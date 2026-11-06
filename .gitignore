@@ -21,6 +21,7 @@ local/
 !.codex/config.toml
 !.codex/README.md
 .agents/session-tasks/
+.cross-model-review-*/
 *.log
 
 # Dependencies, caches, and generated previews

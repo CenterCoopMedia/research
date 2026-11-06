@@ -2,6 +2,8 @@
 
 This folder is the editing brief for ChatGPT dot and local editors. It contains no report draft, private source export, or published report page.
 
+The repository owner approved this public editing brief's title, byline, source-document link, template reference, and location-count question. This scope permits public design iteration. Raw private source exports stay outside the repository, and report publication remains separate. The source document's owner controls access to that document.
+
 ## Source and template
 
 - Source title: *Boom or bust: The state of ethnic and community media in New Jersey, 2026*.
@@ -16,7 +18,7 @@ The current draft remains in the source Google document. No report JSON or repor
 
 Location counts need author clarification. The source's data highlights gives 90 New Jersey-based outlets and 38 out-of-state outlets. Its findings gives 95 and 33. Both total 128. The findings also labels 95 of 128 as 72.4%; that ratio is about 74.2%. Do not choose or correct these figures without confirmation. Community subtotals also need context before they are treated as an exhaustive partition.
 
-Status: Waiting for author clarification. The coordinator owns the authorized email and response follow-up. Do not treat a sent question as a verified correction.
+Status: Waiting for author clarification. The authorized clarification email was sent on November 6, 2026. The coordinator owns response follow-up. Do not treat a sent question as a verified correction.
 
 ## Editing workflow
 
