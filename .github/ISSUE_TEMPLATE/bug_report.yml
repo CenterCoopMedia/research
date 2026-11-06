@@ -1,0 +1,31 @@
+name: Bug report
+description: Report a problem with a published report or the research hub.
+title: "Fix: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Do not include private research data, credentials, or sensitive security details. Use private vulnerability reporting for security issues.
+  - type: input
+    id: url
+    attributes:
+      label: Affected URL
+      description: The public page where the problem occurs.
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem and expected result
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and screen size

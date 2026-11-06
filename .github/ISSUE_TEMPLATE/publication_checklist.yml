@@ -1,0 +1,39 @@
+name: Publication checklist
+description: Record the evidence needed to release a report.
+title: "Publish: "
+labels: [publication]
+body:
+  - type: input
+    id: proposal
+    attributes:
+      label: Report proposal issue
+    validations:
+      required: true
+  - type: input
+    id: url
+    attributes:
+      label: Intended public URL
+    validations:
+      required: true
+  - type: checkboxes
+    id: approval
+    attributes:
+      label: Content and rights
+      options:
+        - label: Authoritative text, data, citations, and attribution are verified.
+        - label: Editorial approval and rights for publication are recorded.
+        - label: Private inputs and credentials are absent from the public change.
+  - type: checkboxes
+    id: review
+    attributes:
+      label: Review and release
+      options:
+        - label: Independent review and hosted checks pass for the exact head.
+        - label: Keyboard use, text alternatives, phone layout, and wide-screen layout are checked.
+        - label: Public links, charts, and assets work under the research project path.
+        - label: The deployed commit, workflow run, live URL, and verification time are recorded.
+  - type: textarea
+    id: receipts
+    attributes:
+      label: Approval and verification receipts
+      description: Keep this issue open until the public result is verified.

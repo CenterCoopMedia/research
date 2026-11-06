@@ -1,0 +1,35 @@
+name: Report proposal
+description: Plan a report, migration, or research intake.
+title: "Report: "
+labels: [research]
+body:
+  - type: input
+    id: title
+    attributes:
+      label: Working title
+    validations:
+      required: true
+  - type: textarea
+    id: purpose
+    attributes:
+      label: Audience and purpose
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: Approved public sources
+      description: Link only public sources approved for sharing. State when source access or verification is pending.
+    validations:
+      required: true
+  - type: textarea
+    id: rights
+    attributes:
+      label: Authors, rights, and approval
+      description: State confirmed information and any permission still needed. Do not guess a license.
+    validations:
+      required: true
+  - type: input
+    id: slug
+    attributes:
+      label: Proposed report slug

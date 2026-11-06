@@ -1,0 +1,41 @@
+# Credentials and private inputs
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+credentials*.json
+service-account*.json
+private/
+raw-data/
+data/private/
+local/
+.local/
+
+# Personal agent settings and runtime state
+.claude/settings.local.json
+.claude/projects/
+.claude/logs/
+.codex/*
+!.codex/config.toml
+!.codex/README.md
+.agents/session-tasks/
+*.log
+
+# Dependencies, caches, and generated previews
+node_modules/
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.cache/
+.pytest_cache/
+dist/
+build/
+_site/
+tmp/
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

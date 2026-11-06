@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Sensitive security report
+    url: https://github.com/CenterCoopMedia/research/security/advisories/new
+    about: Report a vulnerability privately. Do not publish credential values.
