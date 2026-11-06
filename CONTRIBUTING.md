@@ -1,6 +1,6 @@
 # Contributing
 
-Start with an issue that states the intended result and the approved sources. Use the report proposal form for new research. Add the closest milestone and the matching labels. Keep embargoed research and private data outside public issues. Owner-approved public drafts can be planned in issues and revised on branches before report publication.
+Start with an issue that states the intended result and the approved sources. Use the report proposal form for new research. Add the closest milestone and the matching labels. Keep embargoed research and private data outside public issues. Other unpublished research and working files stay outside unless Joe Amditis or a designated CCM project maintainer authorizes those specific materials for public work with the right to share them. Existing task instructions can provide that authority. Record the public scope in the report brief and revise approved public drafts on branches before report publication.
 
 Make a focused branch and pull request. Explain the change, its sources, and how it was checked. Keep design and editorial decisions explicit. Give credit to report authors and source owners without adding agent attribution to commits.
 

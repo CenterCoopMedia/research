@@ -2,7 +2,7 @@
 
 Research and interactive reports from the [Center for Cooperative Media](https://centerforcooperativemedia.org/).
 
-This repository holds the public site, approved report assets, and the work needed to publish and maintain them. Embargoed research, private working data, and credentials belong outside this public repository. Owner-approved public working briefs and drafts can be revised on branches before report publication.
+This repository holds the public site, approved report assets, and the work needed to publish and maintain them. Embargoed research, private working data, and credentials belong outside this public repository. Other unpublished research and working files stay outside unless Joe Amditis or a designated CCM project maintainer authorizes those specific materials for public work with the right to share them. Existing task instructions can provide that authority. Record the public scope in the report brief and revise approved public drafts on branches before report publication.
 
 ## Publication
 

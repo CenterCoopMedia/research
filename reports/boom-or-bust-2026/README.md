@@ -2,7 +2,7 @@
 
 This folder is the editing brief for ChatGPT dot and local editors. It contains no report draft, private source export, or published report page.
 
-The repository owner approved this public editing brief's title, byline, source-document link, template reference, and location-count question. This scope permits public design iteration. Raw private source exports stay outside the repository, and report publication remains separate. The source document's owner controls access to that document.
+Joe Amditis authorized this public editing brief's title, byline, source-document link, template reference, and location-count question. The current setup scope covers only those items. The draft body, quotations, findings, and data beyond that question are outside this scope and must not be copied into public report JSON, branches, or issues as part of setup. Future task instructions can authorize specific materials for public design iteration under the repository rules. Raw private source exports stay outside the repository, and report publication remains separate. The source document's owner controls access to that document.
 
 ## Source and template
 

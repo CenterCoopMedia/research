@@ -6,7 +6,7 @@ This file is the canonical project instruction file. Read it before work. `CLAUD
 
 This is the public research and reports hub for the Center for Cooperative Media. Use the supplied report, approved sources, and the established report template. Do not invent findings, citations, author details, licenses, data, or publication approval. Keep report content separate from repository setup.
 
-Never commit credentials, private working data or source documents, private personal information, local agent state, or PR evidence images. Owner-approved public working briefs and drafts can be revised on branches before report publication. Record the approved public scope in the brief; keep raw private source exports outside the repository. Ignore rules are a convenience, not a security boundary. Inspect the full proposed change before publication.
+Never commit credentials, private working data or source documents, private personal information, local agent state, or PR evidence images. Other unpublished research and working files stay outside unless Joe Amditis or a designated CCM project maintainer authorizes those specific materials for public work with the right to share them. Existing task instructions can provide that authority; do not ask again for work already authorized. Record the public scope in the report brief and revise approved public drafts on branches before report publication. Keep raw private source exports outside the repository. Ignore rules are a convenience, not a security boundary. Inspect the full proposed change before publication.
 
 ## Coordination
 

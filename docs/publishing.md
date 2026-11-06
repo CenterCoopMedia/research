@@ -12,7 +12,7 @@ Keep the hub at `site/index.html`. Put each report at `site/reports/<slug>/index
 
 Use relative links, or include the `/research/` prefix for site-root paths. A path such as `/assets/chart.js` points outside this project site. Keep report links stable after publication; use a redirect page if a move is necessary.
 
-Only publish approved data needed by the report. Do not commit private inputs, private source document exports, interview records, private email addresses, credentials, or embargoed working files. Owner-approved public briefs and drafts can be revised in the repository before report publication. Removing a link does not make a file private.
+Only publish approved data needed by the report. Do not commit private inputs, private source document exports, interview records, private email addresses, credentials, or embargoed working files. Other unpublished research and working files stay outside unless Joe Amditis or a designated CCM project maintainer authorizes those specific materials for public work with the right to share them. Existing task instructions can provide that authority. Record the public scope in the report brief and revise approved public drafts on branches before report publication. Removing a link does not make a file private.
 
 ## Report requirements
 
