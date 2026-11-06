@@ -1,0 +1,595 @@
+/* figures. A chart is one layer of marks in SVG and one layer of labels in
+   HTML. The SVG holds a 100 by 100 viewBox and takes preserveAspectRatio:
+   none, so an x is a percent of the plot width and a y a percent of its
+   height, and the stylesheet alone decides how tall a row is. The labels stay
+   in HTML, so they hold the token type size at every screen width. A scaled
+   SVG would shrink its own text to four pixels on a phone. */
+
+/* Hidden from the eye, kept in the page: the sentence a sparkline states and
+   the sentence a sort states. */
+
+.hidden-text {
+  position:absolute;
+  width:1px;
+  height:1px;
+  overflow:hidden;
+  clip-path:inset(50%);
+  white-space:nowrap;
+}
+
+/* A figure heading opens a block on --figure, so it takes that width. */
+
+.section-figure .section-heading,.section-table .section-heading {
+  width:min(var(--figure),100%);
+}
+
+.figure {
+  width:min(var(--figure),100%);
+  margin-block:0;
+  margin-inline:var(--role-inline);
+}
+
+.figure-unit {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+  margin-bottom:var(--s5);
+}
+
+/* The picture sits on --figure and the words under it sit on --reading, so
+   the caption reads at the measure the body reads at. */
+
+.figure figcaption {
+  width:var(--col);
+  margin-top:var(--s5);
+}
+
+.figure-caption {
+  color:var(--ink-soft);
+  margin-bottom:var(--s2);
+}
+
+.figure-source,.figure-note {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+  margin-bottom:0;
+}
+
+.figure-note {
+  margin-top:var(--s2);
+}
+
+.figure-source a {
+  text-decoration:underline;
+  text-decoration-color:var(--rule-strong);
+  transition:text-decoration-color var(--dur-hover) var(--ease);
+}
+
+.figure-source a:hover {
+  text-decoration-color:var(--accent);
+}
+
+.figure-source .source-host {
+  display:block;
+}
+
+/* the chart grid */
+
+.chart {
+  --rows:1;
+  --per-row:2;
+  /* A row holds its marks and its name. Two marks need two steps of the
+     space scale; a group of four needs four. */
+  --row-h:calc(var(--s5) * var(--per-row));
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:0 var(--s4);
+}
+
+/* The name column takes the width its names need and stops there, so a chart
+   of short names does not leave a gap in front of its marks. */
+
+.chart-cats {
+  display:flex;
+  flex-direction:column;
+  max-width:var(--s10);
+}
+
+/* Every name box is one row tall, so the names and the marks stay level. A
+   name that is longer than two lines is clipped: the data table under the
+   figure holds every name in full. */
+
+.chart-cat {
+  display:flex;
+  align-items:center;
+  height:var(--row-h);
+  overflow:hidden;
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--ink-soft);
+}
+
+/* Every column is placed by name, so a column a narrow screen hides does not
+   move the plot into the space it left. */
+
+.chart-plot {
+  position:relative;
+  grid-column:2;
+  height:calc(var(--rows) * var(--row-h));
+}
+
+.chart-marks {
+  position:absolute;
+  inset:0;
+  display:block;
+  width:100%;
+  height:100%;
+  overflow:visible;
+}
+
+/* the marks */
+
+.chart-mark {
+  transition:fill var(--dur-hover) var(--ease);
+}
+
+.chart-mark:hover {
+  fill:var(--mark-hover);
+}
+
+.chart-span {
+  fill:var(--rule-strong);
+}
+
+.chart-rule,.chart-grid {
+  fill:none;
+  stroke:var(--rule);
+}
+
+/* A data line takes --progress-h, the width the page already gives a rule
+   that states a value. */
+
+.chart-path {
+  fill:none;
+  stroke-width:var(--progress-h);
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.chart-marks .series-1 {
+  stroke:var(--series-1);
+}
+
+.chart-marks .series-2 {
+  stroke:var(--series-2);
+}
+
+.chart-marks .series-3 {
+  stroke:var(--series-3);
+}
+
+.chart-marks .series-4 {
+  stroke:var(--series-4);
+}
+
+/* A dot is HTML, not SVG. The plot stretches sideways to the width it is
+   given, and a stretched circle is an ellipse. */
+
+.chart-point {
+  position:absolute;
+  left:var(--x,100%);
+  top:var(--y);
+  width:var(--s3);
+  height:var(--s3);
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+  background:var(--series-1);
+}
+
+.chart-point.series-2 {
+  background:var(--series-2);
+}
+
+.chart-point.series-3 {
+  background:var(--series-3);
+}
+
+.chart-point.series-4 {
+  background:var(--series-4);
+}
+
+/* the labels */
+
+.chart-value {
+  position:absolute;
+  left:var(--x);
+  top:var(--y);
+  transform:translate(var(--s2),-50%);
+  font-family:var(--font-numeral);
+  font-variant-numeric:var(--num-display);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  white-space:nowrap;
+}
+
+/* A long bar carries its own value, in paper, at the bar end. */
+
+.chart-value.inside {
+  transform:translate(calc(-100% - var(--s2)),-50%);
+  color:var(--paper);
+}
+
+/* A value beside a dot clears the dot before it starts. */
+
+.chart-value.beside {
+  transform:translate(var(--s3),-50%);
+}
+
+.chart-value.centered {
+  max-width:var(--w);
+  overflow:hidden;
+  transform:translate(-50%,-50%);
+  text-align:center;
+}
+
+.chart-value.flip {
+  transform:translate(calc(-100% - var(--s3)),-50%);
+}
+
+.chart-name {
+  display:block;
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+}
+
+.chart-figure {
+  font-family:var(--font-numeral);
+  font-variant-numeric:var(--num-display);
+}
+
+/* line and slope: a plot box of one height with the scale beside it */
+
+.chart-line,.chart-slope {
+  grid-template-columns:auto 1fr auto;
+}
+
+.chart-line .chart-plot,.chart-slope .chart-plot,.chart-scale,.chart-ends {
+  height:var(--band);
+}
+
+.chart-scale,.chart-ends {
+  position:relative;
+}
+
+/* Both label columns hold their labels in place rather than in flow, so each
+   one states the width it needs; a column of placed labels reports no width
+   of its own. */
+
+.chart-scale {
+  grid-column:1;
+  width:var(--s8);
+}
+
+.chart-ends {
+  grid-column:3;
+  width:var(--s9);
+}
+
+.chart-tick {
+  position:absolute;
+  top:var(--y);
+  right:0;
+  transform:translateY(-50%);
+  font-family:var(--font-numeral);
+  font-variant-numeric:var(--num-display);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  color:var(--muted);
+}
+
+/* A series is named at its line end, never in a legend. A legend sends the
+   eye back and forth between a key and a line. */
+
+.chart-end {
+  position:absolute;
+  top:var(--y);
+  left:0;
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+}
+
+.chart-end.series-1 .chart-figure {
+  color:var(--series-1);
+}
+
+.chart-end.series-2 .chart-figure {
+  color:var(--series-2);
+}
+
+.chart-end.series-3 .chart-figure {
+  color:var(--series-3);
+}
+
+.chart-end.series-4 .chart-figure {
+  color:var(--series-4);
+}
+
+.chart-ends-start {
+  grid-column:1;
+  width:var(--s9);
+  text-align:right;
+}
+
+.chart-ends-start .chart-end {
+  left:auto;
+  right:0;
+}
+
+.chart-axis {
+  position:relative;
+  grid-column:2;
+  min-height:calc(var(--t-1) * var(--lh-label));
+  margin-top:var(--s2);
+}
+
+.chart-x {
+  position:absolute;
+  left:var(--x);
+  transform:translateX(-50%);
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+}
+
+.chart-x.first {
+  transform:none;
+}
+
+.chart-x.last {
+  transform:translateX(-100%);
+}
+
+/* A range needs room outside the plot for the value at each end. */
+
+.chart-range .chart-plot {
+  margin-inline:var(--s7);
+}
+
+/* small multiples: one chart for each series, all on one scale */
+
+.chart-multiples {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:var(--s6) var(--s7);
+}
+
+.chart-multiples .chart {
+  --row-h:var(--s6);
+}
+
+/* A panel is a small chart, so its plot box is smaller than the one a lone
+   line chart takes. */
+
+.chart-multiples .chart-plot,.chart-multiples .chart-scale,.chart-multiples .chart-ends {
+  height:var(--s10);
+}
+
+/* A panel names its series in its own heading, so its end label states only
+   a value and needs less room than a lone chart's. */
+
+.chart-multiples .chart-ends {
+  width:var(--s8);
+}
+
+.chart-multiples .chart-bar .chart-plot,.chart-multiples .chart-dot .chart-plot,.chart-multiples .chart-stacked .chart-plot {
+  height:calc(var(--rows) * var(--row-h));
+}
+
+.chart-panel-name {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--ink-soft);
+  margin-bottom:var(--s3);
+}
+
+/* the data behind the picture */
+
+.figure-data {
+  width:min(var(--figure),100%);
+  margin-block:var(--s5) 0;
+  margin-inline:var(--role-inline);
+}
+
+.figure-data summary {
+  list-style:none;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:var(--s5);
+  min-height:var(--tap);
+  padding-block:var(--s2);
+  font-family:var(--font-label);
+  font-size:var(--t1);
+  line-height:var(--lh-label);
+  transition:color var(--dur-hover) var(--ease);
+}
+
+.figure-data summary::-webkit-details-marker {
+  display:none;
+}
+
+.figure-data summary:hover {
+  color:var(--accent);
+}
+
+.figure-data[open] summary .accordion-chevron {
+  transform:rotate(180deg);
+}
+
+.figure-data summary:hover .accordion-chevron {
+  color:var(--accent);
+}
+
+.figure-data[open] summary {
+  margin-bottom:var(--s3);
+}
+
+/* motion. Bars grow from zero and lines are drawn through a window that
+   opens from the left. Both are one transform, and the end state is the base
+   state, so a browser that runs no animation still reads correctly. */
+
+@keyframes figure-grow {
+  from {
+    transform:scaleX(0);
+  }
+}
+
+.chart-grow,.chart-reveal {
+  transform-box:fill-box;
+  transform-origin:left center;
+}
+
+/* Scripts off there is no timer to start the reveal, so the reader's own
+   scroll position drives it where the browser supports that. */
+
+@supports (animation-timeline:view()) {
+
+  html:not(.enhanced) .chart .chart-grow,html:not(.enhanced) .chart .chart-reveal {
+    animation:figure-grow var(--dur-draw) var(--ease-draw) both;
+    animation-timeline:view();
+    animation-range:entry 10% entry 90%;
+  }
+
+}
+
+/* Scripts on, one observer starts the reveal on first view and never starts
+   it again. A scroll timeline would run backwards when the reader scrolls
+   back up, and nothing on this page re-animates on a second look. */
+
+.chart.in-view .chart-grow,.chart.in-view .chart-reveal {
+  animation:figure-grow var(--dur-draw) var(--ease-draw) both;
+  animation-delay:min(calc(var(--row,0) * var(--stagger-step)),var(--stagger-cap));
+}
+
+.chart.drawn .chart-grow,.chart.drawn .chart-reveal {
+  animation:none;
+}
+
+/* A scroll timeline reads a position, not a clock, so shortening every
+   duration does not stop it. The reader who asked for no motion gets the end
+   state and nothing else. */
+
+.no-motion .chart-grow,.no-motion .chart-reveal {
+  animation:none!important;
+}
+
+@media(prefers-reduced-motion:reduce) {
+
+  :root:not(.motion-on) .chart-grow,:root:not(.motion-on) .chart-reveal {
+    animation:none!important;
+  }
+
+}
+
+@media(max-width:1000px) {
+
+  .chart-multiples {
+    gap:var(--s5) var(--s6);
+  }
+
+}
+
+@media(max-width:760px) {
+
+  .chart {
+    gap:0 var(--s3);
+  }
+
+  .chart-cats {
+    max-width:var(--s9);
+  }
+
+  .chart-range .chart-plot {
+    margin-inline:var(--s5);
+  }
+
+  /* A phone has no room for a scale column beside a line, so the line drops
+     it and keeps its end labels, which state the value that matters. The data
+     table under the figure still holds every point. */
+
+  .chart-scale,.chart-grid {
+    display:none;
+  }
+
+  /* Five dates under a plot this narrow overlap, so the axis keeps the two
+     that name the span. */
+
+  .chart-x:not(.first):not(.last) {
+    display:none;
+  }
+
+  .chart-multiples {
+    grid-template-columns:1fr;
+  }
+
+}
+
+@media print {
+
+  .figure,.chart-panel {
+    break-inside:avoid;
+  }
+
+  /* A reader who prints while a figure is still drawing gets the whole
+     figure, not the frame the sheet caught. */
+
+  .chart-grow,.chart-reveal {
+    animation:none!important;
+  }
+
+  /* Paper carries no hue a reader can rely on, so a figure with two or more
+     series swaps its fills for the pattern each series carries. */
+
+  /* The hairline states where a mark ends, which a light pattern alone does
+     not. */
+
+  .chart .chart-mark[style*="--pattern"] {
+    fill:var(--pattern);
+    stroke:var(--ink);
+    stroke-width:1px;
+    vector-effect:non-scaling-stroke;
+  }
+
+  /* The mark under the label is now paper with ink drawn on it, so the label
+     changes to ink as well. */
+
+  .patterned .chart-value.inside {
+    color:var(--ink);
+  }
+
+  /* --band is a share of the screen height, which a sheet of paper does not
+     have. */
+
+  .chart-line .chart-plot,.chart-slope .chart-plot,.chart-scale,.chart-ends {
+    height:var(--s10);
+  }
+
+  .chart-multiples {
+    grid-template-columns:repeat(2,1fr);
+    gap:var(--s5);
+  }
+
+}

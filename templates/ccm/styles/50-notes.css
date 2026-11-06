@@ -1,0 +1,146 @@
+/* notes: the sidenote in the margin and the footnote under the section */
+
+/* The footnote is the copy every reader can reach: it is what a phone, a
+   printer and a page with scripts off all show, and it holds the id the
+   reference points at. */
+
+.footnotes {
+  width:var(--col);
+  margin-block:var(--s6) 0;
+  margin-inline:var(--role-inline);
+}
+
+.footnotes-title {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+  margin-bottom:var(--s3);
+}
+
+.footnote-list {
+  margin:0;
+  padding-inline-start:var(--s5);
+  font-size:var(--t0);
+  line-height:var(--lh-body);
+}
+
+.footnote-list li {
+  border-top:1px solid var(--rule);
+  padding-top:var(--s2);
+  margin-bottom:var(--s3);
+}
+
+.footnote-list li:last-child {
+  margin-bottom:0;
+}
+
+.footnote-list li::marker {
+  font-family:var(--font-numeral);
+  font-variant-numeric:var(--num-display);
+  color:var(--accent);
+}
+
+/* The reference lands the reader's focus on the note itself, so the note
+   takes the page's one focus ring while it holds that focus. */
+
+.footnote-list li:focus-visible,.sidenote:focus-visible {
+  outline:var(--focus-width) solid var(--focus);
+  outline-offset:var(--focus-offset);
+}
+
+.note-back {
+  display:inline-flex;
+  align-items:center;
+  min-height:var(--tap);
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  color:var(--muted);
+  text-decoration:underline;
+  text-decoration-color:var(--rule-strong);
+  transition:text-decoration-color var(--dur-hover) var(--ease);
+}
+
+.note-back:hover {
+  text-decoration-color:var(--accent);
+}
+
+/* The sidenote sits in the space between the reading column and the figure
+   width, which is a column the grid already has. It is measured here and
+   placed by scripts/50-notes.js, which sets the top of each note from the top
+   of its own reference and moves a note down when it would land on the note
+   above it. The column is hidden until that script says it fits, so a narrow
+   window and a narrow page in the guide both keep the footnote instead. */
+
+.section:has(> .sidenotes) {
+  position:relative;
+}
+
+.sidenotes {
+  display:none;
+  position:absolute;
+  top:0;
+  bottom:0;
+  inset-inline-start:calc(50% + var(--col) / 2 + var(--s5));
+  width:max(0px,(min(var(--figure),100% - var(--gutter) * 2) - var(--col)) / 2 - var(--s5));
+}
+
+/* The margin column opens above the fold the wide layout folds its rail at,
+   so one width decides where a note goes in either layout, and only in a
+   section wide enough to hold it: a specimen on the guide is narrower than the
+   window it sits in, and the reading layout's margin is narrower than the
+   wide layout's rail. */
+
+@media(min-width:1001px) {
+
+  .notes-side > .sidenotes {
+    display:block;
+  }
+
+  .notes-side > .footnotes {
+    display:none;
+  }
+
+}
+
+.sidenote {
+  position:absolute;
+  top:0;
+  margin:0;
+  font-family:var(--font-label);
+  font-size:var(--t0);
+  line-height:var(--lh-body);
+  color:var(--muted);
+}
+
+.sidenote-number {
+  color:var(--accent);
+  font-family:var(--font-numeral);
+  font-variant-numeric:var(--num-display);
+  margin-inline-end:var(--s2);
+}
+
+/* Paper has one column, so every note is a footnote again and the block that
+   the script hid comes back. */
+
+@media print {
+
+  /* Every block on paper starts at the page margin, so the notes leave the
+     centered column the screen puts them in. */
+
+  .footnotes {
+    max-width:var(--reading-print);
+    width:auto;
+    margin-inline:0;
+  }
+
+  .notes-side > .footnotes {
+    display:block;
+  }
+
+  .footnote-list li {
+    break-inside:avoid;
+  }
+
+}

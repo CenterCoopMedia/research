@@ -1,0 +1,77 @@
+/* toast */
+
+/* One short message that confirms an action the reader just took. It is a
+   manual popover, so the browser puts it in the top layer and no rule here
+   types a stacking order of its own beyond the token. */
+
+/* --toast-lift is what 50-share.js measures: how much of the footer's control
+   group is already on the screen, so the message clears the control that opened
+   it even where anchor positioning is not available. The message keeps the end
+   edge of the page, which is the edge the control group sits at. */
+
+.toast {
+  position:fixed;
+  inset:auto var(--pad-wrapper) calc(var(--gutter) + var(--toast-lift,0px)) auto;
+  z-index:var(--z-toast);
+  margin:0;
+  max-width:var(--panel-w);
+  padding:var(--s3) var(--s4);
+  border:0;
+  border-radius:var(--radius-control);
+  background:var(--ink);
+  color:var(--paper);
+  font-family:var(--font-label);
+  font-size:var(--t0);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  box-shadow:var(--shadow-panel);
+}
+
+/* It rises as it arrives, by --rise-enter, the same rise the lightbox
+   dialog takes. */
+
+.toast:popover-open {
+  opacity:1;
+  transform:none;
+  transition:opacity var(--dur-enter) var(--ease),transform var(--dur-enter) var(--ease),overlay var(--dur-enter) allow-discrete,display var(--dur-enter) allow-discrete;
+}
+
+@starting-style {
+
+  .toast:popover-open {
+    opacity:0;
+    transform:translateY(var(--rise-enter));
+  }
+
+}
+
+/* The control group at the end of the footer is what opens the message, so the
+   message lands over that group and not over the band above it: its own end
+   edge sits on the group's end edge and its bottom sits on the group's top. */
+
+@supports (anchor-name:--controls) {
+
+  .footer-controls {
+    anchor-name:--controls;
+  }
+
+  .toast {
+    position-anchor:--controls;
+    inset:auto anchor(right) anchor(top) auto;
+    margin-bottom:var(--s3);
+  }
+
+}
+
+@media(max-width:760px) {
+
+  /* The horizontal only: the message keeps the place above the footer that the
+     anchor, or the measured lift, gave it. */
+
+  .toast {
+    left:var(--gutter);
+    right:var(--gutter);
+    max-width:none;
+  }
+
+}

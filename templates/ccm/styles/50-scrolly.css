@@ -1,0 +1,211 @@
+/* scrolly. The frame pins for the whole section; the cards run past it, one
+   card to a screen, and each card's state fires as the card appears. */
+
+/* The card column is the card's own width, so the card's right edge lands on
+   the figure's right edge instead of eight pixels inside it. */
+
+.scrolly {
+  position:relative;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) var(--card-w);
+  gap:var(--s6);
+  width:min(var(--figure),100%);
+  margin-inline:var(--role-inline);
+}
+
+.stage {
+  --art-width:min(100%,calc((var(--stage-h-safe,700px) - var(--s9)) * 4 / 3));
+  margin:0;
+  position:sticky;
+  top:0;
+  height:100vh;
+  height:100svh;
+  padding-top:calc(var(--header) + var(--s1));
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-self:start;
+  min-width:0;
+}
+
+/* report.js writes --stage-h-safe as the viewport minus the header, so the
+   drawing is always inside the pinned frame. */
+
+.stage .ink-art {
+  width:var(--art-width);
+  margin-inline:auto;
+}
+
+.stage figcaption {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+  text-align:center;
+  margin:var(--s4) auto 0;
+  animation:caption-in var(--dur-caption) var(--ease) both;
+}
+
+@keyframes caption-in {
+
+  from {
+    opacity:0;
+  }
+
+}
+
+.stage-progress {
+  width:var(--art-width);
+  height:var(--stage-progress-h);
+  margin:var(--s5) auto 0;
+  border-radius:calc(var(--stage-progress-h) / 2);
+  background:var(--wash);
+  overflow:hidden;
+}
+
+/* The fill is the accent, so the reader's place reads at a glance. The
+   contrast suite holds the accent on the wash at 4.5:1 or better in every
+   preset, which is more than the 3:1 a non-text indicator needs. */
+
+.stage-progress i {
+  display:block;
+  height:100%;
+  background:var(--accent);
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform var(--dur-progress) var(--ease);
+}
+
+/* The column is led in by one stage height, then pulled back by half a step,
+   so the first card meets the frame it explains. */
+
+.steps {
+  padding-top:100vh;
+  padding-top:100svh;
+  margin-top:-56vh;
+  margin-top:-56svh;
+  pointer-events:none;
+}
+
+.steps:after {
+  content:'';
+  display:block;
+  height:80vh;
+  height:80svh;
+}
+
+.step {
+  min-height:112vh;
+  min-height:112svh;
+  display:flex;
+  align-items:center;
+}
+
+.step-card {
+  pointer-events:auto;
+  width:min(var(--card-w),100%);
+  padding:var(--card-pad);
+  background:var(--paper);
+  border:1px solid var(--card-border);
+  border-radius:var(--radius-card);
+  box-shadow:var(--shadow-card);
+}
+
+.step-card .eyebrow {
+  color:var(--accent);
+}
+
+.step-card h3 {
+  font-family:var(--font-label);
+  font-weight:600;
+  font-size:var(--t1);
+  line-height:var(--lh-body);
+}
+
+.step-card p {
+  margin-bottom:0;
+}
+
+/* This is the accessible description of the drawing. The stage figcaption is
+   the sighted copy and is hidden from assistive technology, so this one is
+   hidden from the eye instead of from the page: it stays in the accessibility
+   tree, in reading order, inside the card it belongs to. */
+
+.step-card .static-caption {
+  position:absolute;
+  width:1px;
+  height:1px;
+  overflow:hidden;
+  clip-path:inset(50%);
+  white-space:nowrap;
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  color:var(--muted);
+  margin-top:var(--s3);
+}
+
+/* report.js fills this with one static state per step, for print only. */
+
+.print-figure {
+  display:none;
+}
+
+/* Scrub mode. The scroll position drives the stage directly, so every timed
+   transition inside it is off: a transform that eases for 620ms after the
+   finger has moved reads as lag, not as polish. The mark keeps only its
+   stroke transition, because the accent landing at the segment's midpoint is
+   a state change, not a travel. The lines lose their draw animation and their
+   dash, because the blend reveals them by crossfade, not by drawing. The
+   progress rule follows the place itself, so it too stops easing. */
+
+.scrolly.is-scrub .stage .ink-art .mark {
+  transition:stroke var(--dur-color) var(--ease);
+}
+
+.scrolly.is-scrub .connections path {
+  animation:none;
+  stroke-dasharray:none;
+  transition:none;
+}
+
+.scrolly.is-scrub .center-ring,.scrolly.is-scrub .center-label {
+  transition:none;
+}
+
+.scrolly.is-scrub .stage-progress i {
+  transition:none;
+}
+
+/* The drawing warms as the argument builds. Scatter stays ink, because
+   nothing is shared yet; the groups take the secondary, the network takes
+   the series midpoint of accent and secondary, and the orbit arrives in the
+   accent itself. Every hue is a series token, so the four states read as one
+   palette in every theme, and the change crosses on the stroke transition in
+   both modes, because a state's color is a state change, not a travel. The
+   lines take the state's color with the marks. */
+
+.scrolly .connections {
+  transition:stroke var(--dur-color) var(--ease);
+}
+
+.scrolly .ink-art[data-state="groups"] .mark,.scrolly .ink-art[data-state="groups"] .connections {
+  stroke:var(--secondary);
+}
+
+.scrolly .ink-art[data-state="network"] .mark,.scrolly .ink-art[data-state="network"] .connections {
+  stroke:var(--series-3);
+}
+
+.scrolly .ink-art[data-state="orbit"] .mark,.scrolly .ink-art[data-state="orbit"] .connections {
+  stroke:var(--accent);
+}
+
+/* The highlight keeps the accent in every state. This rule comes after the
+   state colors on purpose: a convener stays accented inside its green group. */
+
+.scrolly .ink-art .mark.is-highlight {
+  stroke:var(--accent);
+}
+

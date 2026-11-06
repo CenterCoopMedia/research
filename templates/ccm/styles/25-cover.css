@@ -1,0 +1,72 @@
+/* cover */
+
+/* Three horizontal bands: masthead, headline beside the art, footnotes. */
+
+.hero {
+  min-height:calc(100svh - var(--header));
+  display:grid;
+  grid-template-rows:auto 1fr auto;
+  gap:var(--s7);
+  padding-block:var(--bookend);
+  padding-inline:var(--pad-wrapper);
+  position:relative;
+}
+
+/* The cover's two rules are band edges, like the header's and the notice's,
+   so they run to the page edge instead of stopping inside the wrapper.
+   --pad-wrapper holds a 100% that resolves against whatever element uses it,
+   so a child already inset by --hero's own padding gets back a narrower
+   number than --hero itself did. --hero-pad states the same formula in
+   viewport width instead, which every descendant reads the same way, so the
+   rule and the header above it land on the same edge at every width. */
+
+.hero {
+  --hero-pad:max(var(--gutter),calc((100vw - var(--wrapper)) / 2 + var(--gutter)));
+}
+
+.hero-top,.hero-bottom {
+  margin-inline:calc(var(--hero-pad) * -1);
+  padding-inline:var(--hero-pad);
+}
+
+.hero-top {
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  gap:var(--s5);
+  border-bottom:1px solid var(--rule);
+  padding-bottom:var(--s4);
+}
+
+.hero-top .eyebrow {
+  margin-bottom:0;
+}
+
+.hero-main {
+  display:grid;
+  grid-template-columns:1.15fr 1fr;
+  align-items:center;
+  gap:var(--s7);
+}
+
+
+/* A cover with a footnote band does not need the full bookend under it as
+   well: the band is a rule and one line, and the two together left 120px of
+   paper below a single sentence. The band's own padding is the space now. */
+
+.hero:has(.hero-bottom) {
+  padding-bottom:var(--s5);
+}
+
+@media print {
+
+  /* The bands pull themselves out to the page edge with a viewport-width
+     gutter. On paper the cover has no such padding to give back, so the pull
+     would carry the band off the sheet. */
+
+  .hero-top,.hero-bottom {
+    margin-inline:0;
+    padding-inline:0;
+  }
+
+}

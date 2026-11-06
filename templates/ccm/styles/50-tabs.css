@@ -1,0 +1,135 @@
+/* tabs */
+
+/* The tab list is hidden until 50-tabs.js says it works. Until then, and with
+   no script at all, every panel is open under its own heading, so no panel is
+   behind a control that cannot do anything. */
+
+.tabs .tablist {
+  display:none;
+}
+
+.tabs-live .tablist {
+  display:flex;
+  flex-wrap:wrap;
+  gap:0 var(--s5);
+  border-bottom:1px solid var(--rule);
+  margin-bottom:var(--s5);
+}
+
+/* A text tab, not a pill and not a card: the label is the control and the
+   accent rule under it is the state. --rule-mark is the marker rule, and the
+   contents row the reader is in takes the same one. */
+
+.tabs .tab {
+  position:relative;
+  min-height:var(--tap);
+  padding:0;
+  border:0;
+  background:none;
+  color:var(--muted);
+  font-family:var(--font-label);
+  font-size:var(--t0);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  transition:color var(--dur-hover) var(--ease);
+}
+
+.tabs .tab:hover {
+  color:var(--ink);
+}
+
+.tabs .tab[aria-selected="true"] {
+  color:var(--ink);
+}
+
+.tabs .tab:after {
+  content:'';
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:calc(var(--rule-mark) * -1);
+  height:var(--rule-mark);
+  background:var(--accent);
+  opacity:0;
+  transition:opacity var(--dur-hover) var(--ease);
+}
+
+.tabs .tab[aria-selected="true"]:after {
+  opacity:1;
+}
+
+/* The panel is in the tab order, so it takes the one focus ring. */
+
+.tabs .tab-panel:focus-visible {
+  outline:var(--focus-width) solid var(--focus);
+  outline-offset:var(--focus-offset);
+}
+
+.tabs .tab-panel > :last-child {
+  margin-bottom:0;
+}
+
+/* The tab label already names the panel, so the heading it opens with is for
+   the reader who has no tab list. */
+
+.tabs-live .tab-heading {
+  display:none;
+}
+
+.tabs .tab-panel + .tab-panel {
+  margin-top:var(--s6);
+}
+
+.tabs-live .tab-panel + .tab-panel {
+  margin-top:0;
+}
+
+/* Opacity alone, so a panel swap never moves the text under it. The panel is
+   newly rendered when the script drops its hidden attribute, which is what
+   @starting-style needs to have a state to come from. */
+
+.tabs-live .tab-panel {
+  opacity:1;
+  transition:opacity var(--dur-reveal) var(--ease);
+}
+
+@starting-style {
+
+  .tabs-live .tab-panel {
+    opacity:0;
+  }
+
+}
+
+@media(max-width:760px) {
+
+  .tabs-live .tablist {
+    gap:0 var(--s4);
+  }
+
+}
+
+@media print {
+
+  /* Paper has no tab list and no hidden panel: every panel prints under its
+     own heading, in the order the report writes them. */
+
+  .tabs .tablist {
+    display:none!important;
+  }
+
+  .tabs .tab-panel,.tabs .tab-heading {
+    display:block!important;
+  }
+
+  /* Each panel opens with a hairline, the way a finding and a step do on
+     paper, so three panels read as one list rather than as one long run. */
+
+  .tabs .tab-panel {
+    break-inside:avoid;
+    margin-top:var(--s5);
+    padding-top:var(--s4);
+    border-top:1px solid var(--rule);
+  }
+
+}

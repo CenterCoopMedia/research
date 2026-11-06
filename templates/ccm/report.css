@@ -1,0 +1,5528 @@
+/* Tokens. build.py writes the five theme colors into :root ahead of this file.
+   Every other value on the page derives from those five or from the scales
+   below. Change a token here and the whole page follows. */
+
+:root {
+  /* type: three roles, one display weight, and the figures a numeral takes.
+     These four are the system preset, which is what a report with no fonts
+     block sets in. A report that names a preset carries one more style
+     element after this stylesheet, and it declares these same tokens with the
+     faces it embeds. kit/fonts.py writes it. */
+  --font-body:'Iowan Old Style','Palatino Linotype','Book Antiqua',Palatino,Charter,Georgia,'Times New Roman',serif;
+  --font-display:var(--font-body);
+  --font-label:ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+  --w-display:800;
+  --vs-body:normal;
+  --vs-display:normal;
+  --num-display:lining-nums tabular-nums;
+  /* The two names the stylesheet used before the presets. Every rule that set
+     a family kept one of them, so they stay as aliases and no component
+     partial had to be rewritten to follow a preset. */
+  --font-serif:var(--font-body);
+  --font-sans:var(--font-label);
+  /* A tabular numeral is the body face with lining figures, so a table and a
+     date column read in the face the sentences do. The large numerals, which
+     are the finding value and the part number, take the display face instead. */
+  --font-numeral:var(--font-body);
+  /* The one place a third face is allowed: a command line has to be
+     transcribed exactly, so the guide sets its code blocks in a mono. No
+     report uses it. */
+  --font-code:ui-monospace,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace;
+
+  --t-1:13px;
+  --t0:15px;
+  --t1:17px;
+  /* The reading size. The body sets on it and the measure follows it, so the
+     steps above it hold their own sizes: a step card, a caption and a label
+     do not grow with the prose. */
+  --t-read:20px;
+  --t2:22px;
+  --t3:28px;
+  --t4:clamp(2.5rem,4.2vw,3.8125rem);
+
+  --lh-numeral:.9;
+  --lh-display:1.2;
+  --lh-title:1.29;
+  --lh-subhead:1.45;
+  --lh-label:1.5;
+  --lh-body:1.55;
+  --track-label:.01em;
+
+  /* space on a 4px base */
+  --s1:4px;
+  --s2:8px;
+  --s3:12px;
+  --s4:16px;
+  --s5:24px;
+  --s6:32px;
+  --s7:48px;
+  --s8:64px;
+  --s9:96px;
+  --s10:128px;
+
+  /* grid: one gutter, three role widths, one section rhythm */
+  --gutter:clamp(32px,calc(8vw - 24px),64px);
+  /* The measure is set in em, so it follows the body size instead of guessing
+     at it. The faces the presets set run .40em to .50em a character, so 34em
+     of the 20px body holds 62 to 66 characters a line in every preset and
+     never reaches 75. Both layouts use it: the reading layout centers it and
+     the wide layout puts it against the left gutter with the rail beside it. */
+  --reading:34em;
+  --reading-print:27em;
+  /* The rail of the wide layout: 22em of the note face it holds, which sets
+     at --t0. It is stated as a product rather than in em, because the track
+     is measured on the section and the notes in it are two sizes down from
+     the section's own. */
+  --rail:calc(22 * var(--t0));
+  /* Where a role width sits inside its section: centered, which is the reading
+     layout, or against the leading gutter, which is what the wide layout needs
+     to put the rail beside the column. Every block that states a role width
+     reads it, so the two layouts share one set of rules. */
+  --role-inline:auto;
+  /* The width of the reading column itself. It gives the rail its room in the
+     wide layout, so a window between the fold and the full width narrows the
+     column rather than pushing the rail off the page. */
+  --col:min(var(--reading),100%);
+  --figure:1092px;
+  --wrapper:1400px;
+  --pad-wrapper:max(var(--gutter),calc((100% - var(--wrapper)) / 2 + var(--gutter)));
+  --section:clamp(40px,5vw,64px);
+  --bookend:clamp(var(--s7),9svh,var(--s10));
+  --cover-art:48svh;
+  --band:clamp(220px,38svh,320px);
+  --header:68px;
+
+  /* shape and hit area */
+  --radius-card:8px;
+  --radius-control:6px;
+  --panel-w:min(380px,92vw);
+  --progress-h:2px;
+  --stage-progress-h:6px;
+  /* The marker rule that states a selection: under the tab that is open, and
+     at the leading edge of the contents row the reader is in. */
+  --rule-mark:2px;
+  /* The heavier ink edge a field in error takes, and the edge of the summary
+     that lists the errors. Color alone cannot carry the message, so the
+     weight of the edge is the signal. */
+  --rule-error:2px;
+  --tap:44px;
+  --focus-width:2px;
+  --focus-offset:3px;
+  /* The lightbox is the picture at the size the window has, so it is sized by
+     the window rather than by the grid. */
+  --overlay-w:96vw;
+  --overlay-h:92svh;
+
+  /* color derived from the theme, with the ratio each pair holds on paper */
+  --ink-soft:color-mix(in oklab,var(--ink) 80%,var(--paper));       /* 7.76:1 */
+  --ink-strong:color-mix(in oklab,var(--ink) 88%,#000);             /* 14.57:1 */
+  --muted:color-mix(in oklab,var(--ink) 62%,var(--paper));          /* 4.55:1 */
+  --rule:color-mix(in oklab,var(--ink) 16%,var(--paper));           /* 1.40:1 */
+  --rule-strong:color-mix(in oklab,var(--ink) 52%,var(--paper));    /* 3.43:1 */
+  --card-border:color-mix(in oklab,var(--ink) 28%,var(--paper));    /* 1.85:1 */
+  --line:color-mix(in oklab,var(--secondary) 70%,var(--ink));       /* 7.29:1 */
+  --focus:var(--accent);                                            /* 5.74:1 */
+  --select:color-mix(in oklab,var(--accent) 22%,var(--paper));
+  --scrim:color-mix(in oklab,var(--paper) 70%,transparent);
+  --shadow-card:0 4px 24px color-mix(in oklab,var(--ink) 6%,transparent);
+  --shadow-header:0 1px 12px color-mix(in oklab,var(--ink) 9%,transparent);
+  --shadow-panel:0 1px 2px color-mix(in oklab,var(--ink) 8%,transparent),0 18px 34px -20px color-mix(in oklab,var(--ink) 40%,transparent);
+  --grain:180px;
+  --grain-strength:.38;
+
+  /* Categorical color for figures: the accent, the secondary, the oklab
+     midpoint of the two, and that midpoint carried toward ink. Four is
+     the cap; a fifth series means small multiples. Each ratio is against
+     paper, and each one also clears 3:1 on the wash. */
+  --series-1:var(--accent);                                          /* 5.74:1 */
+  --series-2:var(--secondary);                                       /* 5.53:1 */
+  --series-3:color-mix(in oklab,var(--accent) 50%,var(--secondary)); /* 5.60:1 */
+  --series-4:color-mix(in oklab,var(--series-3) 55%,var(--ink));     /* 8.43:1 */
+  /* A table row under the pointer, and a figure mark under it. */
+  --tint-row:var(--wash);
+  --mark-hover:var(--ink);
+
+  /* z-order, stated once, so no rule types a number of its own */
+  --z-stage:2;
+  --z-header:10;
+  --z-grain:20;
+  --z-panel:24;
+  --z-popover:26;
+  --z-toast:28;
+  --z-skip:30;
+
+  /* motion: one arrival curve, one drawing curve */
+  --ease:cubic-bezier(.32,.72,0,1);
+  --ease-draw:cubic-bezier(.33,1,.68,1);
+  --dur-instant:90ms;
+  --dur-hover:140ms;
+  --dur-control:160ms;
+  --dur-panel:180ms;
+  --dur-reveal:220ms;
+  /* How long a pointer rests on a term before its definition opens. */
+  --dur-intent:300ms;
+  --dur-enter:320ms;
+  --dur-count:720ms;
+  /* How long the toast holds before it goes. 50-share.js reads it. */
+  --dur-toast:2400ms;
+  /* The rise anything that arrives over the page travels: the toast and the
+     lightbox dialog. */
+  --rise-enter:6px;
+  /* A staggered list steps by --stagger-step and stops at --stagger-cap,
+     so a long list finishes in the same time a short one does. */
+  --stagger-step:16ms;
+  --stagger-cap:180ms;
+
+  /* stage motion. Travel and draw overlap: the lines start at --draw-start,
+     about 70 percent of the way through the travel. */
+  --dur-travel:620ms;
+  --dur-draw:240ms;
+  --dur-erase:140ms;
+  --dur-color:340ms;
+  --dur-ring:380ms;
+  --dur-progress:300ms;
+  --dur-caption:320ms;
+  --draw-start:434ms;
+  --delay-erase:100ms;
+  /* Per-element stage timing. report.js reads these four and writes the delay
+     each line and each stroke carries, so the stagger is stated once, here. */
+  --line-delay-first:14ms;
+  --line-delay-last:110ms;
+  --intro-mark-step:30ms;
+  --intro-stroke-step:12ms;
+  --card-pad:20px;
+  --card-w:416px;
+  --quote-rule:40px;
+  /* The band's soft edge on a phone. The step slots clear it as well as the
+     band, so a card at rest is never under it. */
+  --band-skirt:var(--s7);
+}
+
+
+/* page */
+
+* {
+  box-sizing:border-box;
+}
+
+[hidden] {
+  display:none!important;
+}
+
+html {
+  /* color-scheme is not here. The browser's chrome has to match the report's
+     own paper, and this file cannot know whether that paper is light or dark,
+     so build.py reads it off the paper and writes it into the theme block
+     above this stylesheet. */
+  /* Jumps are instant on purpose: smooth scrolling over thousands of pixels
+     animates the reader through every scrolly state on the way. */
+  scroll-padding-top:var(--header);
+}
+
+body {
+  margin:0;
+  /* The grain is a layer on the document, so the body is its containing
+     block. */
+  position:relative;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--font-body);
+  font-variation-settings:var(--vs-body);
+  font-size:var(--t-read);
+  line-height:var(--lh-body);
+}
+
+/* The tooth of the paper. It is a layer on the document, not on the window:
+   a fixed layer paints the first screen and leaves a seam at the fold in any
+   full-page render or print preview. */
+
+body:before {
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:var(--z-grain);
+  opacity:var(--grain-strength);
+  mix-blend-mode:multiply;
+  background-size:var(--grain) var(--grain);
+  background-repeat:repeat;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23808080' filter='url(%23n)' opacity='.4' d='M0 0h180v180H0z'/%3E%3C/svg%3E");
+}
+
+::selection {
+  background:var(--select);
+  color:var(--ink);
+}
+
+a {
+  color:inherit;
+  text-underline-offset:var(--s1);
+}
+
+/* Text links carry a quiet underline and take the accent on hover. */
+
+.notice a,.site-footer a,.section-methods ol li a,.brand-name {
+  text-decoration:underline;
+  text-decoration-color:var(--rule-strong);
+  transition:text-decoration-color var(--dur-hover) var(--ease);
+}
+
+.notice a:hover,.site-footer a:hover,.section-methods ol li a:hover,.brand:hover .brand-name {
+  text-decoration-color:var(--accent);
+}
+
+button,summary,.button {
+  font:inherit;
+  cursor:pointer;
+}
+
+button {
+  color:inherit;
+}
+
+button:focus-visible,a:focus-visible,summary:focus-visible {
+  outline:var(--focus-width) solid var(--focus);
+  outline-offset:var(--focus-offset);
+}
+
+/* Two links sit at the size of their own type: the brand in the header and
+   the template link in the notice. A pseudo-element behind them used to carry
+   the hit area. It works for a pointer, and it fails every measurement of the
+   target, because the box the link reports is still the box of its own type.
+   The target is the box now: --tap tall, with the type centred in it, the way
+   the contents summary and the motion button already do it. */
+
+.brand,.notice a {
+  display:inline-flex;
+  align-items:center;
+  min-height:var(--tap);
+}
+
+/* type */
+
+h1,h2,h3,p {
+  margin-top:0;
+}
+
+/* Every heading is display type, so it takes the display face, the display
+   weight and the display axis settings of whichever preset the report names.
+   The system preset draws the weight where its stack has it. */
+
+h1,h2,h3 {
+  font-family:var(--font-display);
+  font-variation-settings:var(--vs-display);
+  font-weight:var(--w-display);
+  text-wrap:balance;
+}
+
+h1 {
+  font-size:var(--t4);
+  line-height:var(--lh-display);
+  letter-spacing:normal;
+  margin-bottom:var(--s5);
+}
+
+h2 {
+  font-size:var(--t3);
+  line-height:var(--lh-title);
+  letter-spacing:normal;
+  margin-bottom:var(--s6);
+}
+
+h3 {
+  font-size:var(--t2);
+  line-height:var(--lh-subhead);
+  letter-spacing:normal;
+  margin-bottom:var(--s3);
+}
+
+p {
+  margin-bottom:var(--s5);
+}
+
+/* Every section heading is a link to its own section. It carries no
+   decoration at rest, so a heading still reads as a heading; the underline
+   arrives on hover the way it does on every other text link. The pseudo
+   element carries the hit area, so a one line heading still reaches --tap
+   without a 44px line box. */
+
+.heading-anchor {
+  position:relative;
+  color:inherit;
+  text-decoration:none;
+  transition:text-decoration-color var(--dur-hover) var(--ease);
+}
+
+.heading-anchor:before {
+  content:'';
+  position:absolute;
+  inset:calc((var(--tap) - 100%) / -2) 0;
+}
+
+.heading-anchor:hover {
+  text-decoration:underline;
+  text-decoration-color:var(--accent);
+}
+
+.eyebrow {
+  display:block;
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  font-variant-numeric:tabular-nums;
+  color:var(--muted);
+  margin-bottom:var(--s3);
+}
+
+
+/* header */
+
+.site-header {
+  position:sticky;
+  top:0;
+  z-index:var(--z-header);
+  min-height:var(--header);
+  background:var(--paper);
+  border-bottom:1px solid var(--rule);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:var(--s5);
+  padding-inline:var(--pad-wrapper);
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  transition:box-shadow var(--dur-control) var(--ease);
+}
+
+/* The rule alone is too quiet once the page is moving under it. */
+
+.site-header.is-scrolled {
+  box-shadow:var(--shadow-header);
+}
+
+/* Three items share the header row, and only two of them give up width. The
+   brand takes min-width:0 so its name can be cut short before the row is
+   overfull, and the mark inside it never is: a header that shrinks its brand
+   to the width of one word wraps the name down three lines. */
+
+.brand {
+  display:flex;
+  gap:var(--s3);
+  align-items:center;
+  text-decoration:none;
+  min-width:0;
+}
+
+.brand-mark {
+  flex:none;
+  font-family:var(--font-body);
+  font-size:var(--t2);
+  line-height:1;
+  letter-spacing:-.03em;
+  color:var(--accent);
+}
+
+.brand-name {
+  border-left:1px solid var(--rule);
+  padding-left:var(--s3);
+  text-decoration-color:transparent;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+/* The links and the two controls hold their own width. They are what the
+   reader came to the header for, and there is no smaller form of a link than
+   its own words: a shrunk group wrapped "Sample report" and "Resume motion"
+   onto two lines each and stood the header's own type three lines deep. */
+
+.header-actions {
+  display:flex;
+  align-items:center;
+  gap:var(--s3);
+  flex:none;
+}
+
+/* The guide and the examples index, as plain links in the label face. They
+   take the same tap height as the contents control beside them, so the three
+   sit on one baseline and every one of them clears 24px on a phone. */
+
+.header-link {
+  display:inline-flex;
+  align-items:center;
+  min-height:var(--tap);
+  padding-inline:var(--s2);
+  border-radius:var(--radius-control);
+  color:var(--muted);
+  text-decoration-color:transparent;
+  transition:background var(--dur-hover) var(--ease),color var(--dur-hover) var(--ease),text-decoration-color var(--dur-hover) var(--ease);
+}
+
+.header-link:hover {
+  color:var(--ink);
+  text-decoration-color:currentColor;
+}
+
+/* The panel copy of the same links. It waits until the header runs out of room,
+   which is 560px, and the header copy goes at the same width, so one of the two
+   is on the page and never both. */
+
+.contents nav .panel-link {
+  display:none;
+}
+
+.contents summary {
+  list-style:none;
+  display:flex;
+  align-items:center;
+  gap:var(--s2);
+  min-height:var(--tap);
+  padding-inline:var(--s3);
+  border-radius:var(--radius-control);
+  transition:background var(--dur-hover) var(--ease);
+}
+
+.contents summary:hover {
+  background:var(--wash);
+}
+
+/* The scrim starts below the header so the control stays reachable.
+   A click on it reports the <details> as the event target. */
+
+.contents[open]:before {
+  content:'';
+  position:fixed;
+  inset:var(--header) 0 0;
+  background:var(--scrim);
+}
+
+/* The state is a drawn mark, not a character: a "+" typed into the summary is
+   read aloud as the word "plus" after the label. The bar stays and the upright
+   goes, so the open panel shows a minus. */
+
+.contents-icon {
+  flex:none;
+  color:var(--muted);
+}
+
+.contents[open] summary .icon-cross {
+  display:none;
+}
+
+.contents nav {
+  position:absolute;
+  top:100%;
+  right:var(--pad-wrapper);
+  margin-top:-1px;
+  padding:var(--s2);
+  background:var(--paper);
+  border:1px solid var(--card-border);
+  border-radius:var(--radius-card);
+  width:var(--panel-w);
+  box-shadow:var(--shadow-panel);
+}
+
+.contents[open] nav {
+  animation:panel var(--dur-panel) var(--ease);
+}
+
+@keyframes panel {
+
+  from {
+    opacity:0;
+    transform:translateY(calc(var(--s2) * -1));
+  }
+
+}
+
+.contents nav a {
+  display:flex;
+  align-items:center;
+  min-height:var(--tap);
+  padding-inline:var(--s3);
+  font-size:var(--t0);
+  text-decoration:none;
+  border-bottom:1px solid var(--rule);
+  border-radius:var(--radius-control);
+  transition:background var(--dur-hover) var(--ease),color var(--dur-hover) var(--ease),box-shadow var(--dur-hover) var(--ease);
+}
+
+.contents nav a:last-child {
+  border-bottom:0;
+}
+
+.contents nav a:hover {
+  background:var(--wash);
+}
+
+/* The reader's current section keeps full ink and takes an accent rule at its
+   leading edge; the rest step back. The rule is the marker and nothing else
+   uses it, so a reader who cannot separate the hues still has the ink step and
+   the panel still states the same thing with aria-current. */
+
+.contents nav:has(a[aria-current]) a {
+  color:var(--muted);
+}
+
+.contents nav a[aria-current] {
+  color:var(--ink);
+  box-shadow:inset var(--rule-mark) 0 0 var(--accent);
+}
+
+/* The reading progress rule sits on the header's own bottom edge. 50-progress.js
+   writes scaleX and nothing else, and the rule never transitions, so it follows
+   the scroll under reduced motion the same way it does with motion on. */
+
+.reading-progress {
+  position:absolute;
+  bottom:-1px;
+  left:0;
+  height:var(--progress-h);
+  width:100%;
+  background:var(--rule-strong);
+  transform:scaleX(0);
+  transform-origin:left;
+}
+
+/* With no script the rule can only report zero, which is worse than no rule. */
+
+html:not(.enhanced) .reading-progress {
+  display:none;
+}
+
+/* The title of the section the reader is in. It is empty until report.js
+   fills it, and an empty box would take the header's gap. */
+
+.header-section {
+  min-width:0;
+  /* The title is the one part of the header the reader is told twice, by the
+     panel's aria-current, so it is the first thing to go when the row is
+     short. The factor is large enough that the title is down to nothing
+     before the brand beside it gives up a letter. */
+  flex-shrink:999;
+  margin-inline-end:auto;
+  padding-left:var(--s3);
+  border-left:1px solid var(--rule);
+  color:var(--muted);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.header-section:empty {
+  display:none;
+}
+
+/* The skip link lands under the header, at the same gutter every band on the
+   page starts at. Over the header it would cover the brand, which is the one
+   part of the chrome a reader uses to tell the page apart from another. */
+
+.skip-link {
+  position:fixed;
+  top:calc(var(--s10) * -1);
+  left:var(--pad-wrapper);
+  min-height:var(--tap);
+  display:inline-flex;
+  align-items:center;
+  background:var(--ink);
+  color:var(--paper);
+  padding-inline:var(--s4);
+  border-radius:var(--radius-control);
+  z-index:var(--z-skip);
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  letter-spacing:var(--track-label);
+  text-decoration:none;
+}
+
+.skip-link:focus {
+  top:calc(var(--header) + var(--s2));
+}
+
+/* A report may carry three links of its own, and the links arrive at 561px.
+   The row then has to hold the brand, the title of the section, three links
+   and two controls, and each part it can state another way goes at the width
+   the page already folds at.
+
+   Below 1000px the section title goes and the motion control is its icon. The
+   contents panel marks the same section with aria-current, and the button
+   keeps the aria-label report.js holds in step with the state. Measured with
+   three links: the full row wants about 916px of a 1001px header, and those
+   two parts are 276px of it.
+
+   Below 760px the organisation name goes as well, because the brand mark
+   beside it still names the report. Three links then want about 554px of the
+   761px they have, and about 544px at 561px, which is the width they arrive
+   at. With all three parts in place they wanted about 878px, and the page
+   scrolled sideways from 561px to about 624px.
+
+   The guide and the examples index carry no panel, no controls and no section
+   title, so their brand name stays to 420px; the class is what tells the two
+   headers apart. */
+
+@media(max-width:1000px) {
+
+  .header-section {
+    display:none;
+  }
+
+  .with-contents .motion-label {
+    display:none;
+  }
+
+}
+
+@media(max-width:760px) {
+
+  .with-contents .brand-name {
+    display:none;
+  }
+
+}
+
+/* Below 560px the brand, the motion control and the contents control fill a
+   report's header on their own, so the links to the guide and the examples move
+   into the contents panel. They keep the row the section links take, under a
+   heavier rule that separates the two groups. The guide and the examples index
+   carry no panel and no controls, so their links stay in the header. */
+
+@media(max-width:560px) {
+
+  .with-contents .header-link {
+    display:none;
+  }
+
+  .contents nav .panel-link {
+    display:flex;
+  }
+
+  .contents nav .panel-link:first-of-type {
+    margin-top:var(--s2);
+    border-top:1px solid var(--rule-strong);
+  }
+
+}
+
+
+/* cover */
+
+/* Three horizontal bands: masthead, headline beside the art, footnotes. */
+
+.hero {
+  min-height:calc(100svh - var(--header));
+  display:grid;
+  grid-template-rows:auto 1fr auto;
+  gap:var(--s7);
+  padding-block:var(--bookend);
+  padding-inline:var(--pad-wrapper);
+  position:relative;
+}
+
+/* The cover's two rules are band edges, like the header's and the notice's,
+   so they run to the page edge instead of stopping inside the wrapper.
+   --pad-wrapper holds a 100% that resolves against whatever element uses it,
+   so a child already inset by --hero's own padding gets back a narrower
+   number than --hero itself did. --hero-pad states the same formula in
+   viewport width instead, which every descendant reads the same way, so the
+   rule and the header above it land on the same edge at every width. */
+
+.hero {
+  --hero-pad:max(var(--gutter),calc((100vw - var(--wrapper)) / 2 + var(--gutter)));
+}
+
+.hero-top,.hero-bottom {
+  margin-inline:calc(var(--hero-pad) * -1);
+  padding-inline:var(--hero-pad);
+}
+
+.hero-top {
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  gap:var(--s5);
+  border-bottom:1px solid var(--rule);
+  padding-bottom:var(--s4);
+}
+
+.hero-top .eyebrow {
+  margin-bottom:0;
+}
+
+.hero-main {
+  display:grid;
+  grid-template-columns:1.15fr 1fr;
+  align-items:center;
+  gap:var(--s7);
+}
+
+
+/* A cover with a footnote band does not need the full bookend under it as
+   well: the band is a rule and one line, and the two together left 120px of
+   paper below a single sentence. The band's own padding is the space now. */
+
+.hero:has(.hero-bottom) {
+  padding-bottom:var(--s5);
+}
+
+@media print {
+
+  /* The bands pull themselves out to the page edge with a viewport-width
+     gutter. On paper the cover has no such padding to give back, so the pull
+     would carry the band off the sheet. */
+
+  .hero-top,.hero-bottom {
+    margin-inline:0;
+    padding-inline:0;
+  }
+
+}
+
+.hero-art {
+  position:relative;
+  min-width:0;
+  margin:0;
+}
+
+/* The drawing is capped by the viewport so the whole cover stays in frame. */
+
+.hero-art .ink-art {
+  width:auto;
+  max-width:100%;
+  max-height:var(--cover-art);
+  margin-inline:auto;
+}
+
+.ink-art {
+  display:block;
+  width:100%;
+  overflow:visible;
+}
+
+.paper-grid {
+  fill:none;
+  stroke:var(--ink);
+  stroke-width:.5;
+  opacity:.16;
+}
+
+/* Marks are placed in view-box coordinates, so the CSS transform report.js
+   writes and the transform attribute build.py writes mean the same thing.
+   Each mark keeps its own stroke-width from build.py. The rule is scoped to
+   the cover drawing, because the mark specimen on the guide and the nodes of
+   a diagram carry the same class and take their paint from the group above
+   them; a bare .mark rule would reach into both from a file neither of them
+   reads. */
+
+.ink-art .mark {
+  fill:none;
+  stroke:var(--ink);
+  stroke-linecap:round;
+  transform-box:view-box;
+  transform-origin:0 0;
+}
+
+/* Transitions wait for the first state, so nothing travels in from the
+   corner on load. */
+
+.ink-art.is-live .mark {
+  transition:transform var(--dur-travel) var(--ease) var(--md,0ms),stroke var(--dur-color) var(--ease);
+}
+
+.ink-art .mark.is-highlight {
+  stroke:var(--accent);
+}
+
+.connections {
+  stroke:var(--line);
+  stroke-width:1.1;
+  fill:none;
+  opacity:.85;
+}
+
+/* Lines are drawn, not revealed, and they start while the marks are still
+   travelling. Old lines clear out under them. */
+
+.connections path {
+  stroke-dasharray:var(--len,600);
+  animation:draw-line var(--dur-draw) var(--ease-draw) calc(var(--draw-start) + var(--d,0ms)) both;
+  transition:opacity var(--dur-erase) var(--ease) var(--delay-erase);
+}
+
+.connections path.is-leaving {
+  animation:none;
+  opacity:0;
+}
+
+@keyframes draw-line {
+
+  from {
+    stroke-dashoffset:var(--len,600);
+  }
+
+  to {
+    stroke-dashoffset:0;
+  }
+
+}
+
+/* The cover draws its own strokes in, once per load. Every stroke carries
+   pathLength from build.py, so --stroke-len is one dash for all of them and
+   no stroke is drawn short. */
+
+.ink-art.is-intro .mark path {
+  stroke-dasharray:var(--stroke-len);
+  animation:draw-stroke var(--dur-draw) var(--ease-draw) calc(var(--i,0) * var(--intro-mark-step) + var(--j,0) * var(--intro-stroke-step)) both;
+}
+
+@keyframes draw-stroke {
+
+  from {
+    stroke-dashoffset:var(--stroke-len);
+  }
+
+  to {
+    stroke-dashoffset:0;
+  }
+
+}
+
+/* --i is the mark's index and --j the stroke's, both written by build.py, so
+   a mark of any stroke count staggers from one rule. */
+
+/* The ring and its label arrive after the lines that point at them. */
+
+.center-ring {
+  fill:none;
+  stroke:var(--accent);
+  stroke-width:.8;
+  opacity:0;
+  transition:opacity var(--dur-ring) var(--ease) var(--ring-delay,0ms);
+}
+
+/* The size lives on the element, in frame units, because the label has to
+   hold its own against the drawing at every scale the drawing is used at. */
+
+.center-label {
+  font-family:var(--font-label);
+  fill:var(--ink);
+  opacity:0;
+  transition:opacity var(--dur-ring) var(--ease) var(--ring-delay,0ms);
+}
+
+
+.hero-art figcaption {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  text-align:center;
+  color:var(--muted);
+  margin-top:var(--s5);
+}
+
+.hero-copy {
+  min-width:0;
+}
+
+/* The deck is prose, so it takes the prose measure. The cover column is wider
+   than the measure at desktop widths and would otherwise run past 70
+   characters a line. */
+
+.standfirst {
+  max-width:var(--reading);
+  color:var(--ink-soft);
+  margin-bottom:var(--s6);
+}
+
+.byline {
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+  gap:var(--s1) var(--s3);
+  margin:0;
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  text-align:right;
+}
+
+.byline-date {
+  color:var(--muted);
+}
+
+.hero-actions {
+  display:flex;
+  gap:var(--s3);
+  flex-wrap:wrap;
+}
+
+.hero-bottom {
+  display:flex;
+  justify-content:space-between;
+  gap:var(--s5);
+  border-top:1px solid var(--rule);
+  padding-top:var(--s4);
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+}
+
+/* A lone tagline already sits left under space-between. A lone cue needs to
+   sit right instead, so push it there with an auto margin. */
+
+.hero-bottom .scroll-cue:only-child {
+  margin-inline-start:auto;
+}
+
+
+/* The byline and the reading time share the right of the masthead, so the
+   reading time reads as one more fact about the report and lands beside the
+   date rather than under it. */
+
+.byline-group {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:baseline;
+  justify-content:flex-end;
+  gap:var(--s1) var(--s3);
+  min-width:0;
+}
+
+.reading-time {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+}
+
+@media(max-width:760px) {
+
+  .byline-group {
+    justify-content:flex-start;
+  }
+
+}
+
+/* controls */
+
+.button,.control {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:var(--s2);
+  min-height:var(--tap);
+  padding:var(--s2) var(--s4);
+  border:1px solid var(--rule-strong);
+  border-radius:var(--radius-control);
+  background:none;
+  color:var(--ink);
+  text-decoration:none;
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  transition:background var(--dur-control) var(--ease),border-color var(--dur-control) var(--ease),color var(--dur-control) var(--ease),transform var(--dur-control) var(--ease);
+}
+
+.button:hover,.control:hover {
+  background:var(--wash);
+  transform:translateY(-1px);
+}
+
+.button:active,.control:active {
+  transform:none;
+}
+
+.button.primary {
+  background:var(--ink);
+  border-color:var(--ink);
+  color:var(--paper);
+}
+
+.button.primary:hover {
+  background:var(--ink-strong);
+  border-color:var(--ink-strong);
+  color:var(--paper);
+}
+
+.motion-icon {
+  flex:none;
+}
+
+.motion-button .icon-play,.motion-button[aria-pressed="true"] .icon-pause {
+  display:none;
+}
+
+.motion-button[aria-pressed="true"] .icon-play {
+  display:inline;
+}
+
+/* notice */
+
+.notice {
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:var(--s3) var(--s5);
+  padding-block:var(--s3);
+  padding-inline:var(--pad-wrapper);
+  border-block:1px solid var(--rule);
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+}
+
+
+/* sections: one flat rhythm, three role widths */
+
+.section {
+  padding-block:var(--section);
+  padding-inline:var(--gutter);
+}
+
+.section > :last-child {
+  margin-bottom:0;
+}
+
+.reading,.section-heading {
+  width:var(--col);
+  margin-inline:var(--role-inline);
+}
+
+/* A heading opens the block under it, so it takes that block's role width.
+   The title itself still sets on the reading measure. */
+
+.section-findings .section-heading,.section-scrolly .section-heading {
+  width:min(var(--figure),100%);
+}
+
+.section-heading {
+  margin-bottom:var(--s7);
+}
+
+.section-heading h2 {
+  max-width:var(--reading);
+}
+
+.section-heading h2 {
+  margin-bottom:0;
+}
+
+
+/* One hint for anything that scrolls sideways: the table wrapper below 760px
+   and the diagram frame at every width. 00-runtime.js marks the box while the
+   reader is short of the end, so the hint always means there is more to the
+   side, and it goes at the end of the scroll.
+
+   The hint is an inset shade at the trailing edge rather than a drop shadow.
+   A drop shadow reads as a card, and on a phone, where the box is the width
+   of the screen, it falls outside the gutter and cannot be seen at all. */
+
+.scroll-edge {
+  overscroll-behavior-x:contain;
+}
+
+.scroll-edge[data-scroll="more"] {
+  box-shadow:inset calc(var(--s5) * -1) 0 var(--s4) calc(var(--s4) * -1) var(--rule-strong);
+}
+
+/* the wide layout: the reading column against the left gutter, with a rail
+
+   A report writes "layout": "wide" and build.py puts the name on <body>. The
+   selectors read the name off any ancestor rather than off <body> alone, so the
+   guide can show both layouts on one page.
+
+   The column keeps the same 34em measure the reading layout has, so no line grows
+   past 66 characters; what changes is where the column sits and what stands
+   beside it. The rail holds the sidenotes, the pull quotes and any figure or
+   table the author marks for it. A figure, a table, a timeline and the stage
+   keep the full --figure width and break past the column on purpose.
+
+   Nothing here applies below the fold, so the wide layout is the reading
+   layout on a narrow window and on a phone, and every block the rail held
+   comes back into the column at the place the author wrote it.
+
+   The band is a screen band. A sheet of paper is narrower than 1001px, so the
+   width alone kept the rail off nearly every printed page, but a landscape or
+   an oversize sheet has a print viewport of 1001px or more and took the rail
+   with it: a figure marked for the rail printed at 330px against the right
+   edge with its caption one word to a line. The media type says what the width
+   only implied, so one word here holds every rule of the band off paper and
+   the print stylesheet needs no rule of its own to undo them. */
+
+@media screen and (min-width:1001px) {
+
+  [data-layout="wide"] {
+    --role-inline:0;
+    /* The rail takes its room from the column, so a window between the fold
+       and the width the whole layout wants narrows the measure rather than
+       pushing the rail past the edge of the page. */
+    --col:min(var(--reading),100% - var(--rail) - var(--s7));
+  }
+
+  /* Every band starts at the report's own left edge, which is the gutter the
+     header, the cover, the notice and the colophon already sit on. */
+
+  [data-layout="wide"] .section,[data-layout="wide"] .endmatter {
+    padding-inline:var(--pad-wrapper);
+  }
+
+  /* The notes of a section stand in the rail beside it. The offset is written
+     out here rather than read from --col, because an absolutely positioned box
+     is measured from the section's padding edge while the column is measured
+     from inside the padding, so the two need different arithmetic to land on
+     the same line. */
+
+  [data-layout="wide"] .sidenotes {
+    --rail-start:min(var(--reading),100% - var(--pad-wrapper) * 2 - var(--rail) - var(--s7));
+    inset-inline-start:calc(var(--pad-wrapper) + var(--rail-start) + var(--s7));
+    width:var(--rail);
+  }
+
+  /* The column holds its own float. A pull quote at the end of a short run of
+     paragraphs is taller than the sentences left beside it, and a plain block
+     stops at its last line and lets the quote hang below it, into the band of
+     the next section. flow-root is a block that measures its floats, and it
+     clips nothing, so the quote still stands in the rail outside the column
+     and the sidenote script still reads the same box. */
+
+  [data-layout="wide"] .reading {
+    display:flow-root;
+  }
+
+  /* A pull quote is the one block inside a run of paragraphs that goes to the
+     rail. It floats out of the column and gives back the room it took, so no
+     line of the paragraph beside it is shortened and the quote still stands
+     level with the sentence it lifts. */
+
+  [data-layout="wide"] .pullquote {
+    float:inline-end;
+    width:var(--rail);
+    margin-block:0 var(--s5);
+    margin-inline:0 calc((var(--rail) + var(--s7)) * -1);
+    font-size:var(--t2);
+  }
+
+  /* A figure or a table the author marks with "rail": true renders at rail
+     width beside the column it belongs to, and its heading goes with it. */
+
+  [data-layout="wide"] .section[data-rail] > * {
+    width:min(var(--rail),100%);
+    margin-inline:calc(var(--col) + var(--s7)) 0;
+  }
+
+}
+
+/* accordion */
+
+.accordion-item {
+  border-top:1px solid var(--rule);
+}
+
+.accordion-item:last-child {
+  border-bottom:1px solid var(--rule);
+}
+
+.accordion-item > summary {
+  list-style:none;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:var(--s5);
+  min-height:var(--tap);
+  padding-block:var(--s2);
+  font-family:var(--font-label);
+  font-size:var(--t1);
+  line-height:var(--lh-label);
+  transition:color var(--dur-hover) var(--ease);
+}
+
+.accordion-item > summary::-webkit-details-marker {
+  display:none;
+}
+
+.accordion-item > summary:hover {
+  color:var(--accent);
+}
+
+/* The chevron points down when the item is closed and up when it is open, so
+   the state has a shape as well as a place on the page. */
+
+.accordion-chevron {
+  flex:none;
+  color:var(--rule-strong);
+  transition:transform var(--dur-hover) var(--ease),color var(--dur-hover) var(--ease);
+}
+
+.accordion-item[open] > summary .accordion-chevron {
+  transform:rotate(180deg);
+}
+
+.accordion-item > summary:hover .accordion-chevron {
+  color:var(--accent);
+}
+
+.accordion-panel {
+  padding-block:var(--s2) var(--s5);
+}
+
+.accordion-panel > :last-child {
+  margin-bottom:0;
+}
+
+/* Where the browser can measure an intrinsic size, the panel opens over
+   --dur-reveal instead of appearing whole. Where it cannot, the panel appears
+   whole, which is what a native <details> does today. */
+
+@supports (interpolate-size:allow-keywords) {
+
+  .accordion {
+    interpolate-size:allow-keywords;
+  }
+
+  .accordion-item::details-content {
+    block-size:0;
+    overflow:hidden;
+    transition:block-size var(--dur-reveal) var(--ease),content-visibility var(--dur-reveal) allow-discrete;
+  }
+
+  .accordion-item[open]::details-content {
+    block-size:auto;
+  }
+
+}
+
+@media print {
+
+  /* Paper cannot open an item, so every panel prints. A browser that has
+     ::details-content needs both of these; one that does not needs neither. */
+
+  .accordion-item::details-content {
+    content-visibility:visible!important;
+    block-size:auto!important;
+  }
+
+  .accordion-panel {
+    display:block!important;
+  }
+
+  .accordion-chevron {
+    display:none;
+  }
+
+  .accordion-item {
+    break-inside:avoid;
+  }
+
+}
+
+/* cite */
+
+/* A native <dialog>: the browser holds the focus inside it, closes it on
+   Escape and returns focus to the control that opened it. 50-share.js adds
+   the close on a click outside, which <dialog> does not do on its own. */
+
+.cite-dialog {
+  width:min(var(--reading),100%);
+  max-width:100%;
+  max-height:calc(100svh - var(--s9));
+  padding:var(--s6);
+  border:1px solid var(--card-border);
+  border-radius:var(--radius-card);
+  background:var(--paper);
+  color:var(--ink);
+  box-shadow:var(--shadow-panel);
+}
+
+.cite-dialog::backdrop {
+  background:var(--scrim);
+}
+
+.cite-dialog[open] {
+  opacity:1;
+  transform:none;
+  transition:opacity var(--dur-enter) var(--ease),transform var(--dur-enter) var(--ease);
+}
+
+@starting-style {
+
+  .cite-dialog[open] {
+    opacity:0;
+    transform:translateY(var(--s3));
+  }
+
+}
+
+.cite-head {
+  display:flex;
+  align-items:start;
+  justify-content:space-between;
+  gap:var(--s5);
+  margin-bottom:var(--s5);
+}
+
+.cite-head h2 {
+  font-size:var(--t2);
+  line-height:var(--lh-subhead);
+  margin-bottom:0;
+}
+
+.cite-head h2:focus-visible {
+  outline:var(--focus-width) solid var(--focus);
+  outline-offset:var(--focus-offset);
+}
+
+.cite-close {
+  flex:none;
+}
+
+.cite-form {
+  border-top:1px solid var(--rule);
+  padding-top:var(--s4);
+  margin-top:var(--s5);
+}
+
+.cite-form h3 {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+  margin-bottom:var(--s3);
+}
+
+/* The citation itself is the thing the reader came for, so it is set at
+   reading size and it wraps rather than scrolling sideways. */
+
+.cite-text {
+  font-size:var(--t0);
+  line-height:var(--lh-subhead);
+  margin-bottom:var(--s3);
+  overflow-wrap:anywhere;
+}
+
+.cite-code {
+  margin:0 0 var(--s3);
+  font-family:var(--font-code);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
+
+/* The plain citation under the colophon. It is the one part of the share and
+   cite pair that paper keeps, because a printed page has no clipboard. */
+
+.print-citation {
+  display:none;
+}
+
+@media(max-width:760px) {
+
+  .cite-dialog {
+    padding:var(--s5);
+  }
+
+}
+
+@media print {
+
+  .print-citation {
+    display:block;
+    grid-column:1 / -1;
+    margin:var(--s5) 0 0;
+    max-width:var(--reading-print);
+    break-inside:avoid;
+  }
+
+}
+
+/* compare */
+
+.section-compare .section-heading {
+  width:min(var(--figure),100%);
+}
+
+.compare {
+  width:min(var(--figure),100%);
+  margin-block:0;
+  margin-inline:var(--role-inline);
+}
+
+/* Side by side is the base. It is what prints, and what a reader with no
+   scripting gets, so both pictures stay whole and both keep their label. */
+
+.compare-pair {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:var(--s5);
+}
+
+.compare-side {
+  min-width:0;
+  margin:0;
+}
+
+.compare-side img {
+  display:block;
+  width:100%;
+  height:auto;
+}
+
+/* The label sits above its own picture. One label under both pictures makes
+   the reader work out which picture it names. */
+
+.compare-label {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+  margin-bottom:var(--s2);
+}
+
+/* With the script the two pictures stack and a divider moves over them. The
+   split is a live value with no transition on it: a divider that eases is a
+   divider that lags behind the pointer. */
+
+.compare.is-overlay .compare-pair {
+  --split:50%;
+  position:relative;
+  grid-template-columns:minmax(0,1fr);
+  grid-template-areas:"stack";
+  gap:0;
+  touch-action:pan-y;
+}
+
+.compare.is-overlay .compare-side {
+  grid-area:stack;
+}
+
+.compare.is-overlay .compare-after {
+  clip-path:inset(0 0 0 var(--split));
+}
+
+/* Stacked, the two labels sit on their own halves of the picture. */
+
+.compare.is-overlay .compare-label {
+  position:absolute;
+  top:var(--s3);
+  z-index:var(--z-stage);
+  margin:0;
+  padding:var(--s1) var(--s2);
+  background:var(--paper);
+}
+
+.compare.is-overlay .compare-before .compare-label {
+  left:var(--s3);
+}
+
+.compare.is-overlay .compare-after .compare-label {
+  right:var(--s3);
+}
+
+/* The divider is the same 2px rule the header progress uses. */
+
+.compare.is-overlay .compare-pair:after {
+  content:'';
+  position:absolute;
+  top:0;
+  bottom:0;
+  left:var(--split);
+  width:var(--progress-h);
+  margin-left:calc(var(--progress-h) / -2);
+  background:var(--rule-strong);
+  pointer-events:none;
+}
+
+/* The range input is the divider a reader can reach with one pointer and
+   with the keyboard, which is what WCAG 2.5.7 asks a drag to have beside it.
+   It carries a visible label and its own value. */
+
+.compare-control {
+  display:flex;
+  align-items:center;
+  gap:var(--s3);
+  margin-top:var(--s4);
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+}
+
+.compare-control input {
+  flex:1;
+  min-width:0;
+  min-height:var(--tap);
+  accent-color:var(--accent);
+}
+
+.compare-control input:focus-visible {
+  outline:var(--focus-width) solid var(--focus);
+  outline-offset:var(--focus-offset);
+}
+
+@media(max-width:760px) {
+
+  /* Two pictures side by side on a phone are two pictures nobody can read,
+     so the base state stacks them. The overlay already stacks them. */
+
+  .compare-pair {
+    grid-template-columns:minmax(0,1fr);
+  }
+
+}
+
+@media print {
+
+  /* Paper cannot hold a divider, so the pair goes back to side by side even
+     when the script has already overlaid it. */
+
+  .compare {
+    width:auto;
+    margin-inline:0;
+  }
+
+  .compare-pair,.compare.is-overlay .compare-pair {
+    grid-template-columns:repeat(2,1fr);
+    grid-template-areas:none;
+    gap:var(--s5);
+    break-inside:avoid;
+  }
+
+  .compare.is-overlay .compare-side {
+    grid-area:auto;
+  }
+
+  .compare.is-overlay .compare-after {
+    clip-path:none;
+  }
+
+  .compare.is-overlay .compare-label {
+    position:static;
+    padding:0;
+    background:none;
+    margin-bottom:var(--s2);
+  }
+
+  .compare.is-overlay .compare-pair:after {
+    display:none;
+  }
+
+}
+
+/* diagram */
+
+/* The heading opens the drawing, so it takes the drawing's width. */
+
+.section-diagram .section-heading {
+  width:min(var(--figure),100%);
+}
+
+.diagram {
+  width:min(var(--figure),100%);
+  margin-block:0;
+  margin-inline:var(--role-inline);
+}
+
+/* The drawing is authored one unit to one pixel of the figure column, so a
+   label set at 16 units is a label set at 16 pixels. It holds that size
+   whatever the window does and its own frame scrolls instead, because a
+   label that scales with the page stops being readable on a phone. The list
+   under the drawing says the same thing in sentences either way. */
+
+.diagram-frame {
+  overflow-x:auto;
+}
+
+/* One picture that never animates and that nothing can trigger. The marks
+   and the bowed lines are the cover's own, so a diagram is drawn in the hand
+   the rest of the report is drawn in. */
+
+.diagram-art {
+  display:block;
+  width:100%;
+  min-width:var(--figure);
+  height:auto;
+}
+
+.diagram-lines path {
+  stroke:var(--line);
+}
+
+/* The drawing carries its colors as attributes as well, so that an SVG lifted
+   out of the page is still right. These rules are what follows the token when
+   the token changes. */
+
+.diagram-marks {
+  stroke:var(--ink);
+}
+
+.diagram-edge-label {
+  stroke:var(--paper);
+}
+
+.diagram-label,.diagram-edge-label {
+  font-family:var(--font-label);
+  fill:var(--ink);
+}
+
+/* The drawing is hidden from assistive technology, because a bare SVG tells
+   a screen reader nothing. This list is the drawing in sentences, and it is
+   shown rather than hidden: a reader who can see the picture still gains
+   from reading what it claims. */
+
+.diagram-edges {
+  width:var(--col);
+  margin:var(--s5) 0 0;
+  padding-left:var(--s5);
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+}
+
+.diagram-edges li {
+  margin-bottom:var(--s1);
+}
+
+/* Below this width the frame is narrower than a third of the drawing, so a
+   reader met the middle of the picture and had to scroll to find the node the
+   flow starts from. The drawing takes the width it is given instead and the
+   edge list under it carries the same information in sentences. */
+
+@media(max-width:760px) {
+
+  .diagram-art {
+    min-width:0;
+  }
+
+  .diagram-frame {
+    overflow-x:visible;
+  }
+
+}
+
+@media print {
+
+  /* Paper cannot scroll, so the drawing takes the width of the text block
+     and its labels come down with it. */
+
+  .section-diagram .section-heading {
+    max-width:var(--reading-print);
+    width:auto;
+    margin-inline:0;
+  }
+
+  .diagram {
+    width:auto;
+    margin-inline:0;
+    break-inside:avoid;
+  }
+
+  .diagram-frame {
+    overflow:visible;
+  }
+
+  .diagram-art {
+    min-width:0;
+  }
+
+  .diagram-edges {
+    max-width:var(--reading-print);
+  }
+
+}
+
+/* end matter */
+
+/* Every block after the last section is quiet: a hairline, a small label and
+   the content. No card, no tint and no icon. The report is over, and these
+   blocks answer the questions it leaves rather than starting a new one. */
+
+.endmatter {
+  border-top:1px solid var(--rule);
+  padding-block:var(--s6);
+  padding-inline:var(--gutter);
+}
+
+/* One wrapper states the block's role width, so the label opens the column it
+   belongs to. The measure is in em and the wrapper holds the body size, so the
+   width is the same one the reading column has everywhere else. */
+
+.endmatter-inner {
+  width:var(--col);
+  margin-inline:var(--role-inline);
+}
+
+.endmatter-related .endmatter-inner {
+  width:min(var(--figure),100%);
+}
+
+.endmatter-label {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+  margin-bottom:var(--s5);
+}
+
+/* Every end-matter link carries the quiet underline the notice and the footer
+   carry, and takes the accent under the pointer. */
+
+.endmatter a {
+  text-decoration:underline;
+  text-decoration-color:var(--rule-strong);
+  transition:text-decoration-color var(--dur-hover) var(--ease);
+}
+
+.endmatter a:hover,.series-link:hover .series-title {
+  text-decoration-color:var(--accent);
+}
+
+/* authors */
+
+.author + .author {
+  margin-top:var(--s6);
+}
+
+.author-name {
+  font-family:var(--font-label);
+  font-weight:600;
+  font-size:var(--t1);
+  line-height:var(--lh-body);
+  margin-bottom:var(--s2);
+}
+
+.author-role,.author-bio,.author-link {
+  font-size:var(--t0);
+  line-height:var(--lh-body);
+  color:var(--ink-soft);
+  margin-bottom:0;
+}
+
+.author-role {
+  font-family:var(--font-label);
+}
+
+.author-bio,.author-link {
+  margin-top:var(--s2);
+}
+
+/* The hit area sits behind the link, so the target reaches --tap while the
+   line stays the height of the type the reader sees. */
+
+.author-link a {
+  position:relative;
+}
+
+.author-link a:before {
+  content:'';
+  position:absolute;
+  inset:calc((var(--tap) - 100%) / -2) 0;
+}
+
+/* credits */
+
+.contributors {
+  margin:0;
+}
+
+.contributors > div {
+  display:grid;
+  grid-template-columns:var(--s10) minmax(0,1fr);
+  align-items:baseline;
+  gap:0 var(--s4);
+  border-top:1px solid var(--rule);
+  padding-block:var(--s3);
+}
+
+.contributors dt {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+}
+
+.contributors dd {
+  margin:0;
+  font-size:var(--t0);
+  line-height:var(--lh-body);
+}
+
+/* read next */
+
+.read-next {
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:var(--s6);
+}
+
+.read-next[data-count="1"] {
+  grid-template-columns:minmax(0,var(--reading));
+}
+
+.read-next[data-count="2"] {
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+
+.read-next li {
+  border-top:1px solid var(--rule);
+  padding-top:var(--s3);
+}
+
+.read-next a {
+  display:inline-flex;
+  align-items:center;
+  min-height:var(--tap);
+  font-family:var(--font-label);
+  font-size:var(--t1);
+  line-height:var(--lh-body);
+}
+
+.read-next p {
+  font-size:var(--t0);
+  line-height:var(--lh-body);
+  color:var(--ink-soft);
+  margin:var(--s2) 0 0;
+}
+
+/* series links */
+
+.series-links {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:var(--s5);
+}
+
+/* The whole link carries no underline, and the title inside it carries one.
+   The selector holds two classes, because `.endmatter a` above would otherwise
+   win and underline the direction label with the title. */
+
+.endmatter .series-link {
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:var(--s1);
+  min-height:var(--tap);
+  border-top:1px solid var(--rule);
+  padding-top:var(--s3);
+  text-decoration:none;
+}
+
+/* The two ends of a series sit at the two ends of the row, so a lone next
+   link still reads as the one that follows. */
+
+.series-next {
+  grid-column:2;
+  text-align:right;
+}
+
+.series-direction {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+}
+
+.series-title {
+  font-size:var(--t1);
+  line-height:var(--lh-body);
+  text-decoration:underline;
+  text-decoration-color:var(--rule-strong);
+  transition:text-decoration-color var(--dur-hover) var(--ease);
+}
+
+/* corrections */
+
+.corrections {
+  list-style:none;
+  margin:0;
+  padding:0;
+}
+
+.corrections li {
+  border-top:1px solid var(--rule);
+  padding-block:var(--s3);
+}
+
+.correction-date {
+  display:block;
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  font-variant-numeric:tabular-nums;
+  color:var(--muted);
+  margin-bottom:var(--s1);
+}
+
+.correction-text {
+  font-size:var(--t0);
+  line-height:var(--lh-body);
+  margin:0;
+}
+
+/* A specimen sits inside a guide section that already holds the gutter, so
+   the block it renders gives its own back, the way a section specimen does. */
+
+.specimen-render .endmatter {
+  padding-inline:0;
+  border-top:0;
+}
+
+/* The row holds its item count down to the phone breakpoint. Two columns at
+   1000px left a row of three wrapped two and one, with a hole where the third
+   column was; three columns of 275px carry the title in two lines and the
+   description in three, and the row still reads as a row.
+
+   Every count is named here, because `.read-next[data-count="2"]` above holds
+   one class more than `.read-next` and would otherwise keep its two columns on
+   a phone. */
+
+@media(max-width:760px) {
+
+  .read-next,.read-next[data-count="1"],.read-next[data-count="2"],.series-links {
+    grid-template-columns:minmax(0,1fr);
+  }
+
+  .series-next {
+    grid-column:1;
+    text-align:left;
+  }
+
+}
+
+@media print {
+
+  /* On paper every block starts at the page margin, and none of them is cut
+     in half by a sheet edge. */
+
+  .endmatter {
+    padding:var(--s5) 0;
+    break-inside:avoid;
+  }
+
+  .endmatter-inner {
+    width:auto;
+    max-width:var(--reading-print);
+    margin-inline:0;
+  }
+
+  .endmatter-related .endmatter-inner {
+    max-width:none;
+  }
+
+  .read-next {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:var(--s5);
+  }
+
+  .read-next a,.series-link {
+    min-height:0;
+  }
+
+  .author-link a:before {
+    content:none;
+  }
+
+}
+
+/* figures. A chart is one layer of marks in SVG and one layer of labels in
+   HTML. The SVG holds a 100 by 100 viewBox and takes preserveAspectRatio:
+   none, so an x is a percent of the plot width and a y a percent of its
+   height, and the stylesheet alone decides how tall a row is. The labels stay
+   in HTML, so they hold the token type size at every screen width. A scaled
+   SVG would shrink its own text to four pixels on a phone. */
+
+/* Hidden from the eye, kept in the page: the sentence a sparkline states and
+   the sentence a sort states. */
+
+.hidden-text {
+  position:absolute;
+  width:1px;
+  height:1px;
+  overflow:hidden;
+  clip-path:inset(50%);
+  white-space:nowrap;
+}
+
+/* A figure heading opens a block on --figure, so it takes that width. */
+
+.section-figure .section-heading,.section-table .section-heading {
+  width:min(var(--figure),100%);
+}
+
+.figure {
+  width:min(var(--figure),100%);
+  margin-block:0;
+  margin-inline:var(--role-inline);
+}
+
+.figure-unit {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+  margin-bottom:var(--s5);
+}
+
+/* The picture sits on --figure and the words under it sit on --reading, so
+   the caption reads at the measure the body reads at. */
+
+.figure figcaption {
+  width:var(--col);
+  margin-top:var(--s5);
+}
+
+.figure-caption {
+  color:var(--ink-soft);
+  margin-bottom:var(--s2);
+}
+
+.figure-source,.figure-note {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+  margin-bottom:0;
+}
+
+.figure-note {
+  margin-top:var(--s2);
+}
+
+.figure-source a {
+  text-decoration:underline;
+  text-decoration-color:var(--rule-strong);
+  transition:text-decoration-color var(--dur-hover) var(--ease);
+}
+
+.figure-source a:hover {
+  text-decoration-color:var(--accent);
+}
+
+.figure-source .source-host {
+  display:block;
+}
+
+/* the chart grid */
+
+.chart {
+  --rows:1;
+  --per-row:2;
+  /* A row holds its marks and its name. Two marks need two steps of the
+     space scale; a group of four needs four. */
+  --row-h:calc(var(--s5) * var(--per-row));
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:0 var(--s4);
+}
+
+/* The name column takes the width its names need and stops there, so a chart
+   of short names does not leave a gap in front of its marks. */
+
+.chart-cats {
+  display:flex;
+  flex-direction:column;
+  max-width:var(--s10);
+}
+
+/* Every name box is one row tall, so the names and the marks stay level. A
+   name that is longer than two lines is clipped: the data table under the
+   figure holds every name in full. */
+
+.chart-cat {
+  display:flex;
+  align-items:center;
+  height:var(--row-h);
+  overflow:hidden;
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--ink-soft);
+}
+
+/* Every column is placed by name, so a column a narrow screen hides does not
+   move the plot into the space it left. */
+
+.chart-plot {
+  position:relative;
+  grid-column:2;
+  height:calc(var(--rows) * var(--row-h));
+}
+
+.chart-marks {
+  position:absolute;
+  inset:0;
+  display:block;
+  width:100%;
+  height:100%;
+  overflow:visible;
+}
+
+/* the marks */
+
+.chart-mark {
+  transition:fill var(--dur-hover) var(--ease);
+}
+
+.chart-mark:hover {
+  fill:var(--mark-hover);
+}
+
+.chart-span {
+  fill:var(--rule-strong);
+}
+
+.chart-rule,.chart-grid {
+  fill:none;
+  stroke:var(--rule);
+}
+
+/* A data line takes --progress-h, the width the page already gives a rule
+   that states a value. */
+
+.chart-path {
+  fill:none;
+  stroke-width:var(--progress-h);
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.chart-marks .series-1 {
+  stroke:var(--series-1);
+}
+
+.chart-marks .series-2 {
+  stroke:var(--series-2);
+}
+
+.chart-marks .series-3 {
+  stroke:var(--series-3);
+}
+
+.chart-marks .series-4 {
+  stroke:var(--series-4);
+}
+
+/* A dot is HTML, not SVG. The plot stretches sideways to the width it is
+   given, and a stretched circle is an ellipse. */
+
+.chart-point {
+  position:absolute;
+  left:var(--x,100%);
+  top:var(--y);
+  width:var(--s3);
+  height:var(--s3);
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+  background:var(--series-1);
+}
+
+.chart-point.series-2 {
+  background:var(--series-2);
+}
+
+.chart-point.series-3 {
+  background:var(--series-3);
+}
+
+.chart-point.series-4 {
+  background:var(--series-4);
+}
+
+/* the labels */
+
+.chart-value {
+  position:absolute;
+  left:var(--x);
+  top:var(--y);
+  transform:translate(var(--s2),-50%);
+  font-family:var(--font-numeral);
+  font-variant-numeric:var(--num-display);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  white-space:nowrap;
+}
+
+/* A long bar carries its own value, in paper, at the bar end. */
+
+.chart-value.inside {
+  transform:translate(calc(-100% - var(--s2)),-50%);
+  color:var(--paper);
+}
+
+/* A value beside a dot clears the dot before it starts. */
+
+.chart-value.beside {
+  transform:translate(var(--s3),-50%);
+}
+
+.chart-value.centered {
+  max-width:var(--w);
+  overflow:hidden;
+  transform:translate(-50%,-50%);
+  text-align:center;
+}
+
+.chart-value.flip {
+  transform:translate(calc(-100% - var(--s3)),-50%);
+}
+
+.chart-name {
+  display:block;
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+}
+
+.chart-figure {
+  font-family:var(--font-numeral);
+  font-variant-numeric:var(--num-display);
+}
+
+/* line and slope: a plot box of one height with the scale beside it */
+
+.chart-line,.chart-slope {
+  grid-template-columns:auto 1fr auto;
+}
+
+.chart-line .chart-plot,.chart-slope .chart-plot,.chart-scale,.chart-ends {
+  height:var(--band);
+}
+
+.chart-scale,.chart-ends {
+  position:relative;
+}
+
+/* Both label columns hold their labels in place rather than in flow, so each
+   one states the width it needs; a column of placed labels reports no width
+   of its own. */
+
+.chart-scale {
+  grid-column:1;
+  width:var(--s8);
+}
+
+.chart-ends {
+  grid-column:3;
+  width:var(--s9);
+}
+
+.chart-tick {
+  position:absolute;
+  top:var(--y);
+  right:0;
+  transform:translateY(-50%);
+  font-family:var(--font-numeral);
+  font-variant-numeric:var(--num-display);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  color:var(--muted);
+}
+
+/* A series is named at its line end, never in a legend. A legend sends the
+   eye back and forth between a key and a line. */
+
+.chart-end {
+  position:absolute;
+  top:var(--y);
+  left:0;
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+}
+
+.chart-end.series-1 .chart-figure {
+  color:var(--series-1);
+}
+
+.chart-end.series-2 .chart-figure {
+  color:var(--series-2);
+}
+
+.chart-end.series-3 .chart-figure {
+  color:var(--series-3);
+}
+
+.chart-end.series-4 .chart-figure {
+  color:var(--series-4);
+}
+
+.chart-ends-start {
+  grid-column:1;
+  width:var(--s9);
+  text-align:right;
+}
+
+.chart-ends-start .chart-end {
+  left:auto;
+  right:0;
+}
+
+.chart-axis {
+  position:relative;
+  grid-column:2;
+  min-height:calc(var(--t-1) * var(--lh-label));
+  margin-top:var(--s2);
+}
+
+.chart-x {
+  position:absolute;
+  left:var(--x);
+  transform:translateX(-50%);
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+}
+
+.chart-x.first {
+  transform:none;
+}
+
+.chart-x.last {
+  transform:translateX(-100%);
+}
+
+/* A range needs room outside the plot for the value at each end. */
+
+.chart-range .chart-plot {
+  margin-inline:var(--s7);
+}
+
+/* small multiples: one chart for each series, all on one scale */
+
+.chart-multiples {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:var(--s6) var(--s7);
+}
+
+.chart-multiples .chart {
+  --row-h:var(--s6);
+}
+
+/* A panel is a small chart, so its plot box is smaller than the one a lone
+   line chart takes. */
+
+.chart-multiples .chart-plot,.chart-multiples .chart-scale,.chart-multiples .chart-ends {
+  height:var(--s10);
+}
+
+/* A panel names its series in its own heading, so its end label states only
+   a value and needs less room than a lone chart's. */
+
+.chart-multiples .chart-ends {
+  width:var(--s8);
+}
+
+.chart-multiples .chart-bar .chart-plot,.chart-multiples .chart-dot .chart-plot,.chart-multiples .chart-stacked .chart-plot {
+  height:calc(var(--rows) * var(--row-h));
+}
+
+.chart-panel-name {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--ink-soft);
+  margin-bottom:var(--s3);
+}
+
+/* the data behind the picture */
+
+.figure-data {
+  width:min(var(--figure),100%);
+  margin-block:var(--s5) 0;
+  margin-inline:var(--role-inline);
+}
+
+.figure-data summary {
+  list-style:none;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:var(--s5);
+  min-height:var(--tap);
+  padding-block:var(--s2);
+  font-family:var(--font-label);
+  font-size:var(--t1);
+  line-height:var(--lh-label);
+  transition:color var(--dur-hover) var(--ease);
+}
+
+.figure-data summary::-webkit-details-marker {
+  display:none;
+}
+
+.figure-data summary:hover {
+  color:var(--accent);
+}
+
+.figure-data[open] summary .accordion-chevron {
+  transform:rotate(180deg);
+}
+
+.figure-data summary:hover .accordion-chevron {
+  color:var(--accent);
+}
+
+.figure-data[open] summary {
+  margin-bottom:var(--s3);
+}
+
+/* motion. Bars grow from zero and lines are drawn through a window that
+   opens from the left. Both are one transform, and the end state is the base
+   state, so a browser that runs no animation still reads correctly. */
+
+@keyframes figure-grow {
+  from {
+    transform:scaleX(0);
+  }
+}
+
+.chart-grow,.chart-reveal {
+  transform-box:fill-box;
+  transform-origin:left center;
+}
+
+/* Scripts off there is no timer to start the reveal, so the reader's own
+   scroll position drives it where the browser supports that. */
+
+@supports (animation-timeline:view()) {
+
+  html:not(.enhanced) .chart .chart-grow,html:not(.enhanced) .chart .chart-reveal {
+    animation:figure-grow var(--dur-draw) var(--ease-draw) both;
+    animation-timeline:view();
+    animation-range:entry 10% entry 90%;
+  }
+
+}
+
+/* Scripts on, one observer starts the reveal on first view and never starts
+   it again. A scroll timeline would run backwards when the reader scrolls
+   back up, and nothing on this page re-animates on a second look. */
+
+.chart.in-view .chart-grow,.chart.in-view .chart-reveal {
+  animation:figure-grow var(--dur-draw) var(--ease-draw) both;
+  animation-delay:min(calc(var(--row,0) * var(--stagger-step)),var(--stagger-cap));
+}
+
+.chart.drawn .chart-grow,.chart.drawn .chart-reveal {
+  animation:none;
+}
+
+/* A scroll timeline reads a position, not a clock, so shortening every
+   duration does not stop it. The reader who asked for no motion gets the end
+   state and nothing else. */
+
+.no-motion .chart-grow,.no-motion .chart-reveal {
+  animation:none!important;
+}
+
+@media(prefers-reduced-motion:reduce) {
+
+  :root:not(.motion-on) .chart-grow,:root:not(.motion-on) .chart-reveal {
+    animation:none!important;
+  }
+
+}
+
+@media(max-width:1000px) {
+
+  .chart-multiples {
+    gap:var(--s5) var(--s6);
+  }
+
+}
+
+@media(max-width:760px) {
+
+  .chart {
+    gap:0 var(--s3);
+  }
+
+  .chart-cats {
+    max-width:var(--s9);
+  }
+
+  .chart-range .chart-plot {
+    margin-inline:var(--s5);
+  }
+
+  /* A phone has no room for a scale column beside a line, so the line drops
+     it and keeps its end labels, which state the value that matters. The data
+     table under the figure still holds every point. */
+
+  .chart-scale,.chart-grid {
+    display:none;
+  }
+
+  /* Five dates under a plot this narrow overlap, so the axis keeps the two
+     that name the span. */
+
+  .chart-x:not(.first):not(.last) {
+    display:none;
+  }
+
+  .chart-multiples {
+    grid-template-columns:1fr;
+  }
+
+}
+
+@media print {
+
+  .figure,.chart-panel {
+    break-inside:avoid;
+  }
+
+  /* A reader who prints while a figure is still drawing gets the whole
+     figure, not the frame the sheet caught. */
+
+  .chart-grow,.chart-reveal {
+    animation:none!important;
+  }
+
+  /* Paper carries no hue a reader can rely on, so a figure with two or more
+     series swaps its fills for the pattern each series carries. */
+
+  /* The hairline states where a mark ends, which a light pattern alone does
+     not. */
+
+  .chart .chart-mark[style*="--pattern"] {
+    fill:var(--pattern);
+    stroke:var(--ink);
+    stroke-width:1px;
+    vector-effect:non-scaling-stroke;
+  }
+
+  /* The mark under the label is now paper with ink drawn on it, so the label
+     changes to ink as well. */
+
+  .patterned .chart-value.inside {
+    color:var(--ink);
+  }
+
+  /* --band is a share of the screen height, which a sheet of paper does not
+     have. */
+
+  .chart-line .chart-plot,.chart-slope .chart-plot,.chart-scale,.chart-ends {
+    height:var(--s10);
+  }
+
+  .chart-multiples {
+    grid-template-columns:repeat(2,1fr);
+    gap:var(--s5);
+  }
+
+}
+
+/* form */
+
+/* One column, the full width of the reading measure. A form beside a report
+   is a short errand, not a second document, so the fields stack and the
+   button sits with the sentence that says what the reader gets. */
+
+.signup {
+  display:grid;
+  gap:var(--s5);
+}
+
+.form-field {
+  display:grid;
+  gap:var(--s2);
+}
+
+.form-field label {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+}
+
+.form-input {
+  width:100%;
+  min-height:var(--tap);
+  padding:var(--s2) var(--s3);
+  border:1px solid var(--rule-strong);
+  border-radius:var(--radius-control);
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--font-label);
+  font-size:var(--t0);
+  line-height:var(--lh-body);
+  transition:border-color var(--dur-control) var(--ease);
+}
+
+.form-input:focus-visible {
+  outline:var(--focus-width) solid var(--focus);
+  outline-offset:var(--focus-offset);
+}
+
+/* A field in error takes a heavier ink edge, never a color. Color alone
+   cannot carry the message, and the wording under the label carries it. */
+
+.form-input[aria-invalid="true"] {
+  border-width:var(--rule-error);
+  border-color:var(--ink);
+}
+
+.field-error,.form-summary-title,.form-send-error,.form-summary a {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--ink);
+  margin:0;
+}
+
+/* The summary repeats every error at the top of the form and links to the
+   field that holds it, so a reader who cannot see the whole form still finds
+   each one. It carries no fill: the ink edge is the whole signal. */
+
+.form-summary {
+  border:var(--rule-error) solid var(--ink);
+  border-radius:var(--radius-control);
+  padding:var(--s4);
+}
+
+.form-summary:focus-visible {
+  outline:var(--focus-width) solid var(--focus);
+  outline-offset:var(--focus-offset);
+}
+
+.form-summary ul {
+  list-style:none;
+  margin:var(--s2) 0 0;
+  padding:0;
+}
+
+/* The row is a block and not a flex line, so the first letter of the message
+   is a letter the stylesheet can lift. */
+
+.form-summary a {
+  display:block;
+  min-height:var(--tap);
+  padding-block:var(--s3);
+  text-decoration:underline;
+  text-decoration-color:var(--rule-strong);
+  transition:text-decoration-color var(--dur-hover) var(--ease);
+}
+
+.form-summary a:hover {
+  text-decoration-color:var(--accent);
+}
+
+/* The message opens in lower case, because the field shows it after the word
+   "Error" and a colon. In the summary it starts the line, so it starts with a
+   capital. The word a screen reader hears does not change. */
+
+.form-summary a:first-letter {
+  text-transform:uppercase;
+}
+
+/* The reason states what the reader gets and how often, and it sits beside
+   the button so it is read before the click, not after it. */
+
+.form-actions {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:var(--s3) var(--s5);
+}
+
+.form-reason {
+  flex:1;
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+  margin:0;
+}
+
+/* The spam trap. It is hidden from the eye and from the accessibility tree,
+   and it is out of the tab order, so only a machine fills it in. */
+
+.form-trap {
+  position:absolute;
+  width:1px;
+  height:1px;
+  overflow:hidden;
+  clip-path:inset(50%);
+  white-space:nowrap;
+}
+
+/* The field takes the width of the box that hides it. At its own width its
+   layout box would reach past the page edge inside a clipped parent. */
+
+.form-trap input {
+  width:100%;
+}
+
+/* The end of the flow: the form goes, and one sentence takes its place and
+   names what the reader gave. */
+
+.form-status {
+  font-size:var(--t1);
+  line-height:var(--lh-body);
+  margin:0;
+}
+
+.form-status:focus-visible {
+  outline:var(--focus-width) solid var(--focus);
+  outline-offset:var(--focus-offset);
+}
+
+@media(max-width:760px) {
+
+  /* The button takes the row on its own, so a reason of two lines does not
+     push it off the screen edge. */
+
+  .form-actions .button {
+    width:100%;
+  }
+
+}
+
+/* gallery */
+
+.section-gallery .section-heading {
+  width:min(var(--figure),100%);
+}
+
+.gallery {
+  width:min(var(--figure),100%);
+  margin-inline:var(--role-inline);
+}
+
+/* One strip the reader scrolls by hand or steps through with the buttons.
+   Nothing moves on its own, so there is no timer here and no pause control
+   to need. The last item stops short of the edge, so the reader can see that
+   the strip carries more than one picture. */
+
+.gallery-strip {
+  display:grid;
+  grid-auto-flow:column;
+  grid-auto-columns:min(var(--reading),calc(100% - var(--s7)));
+  gap:var(--s5);
+  overflow-x:auto;
+  overscroll-behavior-x:contain;
+  scroll-snap-type:x mandatory;
+  margin:0;
+  padding:0 0 var(--s3);
+  list-style:none;
+}
+
+.gallery-item {
+  scroll-snap-align:start;
+}
+
+.gallery-item figure {
+  margin:0;
+}
+
+.gallery-item img {
+  display:block;
+  width:100%;
+  height:auto;
+}
+
+.gallery-bar {
+  display:flex;
+  align-items:center;
+  gap:var(--s3);
+  margin-top:var(--s4);
+}
+
+.gallery-count {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  font-variant-numeric:tabular-nums;
+  color:var(--muted);
+  margin:0;
+}
+
+/* A button at the end of the strip has nothing to do, so it says so. A
+   disabled control is not a control, which is why its edge may be quiet. */
+
+.gallery-step[disabled] {
+  color:var(--muted);
+  border-color:var(--rule);
+  cursor:default;
+}
+
+.gallery-step[disabled]:hover {
+  background:none;
+  transform:none;
+}
+
+@media(max-width:760px) {
+
+  /* A phone cannot hold the count between two buttons this wide, so the
+     count takes its own row and the buttons share the one under it. */
+
+  .gallery-bar {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:var(--s3);
+  }
+
+  /* The count is not a control, so moving it above the buttons changes what
+     the eye reads first and leaves the keyboard order alone. */
+
+  .gallery-count {
+    grid-column:1 / -1;
+    order:-1;
+  }
+
+}
+
+@media print {
+
+  /* Paper cannot scroll, so the strip becomes a grid of two. */
+
+  .gallery {
+    width:auto;
+    margin-inline:0;
+  }
+
+  .gallery-strip {
+    grid-auto-flow:row;
+    grid-template-columns:repeat(2,1fr);
+    grid-auto-columns:auto;
+    gap:var(--s5) var(--s6);
+    overflow:visible;
+    padding-bottom:0;
+  }
+
+  .gallery-item {
+    break-inside:avoid;
+  }
+
+}
+
+/* glossary, and the definition control every {term} renders */
+
+.glossary {
+  margin:0;
+}
+
+.glossary-entry {
+  border-top:1px solid var(--rule);
+  padding:var(--s4) 0;
+}
+
+.glossary dt {
+  font-family:var(--font-label);
+  font-size:var(--t1);
+  line-height:var(--lh-subhead);
+  margin-bottom:var(--s1);
+}
+
+/* A term is a landing place, so it takes focus and it takes the focus ring. */
+
+.glossary dt:focus-visible {
+  outline:var(--focus-width) solid var(--focus);
+  outline-offset:var(--focus-offset);
+}
+
+.glossary dd {
+  margin:0;
+  color:var(--ink-soft);
+}
+
+/* The term in the text. The button is set inline so a two-word term breaks
+   across a line the way the words around it do. It carries no hit box: an
+   inline target inside a sentence is the one target WCAG 2.5.8 excepts, and a
+   44px box around a word in body copy covers the lines above and below it. */
+
+.definition-term,.definition-link {
+  display:inline;
+  font:inherit;
+  color:inherit;
+  background:none;
+  border:0;
+  padding:0;
+  text-decoration:underline;
+  text-decoration-style:dotted;
+  text-decoration-color:var(--rule-strong);
+  text-underline-offset:var(--s1);
+  transition:text-decoration-color var(--dur-hover) var(--ease);
+}
+
+.definition-term:hover,.definition-link:hover {
+  text-decoration-color:var(--accent);
+}
+
+/* One of the two is on the page at a time. With scripts off, and in a browser
+   with no popover API, the plain link to the glossary entry is the whole
+   control, so the definition is never behind an overlay the reader cannot
+   open. 50-definition.js adds the no-popover class when it finds no
+   showPopover on the button. */
+
+.definition-link {
+  display:none;
+}
+
+html:not(.enhanced) .definition-term,html.no-popover .definition-term {
+  display:none;
+}
+
+html:not(.enhanced) .definition-link,html.no-popover .definition-link {
+  display:inline;
+}
+
+/* The popover. It holds the term, the definition and a link to the entry, and
+   it is capped at 40 words by the build, so it never needs a scrollbar. */
+
+.definition-popover {
+  width:max-content;
+  max-width:var(--panel-w);
+  padding:var(--s4);
+  border:1px solid var(--card-border);
+  border-radius:var(--radius-card);
+  background:var(--paper);
+  color:var(--ink);
+  box-shadow:var(--shadow-panel);
+  z-index:var(--z-popover);
+  opacity:0;
+  transform:translateY(var(--s1));
+  /* display and overlay are discrete swaps, not animation: they hold the
+     element on the page for the length of the one transition that runs. */
+  transition:opacity var(--dur-reveal) var(--ease),transform var(--dur-reveal) var(--ease),display var(--dur-reveal) allow-discrete,overlay var(--dur-reveal) allow-discrete;
+}
+
+.definition-popover:popover-open {
+  opacity:1;
+  transform:none;
+}
+
+@starting-style {
+
+  .definition-popover:popover-open {
+    opacity:0;
+    transform:translateY(var(--s1));
+  }
+
+}
+
+.definition-name {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+  margin-bottom:var(--s2);
+}
+
+.definition-text {
+  font-size:var(--t0);
+  line-height:var(--lh-body);
+  margin-bottom:var(--s3);
+}
+
+.definition-more {
+  display:inline-flex;
+  align-items:center;
+  min-height:var(--tap);
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  text-decoration:underline;
+  text-decoration-color:var(--rule-strong);
+  transition:text-decoration-color var(--dur-hover) var(--ease);
+}
+
+.definition-more:hover {
+  text-decoration-color:var(--accent);
+}
+
+/* Where anchor positioning is supported the popover sits under the button that
+   opened it with no script at all. The button is the popover's implicit
+   anchor, because the button names it in popovertarget. */
+
+@supports (position-area:block-end) {
+
+  .definition-popover {
+    position:absolute;
+    position-anchor:auto;
+    position-area:block-end;
+    position-try-fallbacks:flip-block;
+    margin:var(--s2) 0 0;
+  }
+
+}
+
+@media(max-width:760px) {
+
+  .definition-popover {
+    max-width:calc(100vw - var(--gutter) * 2);
+  }
+
+  /* A phone is narrower than the box plus the space beside a term, so the box
+     stops centring itself on the term and centres in the window instead. It
+     keeps the term's block axis, so it still opens under the word. */
+
+  @supports (position-area:block-end) {
+
+    .definition-popover {
+      justify-self:center;
+    }
+
+  }
+
+}
+
+/* On paper the term is a word with a glossary entry behind it, and the entry
+   holds the definition, so the control prints as plain text. */
+
+@media print {
+
+  .definition-term {
+    display:none;
+  }
+
+  .definition-link {
+    display:inline;
+    text-decoration:none;
+  }
+
+  .glossary-entry {
+    break-inside:avoid;
+  }
+
+}
+
+/* image, and the caption every media component shares */
+
+/* One figure carries every picture in the kit: the image, the two pictures a
+   comparison holds, the strip of a gallery and the drawing of a diagram. The
+   caption rules below are shared for the same reason a caption reads the same
+   wherever it sits. */
+
+.media-figure {
+  margin:0;
+}
+
+.media-on-reading {
+  width:var(--col);
+  margin-inline:var(--role-inline);
+}
+
+.media-on-figure {
+  width:min(var(--figure),100%);
+  margin-inline:var(--role-inline);
+}
+
+/* A bleed picture reaches the paper's own edge, so it gives back the gutter
+   the section pads it by. Its caption keeps the gutter, because a caption is
+   text and text stays on the grid. */
+
+.media-on-bleed {
+  margin-inline:calc(var(--gutter) * -1);
+}
+
+.media-on-bleed .media-caption {
+  padding-inline:var(--gutter);
+}
+
+.media-figure img {
+  display:block;
+  width:100%;
+  height:auto;
+}
+
+.media-caption {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+  margin-top:var(--s3);
+  margin-bottom:0;
+}
+
+/* The credit is last and on a line of its own: the reader wants the picture
+   explained before they are told who made it. */
+
+.media-credit {
+  display:block;
+  margin-top:var(--s1);
+}
+
+/* The trigger is the picture. Scripts off it is a link to the file; with
+   scripting the script makes it a button that opens the dialog. It carries
+   no chrome but the one edge that says it is a control, and the cursor,
+   which is the whole hover state: the two hover patterns the system has are
+   an underline and a wash fill, and a picture can show neither. */
+
+.lightbox-open {
+  display:block;
+  width:100%;
+  padding:0;
+  border:1px solid var(--rule-strong);
+  background:none;
+  cursor:zoom-in;
+}
+
+/* The dialog is native, so the browser holds focus inside it, closes it on
+   Escape and paints the backdrop. It is the one thing in this family that
+   moves: it rises by --rise-enter as it arrives. */
+
+.lightbox {
+  gap:var(--s3);
+  justify-items:end;
+  max-width:min(var(--overlay-w),var(--wrapper));
+  max-height:var(--overlay-h);
+  padding:var(--s4);
+  border:1px solid var(--card-border);
+  border-radius:var(--radius-card);
+  background:var(--paper);
+  color:var(--ink);
+  box-shadow:var(--shadow-panel);
+  opacity:0;
+  transform:translateY(var(--rise-enter));
+  transition:opacity var(--dur-enter) var(--ease),transform var(--dur-enter) var(--ease),overlay var(--dur-enter) allow-discrete,display var(--dur-enter) allow-discrete;
+}
+
+/* The grid is on the open dialog alone. On the dialog itself it would beat
+   the browser's own rule for a closed dialog, and a shut lightbox would stay
+   on the page as an invisible box that takes every click meant for the text
+   under it. */
+
+/* The dialog states its own width. A <dialog> is shrink to fit, so without one
+   it takes the picture's intrinsic size: a drawing authored at 560px opened at
+   560px in the overlay after filling 1090px on the page, which is a lightbox
+   that makes the picture smaller. */
+
+.lightbox[open] {
+  display:grid;
+  width:min(var(--overlay-w),var(--wrapper));
+  opacity:1;
+  transform:none;
+}
+
+@starting-style {
+
+  .lightbox[open] {
+    opacity:0;
+    transform:translateY(var(--rise-enter));
+  }
+
+}
+
+.lightbox::backdrop {
+  background:var(--scrim);
+}
+
+/* The picture fills the width the dialog has and keeps its shape. object-fit
+   holds the aspect ratio when the height is what runs out first, so a tall
+   picture sits in the middle of the row rather than being stretched across it.
+   --s10 is the room the close button and the dialog's own padding take. */
+
+.lightbox-image {
+  justify-self:center;
+  width:100%;
+  height:auto;
+  max-height:calc(var(--overlay-h) - var(--s10));
+  object-fit:contain;
+}
+
+@media(max-width:760px) {
+
+  .lightbox {
+    padding:var(--s3);
+  }
+
+}
+
+@media print {
+
+  /* A picture on the reading column keeps the printed measure. A picture on
+     the figure column fills the text block, the way the findings row does.
+     A bleed picture comes back to the page margin, because paper has no
+     bleed to reach. */
+
+  .media-on-reading {
+    max-width:var(--reading-print);
+    width:auto;
+    margin-inline:0;
+  }
+
+  .media-on-figure,.media-on-bleed {
+    width:auto;
+    margin-inline:0;
+  }
+
+  .media-on-bleed .media-caption {
+    padding-inline:0;
+  }
+
+  .media-figure {
+    break-inside:avoid;
+  }
+
+  .lightbox-open {
+    border:0;
+  }
+
+}
+
+/* notes: the sidenote in the margin and the footnote under the section */
+
+/* The footnote is the copy every reader can reach: it is what a phone, a
+   printer and a page with scripts off all show, and it holds the id the
+   reference points at. */
+
+.footnotes {
+  width:var(--col);
+  margin-block:var(--s6) 0;
+  margin-inline:var(--role-inline);
+}
+
+.footnotes-title {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+  margin-bottom:var(--s3);
+}
+
+.footnote-list {
+  margin:0;
+  padding-inline-start:var(--s5);
+  font-size:var(--t0);
+  line-height:var(--lh-body);
+}
+
+.footnote-list li {
+  border-top:1px solid var(--rule);
+  padding-top:var(--s2);
+  margin-bottom:var(--s3);
+}
+
+.footnote-list li:last-child {
+  margin-bottom:0;
+}
+
+.footnote-list li::marker {
+  font-family:var(--font-numeral);
+  font-variant-numeric:var(--num-display);
+  color:var(--accent);
+}
+
+/* The reference lands the reader's focus on the note itself, so the note
+   takes the page's one focus ring while it holds that focus. */
+
+.footnote-list li:focus-visible,.sidenote:focus-visible {
+  outline:var(--focus-width) solid var(--focus);
+  outline-offset:var(--focus-offset);
+}
+
+.note-back {
+  display:inline-flex;
+  align-items:center;
+  min-height:var(--tap);
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  color:var(--muted);
+  text-decoration:underline;
+  text-decoration-color:var(--rule-strong);
+  transition:text-decoration-color var(--dur-hover) var(--ease);
+}
+
+.note-back:hover {
+  text-decoration-color:var(--accent);
+}
+
+/* The sidenote sits in the space between the reading column and the figure
+   width, which is a column the grid already has. It is measured here and
+   placed by scripts/50-notes.js, which sets the top of each note from the top
+   of its own reference and moves a note down when it would land on the note
+   above it. The column is hidden until that script says it fits, so a narrow
+   window and a narrow page in the guide both keep the footnote instead. */
+
+.section:has(> .sidenotes) {
+  position:relative;
+}
+
+.sidenotes {
+  display:none;
+  position:absolute;
+  top:0;
+  bottom:0;
+  inset-inline-start:calc(50% + var(--col) / 2 + var(--s5));
+  width:max(0px,(min(var(--figure),100% - var(--gutter) * 2) - var(--col)) / 2 - var(--s5));
+}
+
+/* The margin column opens above the fold the wide layout folds its rail at,
+   so one width decides where a note goes in either layout, and only in a
+   section wide enough to hold it: a specimen on the guide is narrower than the
+   window it sits in, and the reading layout's margin is narrower than the
+   wide layout's rail. */
+
+@media(min-width:1001px) {
+
+  .notes-side > .sidenotes {
+    display:block;
+  }
+
+  .notes-side > .footnotes {
+    display:none;
+  }
+
+}
+
+.sidenote {
+  position:absolute;
+  top:0;
+  margin:0;
+  font-family:var(--font-label);
+  font-size:var(--t0);
+  line-height:var(--lh-body);
+  color:var(--muted);
+}
+
+.sidenote-number {
+  color:var(--accent);
+  font-family:var(--font-numeral);
+  font-variant-numeric:var(--num-display);
+  margin-inline-end:var(--s2);
+}
+
+/* Paper has one column, so every note is a footnote again and the block that
+   the script hid comes back. */
+
+@media print {
+
+  /* Every block on paper starts at the page margin, so the notes leave the
+     centered column the screen puts them in. */
+
+  .footnotes {
+    max-width:var(--reading-print);
+    width:auto;
+    margin-inline:0;
+  }
+
+  .notes-side > .footnotes {
+    display:block;
+  }
+
+  .footnote-list li {
+    break-inside:avoid;
+  }
+
+}
+
+/* part */
+
+/* A chapter opener is a pause, so it takes the bookend rhythm the cover and
+   the footer take instead of the flat section rhythm. */
+
+.section-part {
+  padding-block:var(--bookend);
+  /* The one formula that puts a block on the wrapper. It is what the cover,
+     the notice and the footer sit on, so a chapter opener starts on the
+     report's own left edge rather than on the section gutter. */
+  padding-inline:var(--pad-wrapper);
+}
+
+/* The part number is a numeral, which is the second of the two places on the
+   page where display size is allowed. It counts 1, 2, 3 and never pads. */
+
+.part-number {
+  position:relative;
+  font-family:var(--font-display);
+  font-variation-settings:var(--vs-display);
+  font-weight:var(--w-display);
+  font-variant-numeric:var(--num-display);
+  font-size:var(--t4);
+  line-height:var(--lh-numeral);
+  letter-spacing:-.02em;
+  color:var(--accent);
+  margin-bottom:var(--s5);
+}
+
+/* The word "Part" is in the page for a screen reader and not on it for the
+   eye: a lone numeral above a chapter title reads as a part number, and a
+   lone numeral read aloud does not. */
+
+.part-kicker {
+  position:absolute;
+  width:1px;
+  height:1px;
+  overflow:hidden;
+  clip-path:inset(50%);
+  white-space:nowrap;
+}
+
+.part h2 {
+  max-width:var(--reading);
+  margin-bottom:var(--s5);
+}
+
+.part-deck {
+  width:var(--col);
+  color:var(--ink-soft);
+  margin-bottom:0;
+}
+
+@media print {
+
+  /* A chapter opener starts a sheet. Giving the reader a new page is the
+     whole job of the component. */
+
+  .section-part {
+    break-before:page;
+    break-inside:avoid;
+    padding-block:var(--s7);
+    padding-inline:0;
+  }
+
+  .part h2,.part-deck {
+    max-width:var(--reading-print);
+  }
+
+  .part-number {
+    font-size:30pt;
+  }
+
+}
+
+/* prose blocks: subhead, list, callout, caveat, pull quote */
+
+/* A subhead opens a part of the argument, so it takes more space above it than
+   below it. Only a subhead written into the run of paragraphs is a direct
+   child of the reading column, so the steps and the glossary keep their own. */
+
+.section-prose .reading > h3 {
+  margin-top:var(--s7);
+}
+
+.prose-list {
+  margin:0 0 var(--s5);
+  padding-inline-start:var(--s5);
+}
+
+.prose-list li {
+  margin-bottom:var(--s2);
+}
+
+.prose-list li:last-child {
+  margin-bottom:0;
+}
+
+.prose-list li::marker {
+  color:var(--muted);
+}
+
+/* An ordered list counts in the numeral face, like the citation list. */
+
+ol.prose-list li::marker {
+  font-family:var(--font-numeral);
+  font-variant-numeric:var(--num-display);
+  color:var(--accent);
+}
+
+/* A callout is an aside on the wash, opened by a hairline. A caveat is the
+   same block with a stronger rule and a name: a limit a reader has to notice
+   cannot depend on a border to say what it is, and it takes no color of its
+   own, because a warning color is a sixth color the theme does not hold. */
+
+.callout {
+  margin:0 0 var(--s5);
+  padding:var(--s5);
+  background:var(--wash);
+  border-top:1px solid var(--rule);
+  --muted:color-mix(in oklab,var(--ink) 66%,var(--wash));
+}
+
+.callout > :last-child {
+  margin-bottom:0;
+}
+
+.callout-title {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+  margin-bottom:var(--s2);
+}
+
+.caveat {
+  border-top:2px solid var(--rule-strong);
+}
+
+/* The pull quote reuses the quote section's rule and its size, inside the
+   reading column. The build has already read the sentence back against the
+   paragraphs of the same section, so it is always an exact lift. */
+
+.pullquote {
+  font-size:var(--t3);
+  line-height:var(--lh-title);
+  text-wrap:balance;
+  margin:var(--s6) 0;
+}
+
+.pullquote:before {
+  content:'';
+  display:block;
+  width:var(--quote-rule);
+  border-top:2px solid var(--accent);
+  margin-bottom:var(--s5);
+}
+
+@media(max-width:760px) {
+
+  .callout {
+    padding:var(--s4);
+  }
+
+  .pullquote {
+    font-size:var(--t2);
+  }
+
+}
+
+@media print {
+
+  .callout {
+    padding:var(--s3) 0 0;
+    background:none;
+    break-inside:avoid;
+  }
+
+  .pullquote {
+    font-size:14pt;
+    break-inside:avoid;
+  }
+
+}
+
+/* scrolly. The frame pins for the whole section; the cards run past it, one
+   card to a screen, and each card's state fires as the card appears. */
+
+/* The card column is the card's own width, so the card's right edge lands on
+   the figure's right edge instead of eight pixels inside it. */
+
+.scrolly {
+  position:relative;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) var(--card-w);
+  gap:var(--s6);
+  width:min(var(--figure),100%);
+  margin-inline:var(--role-inline);
+}
+
+.stage {
+  --art-width:min(100%,calc((var(--stage-h-safe,700px) - var(--s9)) * 4 / 3));
+  margin:0;
+  position:sticky;
+  top:0;
+  height:100vh;
+  height:100svh;
+  padding-top:calc(var(--header) + var(--s1));
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-self:start;
+  min-width:0;
+}
+
+/* report.js writes --stage-h-safe as the viewport minus the header, so the
+   drawing is always inside the pinned frame. */
+
+.stage .ink-art {
+  width:var(--art-width);
+  margin-inline:auto;
+}
+
+.stage figcaption {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+  text-align:center;
+  margin:var(--s4) auto 0;
+  animation:caption-in var(--dur-caption) var(--ease) both;
+}
+
+@keyframes caption-in {
+
+  from {
+    opacity:0;
+  }
+
+}
+
+.stage-progress {
+  width:var(--art-width);
+  height:var(--stage-progress-h);
+  margin:var(--s5) auto 0;
+  border-radius:calc(var(--stage-progress-h) / 2);
+  background:var(--wash);
+  overflow:hidden;
+}
+
+/* The fill is the accent, so the reader's place reads at a glance. The
+   contrast suite holds the accent on the wash at 4.5:1 or better in every
+   preset, which is more than the 3:1 a non-text indicator needs. */
+
+.stage-progress i {
+  display:block;
+  height:100%;
+  background:var(--accent);
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform var(--dur-progress) var(--ease);
+}
+
+/* The column is led in by one stage height, then pulled back by half a step,
+   so the first card meets the frame it explains. */
+
+.steps {
+  padding-top:100vh;
+  padding-top:100svh;
+  margin-top:-56vh;
+  margin-top:-56svh;
+  pointer-events:none;
+}
+
+.steps:after {
+  content:'';
+  display:block;
+  height:80vh;
+  height:80svh;
+}
+
+.step {
+  min-height:112vh;
+  min-height:112svh;
+  display:flex;
+  align-items:center;
+}
+
+.step-card {
+  pointer-events:auto;
+  width:min(var(--card-w),100%);
+  padding:var(--card-pad);
+  background:var(--paper);
+  border:1px solid var(--card-border);
+  border-radius:var(--radius-card);
+  box-shadow:var(--shadow-card);
+}
+
+.step-card .eyebrow {
+  color:var(--accent);
+}
+
+.step-card h3 {
+  font-family:var(--font-label);
+  font-weight:600;
+  font-size:var(--t1);
+  line-height:var(--lh-body);
+}
+
+.step-card p {
+  margin-bottom:0;
+}
+
+/* This is the accessible description of the drawing. The stage figcaption is
+   the sighted copy and is hidden from assistive technology, so this one is
+   hidden from the eye instead of from the page: it stays in the accessibility
+   tree, in reading order, inside the card it belongs to. */
+
+.step-card .static-caption {
+  position:absolute;
+  width:1px;
+  height:1px;
+  overflow:hidden;
+  clip-path:inset(50%);
+  white-space:nowrap;
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  color:var(--muted);
+  margin-top:var(--s3);
+}
+
+/* report.js fills this with one static state per step, for print only. */
+
+.print-figure {
+  display:none;
+}
+
+/* Scrub mode. The scroll position drives the stage directly, so every timed
+   transition inside it is off: a transform that eases for 620ms after the
+   finger has moved reads as lag, not as polish. The mark keeps only its
+   stroke transition, because the accent landing at the segment's midpoint is
+   a state change, not a travel. The lines lose their draw animation and their
+   dash, because the blend reveals them by crossfade, not by drawing. The
+   progress rule follows the place itself, so it too stops easing. */
+
+.scrolly.is-scrub .stage .ink-art .mark {
+  transition:stroke var(--dur-color) var(--ease);
+}
+
+.scrolly.is-scrub .connections path {
+  animation:none;
+  stroke-dasharray:none;
+  transition:none;
+}
+
+.scrolly.is-scrub .center-ring,.scrolly.is-scrub .center-label {
+  transition:none;
+}
+
+.scrolly.is-scrub .stage-progress i {
+  transition:none;
+}
+
+/* The drawing warms as the argument builds. Scatter stays ink, because
+   nothing is shared yet; the groups take the secondary, the network takes
+   the series midpoint of accent and secondary, and the orbit arrives in the
+   accent itself. Every hue is a series token, so the four states read as one
+   palette in every theme, and the change crosses on the stroke transition in
+   both modes, because a state's color is a state change, not a travel. The
+   lines take the state's color with the marks. */
+
+.scrolly .connections {
+  transition:stroke var(--dur-color) var(--ease);
+}
+
+.scrolly .ink-art[data-state="groups"] .mark,.scrolly .ink-art[data-state="groups"] .connections {
+  stroke:var(--secondary);
+}
+
+.scrolly .ink-art[data-state="network"] .mark,.scrolly .ink-art[data-state="network"] .connections {
+  stroke:var(--series-3);
+}
+
+.scrolly .ink-art[data-state="orbit"] .mark,.scrolly .ink-art[data-state="orbit"] .connections {
+  stroke:var(--accent);
+}
+
+/* The highlight keeps the accent in every state. This rule comes after the
+   state colors on purpose: a convener stays accented inside its green group. */
+
+.scrolly .ink-art .mark.is-highlight {
+  stroke:var(--accent);
+}
+
+
+/* steps */
+
+/* The numeral is the list's own count, so the markup holds the words and the
+   stylesheet holds the number. One hairline sits between two steps. There is
+   no card, no icon and no line down the column: the scrolly is the type that
+   carries a drawing, and this one carries the instructions. */
+
+.steps-list {
+  margin:0;
+  padding:0;
+  list-style:none;
+  counter-reset:step;
+}
+
+.steps-list li {
+  display:grid;
+  grid-template-columns:var(--s7) minmax(0,1fr);
+  align-items:baseline;
+  gap:0 var(--s4);
+  padding-block:var(--s5);
+}
+
+.steps-list li:first-child {
+  padding-block-start:0;
+}
+
+.steps-list li:last-child {
+  padding-block-end:0;
+}
+
+.steps-list li + li {
+  border-top:1px solid var(--rule);
+}
+
+.steps-list li:before {
+  counter-increment:step;
+  content:counter(step,decimal);
+  grid-column:1;
+  grid-row:1 / span 2;
+  font-family:var(--font-numeral);
+  font-variant-numeric:var(--num-display);
+  font-size:var(--t2);
+  line-height:var(--lh-subhead);
+  color:var(--accent);
+}
+
+.steps-list h3 {
+  grid-column:2;
+  font-family:var(--font-label);
+  font-size:var(--t1);
+  line-height:var(--lh-subhead);
+  margin-bottom:var(--s2);
+}
+
+.steps-list p {
+  grid-column:2;
+  margin-bottom:0;
+}
+
+@media(max-width:760px) {
+
+  .steps-list li {
+    grid-template-columns:var(--s6) minmax(0,1fr);
+    gap:0 var(--s3);
+    padding-block:var(--s4);
+  }
+
+}
+
+@media print {
+
+  .steps-list li {
+    break-inside:avoid;
+    padding-block:var(--s3);
+  }
+
+}
+
+/* summary */
+
+/* The block that says what the report holds. It carries a hairline above and
+   below, the way the findings do, and no tint: the takeaways are the tinted
+   block, and two tinted blocks at the top of one report read as one. */
+
+.section-summary {
+  border-top:1px solid var(--rule);
+  border-bottom:1px solid var(--rule);
+}
+
+/* The abstract sets one step above the body. It is the lead of the report, and
+   it is capped at 100 words, so the larger size never runs past a screen. */
+
+.summary p {
+  font-size:var(--t2);
+  line-height:var(--lh-subhead);
+  margin-bottom:0;
+}
+
+.summary-heading h2 {
+  margin-bottom:var(--s5);
+}
+
+@media(max-width:760px) {
+
+  .summary p {
+    font-size:var(--t1);
+    line-height:var(--lh-body);
+  }
+
+}
+
+@media print {
+
+  .summary p {
+    font-size:12pt;
+    line-height:1.45;
+  }
+
+}
+
+/* tables. A real table first: the head names the columns, the first column
+   names the rows, and the sort control is a button inside the head cell. With
+   no script the table still reads and still holds every value. */
+
+.table-wrap {
+  width:min(var(--figure),100%);
+  margin-inline:var(--role-inline);
+}
+
+.data-table {
+  width:100%;
+  border-collapse:collapse;
+  font-size:var(--t0);
+  line-height:var(--lh-label);
+}
+
+.data-table caption {
+  width:var(--col);
+  text-align:left;
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+  margin-bottom:var(--s4);
+}
+
+.data-table th,.data-table td {
+  padding:var(--s3) var(--s4);
+  border-bottom:1px solid var(--rule);
+  text-align:left;
+  vertical-align:baseline;
+}
+
+.data-table th:first-child,.data-table td:first-child {
+  padding-inline-start:0;
+}
+
+.data-table th:last-child,.data-table td:last-child {
+  padding-inline-end:0;
+}
+
+/* The head stays with the reader while a long table passes under the sticky
+   page header, so a value never loses the name of its column. */
+
+.data-table thead th {
+  position:sticky;
+  top:var(--header);
+  padding:0;
+  background:var(--paper);
+  border-bottom:1px solid var(--rule-strong);
+  font-family:var(--font-label);
+  font-weight:600;
+  font-size:var(--t-1);
+  letter-spacing:var(--track-label);
+  white-space:nowrap;
+}
+
+.data-table thead th:not(:has(.column-sort)) {
+  padding:var(--s3) var(--s4);
+}
+
+.data-table tbody th {
+  font-family:var(--font-label);
+  font-weight:600;
+  font-size:var(--t-1);
+  letter-spacing:var(--track-label);
+}
+
+/* A numeral column is right aligned and set in tabular figures, so two rows
+   compare by eye without reading every digit. */
+
+.data-table .numeric {
+  width:1%;
+  white-space:nowrap;
+  text-align:right;
+}
+
+.data-table td.numeric {
+  font-family:var(--font-numeral);
+  font-variant-numeric:var(--num-display);
+}
+
+.data-table tbody tr {
+  transition:background var(--dur-hover) var(--ease);
+}
+
+.data-table tbody tr:hover {
+  background:var(--tint-row);
+}
+
+.column-head {
+  display:block;
+}
+
+.column-unit {
+  display:block;
+  font-weight:400;
+  color:var(--muted);
+}
+
+/* The source and the note under a table start at the table's own left edge,
+   not at the page gutter. */
+
+.section-table .figure-source,.section-table .figure-note {
+  width:min(var(--figure),100%);
+  margin-inline:var(--role-inline);
+}
+
+.section-table .figure-source {
+  margin-top:var(--s4);
+}
+
+/* the sort control */
+
+.column-sort {
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:var(--s2);
+  width:100%;
+  min-height:var(--tap);
+  padding:var(--s2) var(--s4);
+  border:0;
+  background:none;
+  font-family:var(--font-label);
+  font-weight:600;
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  text-align:left;
+  transition:background var(--dur-control) var(--ease);
+}
+
+.column-sort:hover {
+  background:var(--wash);
+}
+
+th:first-child .column-sort {
+  padding-inline-start:0;
+}
+
+th.numeric .column-sort {
+  justify-content:flex-end;
+  padding-inline-end:0;
+}
+
+/* The mark is two borders turned, so the direction is drawn rather than
+   typed as a glyph. It is empty until a column is sorted.
+
+   A box turned 45 degrees is measured, after the turn, by its own diagonal:
+   a var(--s2) square reaches calc(var(--s2) * sqrt(2)) corner to corner,
+   which is about 1.66px wider than var(--s2) on each side. In a numeric
+   column, which sits flush against the cell's own end with no padding left
+   to absorb that, the turn was pushing a numeral column's own mark, and the
+   table under it, that far past its right edge. The margin below moves the
+   box the same 1.66px the other way before it turns, so the corner the turn
+   adds lands exactly back on the edge the box started flush against. */
+
+.sort-mark {
+  width:var(--s2);
+  height:var(--s2);
+  margin-inline-end:calc(var(--s2) * .20710678);
+  border-right:var(--focus-width) solid var(--muted);
+  border-bottom:var(--focus-width) solid var(--muted);
+  opacity:.55;
+  transform:rotate(45deg);
+  transition:opacity var(--dur-hover) var(--ease),transform var(--dur-hover) var(--ease),border-color var(--dur-hover) var(--ease);
+}
+
+/* The mark stands at rest on every column a reader can sort, so the table
+   says that it sorts before anything is hovered. A reader on a touch screen
+   has no hover, and a head with no mark reads as a plain bold label. */
+
+.column-sort:hover .sort-mark,.column-sort:focus-visible .sort-mark {
+  opacity:1;
+}
+
+/* The sorted column takes the full mark in full ink, so the state differs from
+   the resting affordance by weight and by color, not by direction alone. */
+
+[aria-sort="ascending"] .sort-mark,[aria-sort="descending"] .sort-mark {
+  border-color:currentColor;
+  opacity:1;
+}
+
+[aria-sort="ascending"] .sort-mark {
+  transform:rotate(-135deg);
+}
+
+[aria-sort="descending"] .sort-mark {
+  transform:rotate(45deg);
+}
+
+@media(max-width:760px) {
+
+  /* Below this width the table scrolls sideways rather than stacking its
+     rows into cards: a stacked row loses the link between a value and the
+     name of its column. */
+
+  .table-wrap {
+    overflow-x:auto;
+  }
+
+  /* The wrapper is the scroll box here, so a head that sticks under the page
+     header would sit on top of the first rows instead. The head holds its
+     place in the table and the wrapper carries the scroll. */
+
+  .data-table thead th {
+    position:static;
+  }
+
+  .data-table th,.data-table td {
+    padding:var(--s2) var(--s3);
+  }
+
+  .column-sort {
+    padding:var(--s2) var(--s3);
+  }
+
+}
+
+@media print {
+
+  /* The head repeats on every sheet, so a value on page three still has the
+     name of its column above it. Nothing here is a control any more. */
+
+  .data-table thead {
+    display:table-header-group;
+  }
+
+  .data-table thead th {
+    position:static;
+  }
+
+  .table-wrap {
+    overflow:visible;
+    box-shadow:none;
+  }
+
+  .column-sort {
+    min-height:0;
+    padding:0;
+  }
+
+  .sort-mark {
+    display:none;
+  }
+
+  .data-table tbody tr {
+    break-inside:avoid;
+  }
+
+}
+
+/* tabs */
+
+/* The tab list is hidden until 50-tabs.js says it works. Until then, and with
+   no script at all, every panel is open under its own heading, so no panel is
+   behind a control that cannot do anything. */
+
+.tabs .tablist {
+  display:none;
+}
+
+.tabs-live .tablist {
+  display:flex;
+  flex-wrap:wrap;
+  gap:0 var(--s5);
+  border-bottom:1px solid var(--rule);
+  margin-bottom:var(--s5);
+}
+
+/* A text tab, not a pill and not a card: the label is the control and the
+   accent rule under it is the state. --rule-mark is the marker rule, and the
+   contents row the reader is in takes the same one. */
+
+.tabs .tab {
+  position:relative;
+  min-height:var(--tap);
+  padding:0;
+  border:0;
+  background:none;
+  color:var(--muted);
+  font-family:var(--font-label);
+  font-size:var(--t0);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  transition:color var(--dur-hover) var(--ease);
+}
+
+.tabs .tab:hover {
+  color:var(--ink);
+}
+
+.tabs .tab[aria-selected="true"] {
+  color:var(--ink);
+}
+
+.tabs .tab:after {
+  content:'';
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:calc(var(--rule-mark) * -1);
+  height:var(--rule-mark);
+  background:var(--accent);
+  opacity:0;
+  transition:opacity var(--dur-hover) var(--ease);
+}
+
+.tabs .tab[aria-selected="true"]:after {
+  opacity:1;
+}
+
+/* The panel is in the tab order, so it takes the one focus ring. */
+
+.tabs .tab-panel:focus-visible {
+  outline:var(--focus-width) solid var(--focus);
+  outline-offset:var(--focus-offset);
+}
+
+.tabs .tab-panel > :last-child {
+  margin-bottom:0;
+}
+
+/* The tab label already names the panel, so the heading it opens with is for
+   the reader who has no tab list. */
+
+.tabs-live .tab-heading {
+  display:none;
+}
+
+.tabs .tab-panel + .tab-panel {
+  margin-top:var(--s6);
+}
+
+.tabs-live .tab-panel + .tab-panel {
+  margin-top:0;
+}
+
+/* Opacity alone, so a panel swap never moves the text under it. The panel is
+   newly rendered when the script drops its hidden attribute, which is what
+   @starting-style needs to have a state to come from. */
+
+.tabs-live .tab-panel {
+  opacity:1;
+  transition:opacity var(--dur-reveal) var(--ease);
+}
+
+@starting-style {
+
+  .tabs-live .tab-panel {
+    opacity:0;
+  }
+
+}
+
+@media(max-width:760px) {
+
+  .tabs-live .tablist {
+    gap:0 var(--s4);
+  }
+
+}
+
+@media print {
+
+  /* Paper has no tab list and no hidden panel: every panel prints under its
+     own heading, in the order the report writes them. */
+
+  .tabs .tablist {
+    display:none!important;
+  }
+
+  .tabs .tab-panel,.tabs .tab-heading {
+    display:block!important;
+  }
+
+  /* Each panel opens with a hairline, the way a finding and a step do on
+     paper, so three panels read as one list rather than as one long run. */
+
+  .tabs .tab-panel {
+    break-inside:avoid;
+    margin-top:var(--s5);
+    padding-top:var(--s4);
+    border-top:1px solid var(--rule);
+  }
+
+}
+
+/* takeaways */
+
+/* A hairline opens the block and the wash holds it. No border on the other
+   three sides, no radius and no shadow: a card here would compete with the
+   findings grid, which is the one block on the page that carries a numeral. */
+
+.takeaways {
+  margin:0;
+  padding:var(--s5);
+  padding-inline-start:calc(var(--s5) + var(--s5));
+  background:var(--wash);
+  border-top:1px solid var(--rule);
+  --muted:color-mix(in oklab,var(--ink) 66%,var(--wash));
+}
+
+.takeaways li {
+  margin-bottom:var(--s4);
+}
+
+.takeaways li:last-child {
+  margin-bottom:0;
+}
+
+/* The marker is the theme's accent, which is where every other small numeral
+   and rule on the page comes from. It is a list marker and not an icon. */
+
+.takeaways li::marker {
+  color:var(--accent);
+}
+
+@media(max-width:760px) {
+
+  .takeaways {
+    padding:var(--s4);
+    padding-inline-start:var(--s6);
+  }
+
+}
+
+/* Paper has no tint, so the block keeps its shape from the rules alone and
+   starts at the page margin like every other block. */
+
+@media print {
+
+  .takeaways {
+    padding:var(--s3) 0 var(--s3) var(--s5);
+    background:none;
+    border-bottom:1px solid var(--rule);
+    break-inside:avoid;
+  }
+
+}
+
+/* timeline */
+
+/* The heading opens a two column list, so it takes that list's width. */
+
+.section-timeline .section-heading {
+  width:min(var(--figure),100%);
+}
+
+/* Dates on the left, events on the right. The row is a subgrid, so every
+   date shares one edge and one hairline runs the whole width of the row.
+   No dots, no connector line, no alternating sides: a chronology is a list,
+   and the column of dates is what the eye scans down. */
+
+.timeline {
+  display:grid;
+  grid-template-columns:max-content minmax(0,var(--reading));
+  column-gap:var(--s6);
+  row-gap:var(--s5);
+  width:min(var(--figure),100%);
+  margin-block:0;
+  margin-inline:var(--role-inline);
+  padding:0;
+  list-style:none;
+}
+
+.timeline li {
+  display:grid;
+  grid-column:1 / -1;
+  grid-template-columns:subgrid;
+  border-top:1px solid var(--rule);
+  padding-top:var(--s4);
+}
+
+/* A column of dates is scanned, not read, so the figures are tabular and the
+   face is the one with lining numerals. */
+
+.timeline-date {
+  font-family:var(--font-numeral);
+  font-variant-numeric:var(--num-display);
+  font-size:var(--t1);
+  line-height:var(--lh-body);
+  color:var(--muted);
+}
+
+.timeline-event h3 {
+  font-family:var(--font-label);
+  font-weight:600;
+  font-size:var(--t1);
+  line-height:var(--lh-body);
+  margin-bottom:var(--s2);
+}
+
+.timeline-event p {
+  margin-bottom:0;
+}
+
+@media(max-width:760px) {
+
+  /* A date column and a readable measure cannot share a phone screen, so the
+     date moves above the event it belongs to. */
+
+  .timeline {
+    grid-template-columns:minmax(0,1fr);
+  }
+
+  .timeline li {
+    display:block;
+  }
+
+  .timeline-date {
+    display:block;
+    margin-bottom:var(--s2);
+  }
+
+}
+
+@media print {
+
+  .section-timeline .section-heading {
+    max-width:var(--reading-print);
+    width:auto;
+    margin-inline:0;
+  }
+
+  .timeline {
+    grid-template-columns:max-content minmax(0,var(--reading-print));
+    column-gap:var(--s5);
+    width:auto;
+    margin-inline:0;
+  }
+
+  .timeline li {
+    break-inside:avoid;
+  }
+
+}
+
+/* toast */
+
+/* One short message that confirms an action the reader just took. It is a
+   manual popover, so the browser puts it in the top layer and no rule here
+   types a stacking order of its own beyond the token. */
+
+/* --toast-lift is what 50-share.js measures: how much of the footer's control
+   group is already on the screen, so the message clears the control that opened
+   it even where anchor positioning is not available. The message keeps the end
+   edge of the page, which is the edge the control group sits at. */
+
+.toast {
+  position:fixed;
+  inset:auto var(--pad-wrapper) calc(var(--gutter) + var(--toast-lift,0px)) auto;
+  z-index:var(--z-toast);
+  margin:0;
+  max-width:var(--panel-w);
+  padding:var(--s3) var(--s4);
+  border:0;
+  border-radius:var(--radius-control);
+  background:var(--ink);
+  color:var(--paper);
+  font-family:var(--font-label);
+  font-size:var(--t0);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  box-shadow:var(--shadow-panel);
+}
+
+/* It rises as it arrives, by --rise-enter, the same rise the lightbox
+   dialog takes. */
+
+.toast:popover-open {
+  opacity:1;
+  transform:none;
+  transition:opacity var(--dur-enter) var(--ease),transform var(--dur-enter) var(--ease),overlay var(--dur-enter) allow-discrete,display var(--dur-enter) allow-discrete;
+}
+
+@starting-style {
+
+  .toast:popover-open {
+    opacity:0;
+    transform:translateY(var(--rise-enter));
+  }
+
+}
+
+/* The control group at the end of the footer is what opens the message, so the
+   message lands over that group and not over the band above it: its own end
+   edge sits on the group's end edge and its bottom sits on the group's top. */
+
+@supports (anchor-name:--controls) {
+
+  .footer-controls {
+    anchor-name:--controls;
+  }
+
+  .toast {
+    position-anchor:--controls;
+    inset:auto anchor(right) anchor(top) auto;
+    margin-bottom:var(--s3);
+  }
+
+}
+
+@media(max-width:760px) {
+
+  /* The horizontal only: the message keeps the place above the footer that the
+     anchor, or the measured lift, gave it. */
+
+  .toast {
+    left:var(--gutter);
+    right:var(--gutter);
+    max-width:none;
+  }
+
+}
+
+.section-waterfall { padding-inline: 0; }
+.section-waterfall > .section-heading { padding-inline: var(--gutter); }
+.waterfall-host { display: block; }
+.waterfall-fallback { max-width: var(--reading); margin: auto; padding: var(--gutter); }
+
+/* findings */
+
+.section-findings {
+  border-top:1px solid var(--rule);
+  border-bottom:1px solid var(--rule);
+}
+
+/* Three across, or two when a pair or a set of four would leave a hole. */
+
+.findings {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:var(--s7);
+  width:min(var(--figure),100%);
+  margin-inline:var(--role-inline);
+}
+
+.findings[data-count="1"] {
+  grid-template-columns:1fr;
+}
+
+.findings[data-count="2"],.findings[data-count="4"] {
+  grid-template-columns:repeat(2,1fr);
+}
+
+.findings article {
+  border-top:1px solid var(--rule);
+  padding-top:var(--s4);
+}
+
+/* Every numeral is one line in a box of one height, so a row of statistics
+   sits on a single baseline. */
+
+.finding-value {
+  display:inline-block;
+  font-family:var(--font-display);
+  font-variation-settings:var(--vs-display);
+  font-weight:var(--w-display);
+  font-variant-numeric:var(--num-display);
+  font-size:var(--t4);
+  line-height:var(--lh-numeral);
+  letter-spacing:-.02em;
+  color:var(--accent);
+}
+
+.finding-unit {
+  display:block;
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+  margin-top:var(--s2);
+}
+
+.findings h3 {
+  font-family:var(--font-label);
+  font-weight:600;
+  font-size:var(--t1);
+  line-height:var(--lh-body);
+  margin-top:var(--s5);
+}
+
+.findings p {
+  color:var(--muted);
+  margin-bottom:0;
+}
+
+.finding-note {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  margin-top:var(--s3);
+}
+
+/* The trend beside the numeral. One line, no axis and no frame: the numeral
+   is the value and the line is only its shape. The sentence beside it states
+   the first value, the last value and the count of points, so a reader who
+   cannot see the line still reads the trend. */
+
+.finding-trend {
+  position:relative;
+  display:inline-block;
+  width:var(--s8);
+  height:var(--s5);
+  margin-left:var(--s3);
+}
+
+.sparkline {
+  display:block;
+  width:100%;
+  height:100%;
+  overflow:visible;
+  fill:none;
+  stroke:var(--line);
+  stroke-width:var(--progress-h);
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.sparkline-dot {
+  position:absolute;
+  left:100%;
+  top:var(--y);
+  width:var(--s2);
+  height:var(--s2);
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+  background:var(--accent);
+}
+
+
+/* quote */
+
+/* A short accent rule opens the quote. No glyph, no fill, no centering. */
+
+blockquote {
+  width:var(--col);
+  margin-inline:var(--role-inline);
+}
+
+blockquote:before {
+  content:'';
+  display:block;
+  width:var(--quote-rule);
+  border-top:2px solid var(--accent);
+  margin-bottom:var(--s5);
+}
+
+/* The quote takes the reading column and nothing narrower: at --t3 that is
+   under 40 characters a line, which is already display measure. */
+
+blockquote p {
+  font-size:var(--t3);
+  line-height:var(--lh-title);
+  text-wrap:balance;
+  margin-bottom:var(--s5);
+}
+
+.quote-attribution {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+  margin-bottom:0;
+}
+
+/* The design carries no italics, and a citation is not an aside. */
+
+.quote-attribution cite {
+  font-style:normal;
+}
+
+
+/* methods */
+
+.section-methods {
+  background:var(--wash);
+  --muted:color-mix(in oklab,var(--ink) 66%,var(--wash));
+}
+
+/* Two columns on the band: the note on the reading measure and the citations
+   beside it, both inside the figure. One column of prose in the middle of a
+   full-bleed tint leaves the band empty on both sides. */
+
+.methods {
+  display:grid;
+  grid-template-columns:minmax(0,var(--reading)) minmax(0,1fr);
+  gap:var(--s7);
+  width:min(var(--figure),100%);
+  margin-inline:var(--role-inline);
+}
+
+/* Fewer than two rows leaves the second column mostly empty tint beside the
+   note, so stack them under it in one column instead. The count holds the
+   citations and the downloads together, because they share the column. */
+
+.methods[data-aside="0"],.methods[data-aside="1"] {
+  grid-template-columns:minmax(0,1fr);
+}
+
+.methods .reading {
+  width:auto;
+  margin-inline:0;
+}
+
+.methods-aside {
+  min-width:0;
+}
+
+/* "How we did this": the plain lead a reader takes when they will not read
+   the whole note. The label is small and the sentence is not, so the lead
+   reads before the note under it. */
+
+.methods-brief {
+  margin-bottom:var(--s5);
+}
+
+.methods-brief h3 {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+  margin-bottom:var(--s2);
+}
+
+.methods-brief p {
+  font-size:var(--t2);
+  line-height:var(--lh-subhead);
+  margin-bottom:0;
+}
+
+/* The sources are a citation list, not a browser default: a plain numeral in
+   the accent, a hairline row, and the host under the label so a reader can see
+   where a citation points before following it. The numeral carries no leading
+   zero, because the list can never pass nine and needs no sort order. */
+
+.section-methods ol {
+  list-style:none;
+  margin:0;
+  padding:0;
+  counter-reset:source;
+}
+
+.section-methods ol li {
+  display:grid;
+  grid-template-columns:var(--s6) 1fr;
+  align-items:start;
+  gap:0 var(--s3);
+  padding-bottom:var(--s3);
+  border-top:1px solid var(--rule);
+}
+
+.section-methods ol li:before {
+  counter-increment:source;
+  content:counter(source,decimal);
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--tap);
+  letter-spacing:var(--track-label);
+  font-variant-numeric:tabular-nums;
+  color:var(--accent);
+}
+
+.section-methods ol li a {
+  display:inline-flex;
+  align-items:center;
+  justify-self:start;
+  min-height:var(--tap);
+}
+
+.source-host {
+  grid-column:2;
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+  overflow-wrap:anywhere;
+}
+
+/* The files the report offers, under the citations they back. The format and
+   the size sit inside the link, so a reader hears them in the link's own name
+   and knows what the click starts before it starts. */
+
+.downloads {
+  margin-top:var(--s6);
+}
+
+.downloads h3 {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+  margin-bottom:var(--s3);
+}
+
+.downloads ul {
+  list-style:none;
+  margin:0;
+  padding:0;
+}
+
+.downloads li {
+  border-top:1px solid var(--rule);
+}
+
+/* The label carries the underline and the format line does not, because an
+   underline under a size reads as part of the file name. The row switches the
+   browser's own underline off first, the way .heading-anchor does, because a
+   decoration on the link paints over every line inside it. */
+
+.downloads li a {
+  display:block;
+  padding-block:var(--s3);
+  text-decoration:none;
+}
+
+.download-label {
+  text-decoration:underline;
+  text-decoration-color:var(--rule-strong);
+  transition:text-decoration-color var(--dur-hover) var(--ease);
+}
+
+.downloads li a:hover .download-label {
+  text-decoration-color:var(--accent);
+}
+
+.download-meta {
+  display:block;
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+}
+
+@media(max-width:1000px) {
+
+  .downloads {
+    margin-top:var(--s5);
+  }
+
+}
+
+@media print {
+
+  /* The lead is a deck on paper, not a second heading: it sits between the
+     11pt note and the 17pt section title. */
+
+  .methods-brief p {
+    font-size:13pt;
+  }
+
+  /* The band is one column on paper, so the files follow the citations
+     instead of sitting beside them, and no row is cut by a sheet edge. */
+
+  .downloads li {
+    break-inside:avoid;
+  }
+
+  .downloads a {
+    padding-block:var(--s2);
+  }
+
+}
+
+
+/* footer */
+
+/* A colophon: who published it and when on the left, where it lives and what
+   the reader can do with it on the right. */
+
+.site-footer {
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:var(--s5) var(--s7);
+  align-items:start;
+  border-top:1px solid var(--rule);
+  padding-block:var(--bookend);
+  padding-inline:var(--pad-wrapper);
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+}
+
+.colophon,.colophon-links {
+  display:flex;
+  flex-direction:column;
+  gap:var(--s2);
+  min-width:0;
+}
+
+/* Each link carries a 44px hit box, so the column starts high enough to put
+   its first line on the colophon's first line. */
+
+.colophon-links {
+  align-items:end;
+  text-align:right;
+  margin-top:calc(var(--s3) * -1);
+}
+
+.colophon-org {
+  color:var(--ink);
+}
+
+.colophon-links a {
+  display:inline-flex;
+  align-items:center;
+  min-height:var(--tap);
+  max-width:100%;
+  overflow-wrap:anywhere;
+}
+
+
+/* Copy link, Cite and Print sit together under the address, because all three
+   act on the whole report rather than on any one part of it. */
+
+.footer-controls {
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+  gap:var(--s2);
+}
+
+@media(max-width:760px) {
+
+  .footer-controls {
+    justify-content:flex-start;
+  }
+
+}
+
+/* paused and reduced motion share one path: states change, nothing animates */
+
+.no-motion *,.no-motion *:before,.no-motion *:after {
+  transition-duration:.01ms!important;
+  transition-delay:0s!important;
+  animation-duration:.01ms!important;
+  animation-delay:0s!important;
+}
+
+/* Scripts off. All text is already in the document, but the stage has no
+   state to show and nothing to pin, so the scrolly stops being a staged
+   column: the drawing sits once at --figure, then the steps run down the
+   reading column in the order they are written. */
+
+html:not(.enhanced) .scrolly {
+  display:block;
+}
+
+html:not(.enhanced) .stage {
+  position:relative;
+  top:auto;
+  z-index:auto;
+  width:min(var(--figure),100%);
+  height:auto;
+  margin-inline:var(--role-inline);
+  padding:0;
+  background:none;
+  box-shadow:none;
+}
+
+/* The drawing carries its own paint from build.py, so it reads without a
+   state. It is capped like the cover's, so it opens the section instead of
+   filling a screen. */
+
+html:not(.enhanced) .stage .ink-art {
+  width:auto;
+  max-width:100%;
+  max-height:var(--cover-art);
+}
+
+/* The stage caption names a state the reader cannot reach here, and the card
+   carries its own caption instead. */
+
+html:not(.enhanced) .stage:after,html:not(.enhanced) .steps:after,html:not(.enhanced) .stage-progress,html:not(.enhanced) .stage figcaption {
+  display:none;
+}
+
+html:not(.enhanced) .steps {
+  padding-top:0;
+  margin-top:var(--s6);
+}
+
+html:not(.enhanced) .step {
+  display:block;
+  width:var(--col);
+  min-height:0;
+  margin-inline:var(--role-inline);
+  padding:0;
+}
+
+/* Nothing here can become active, so a card is a block of text under a
+   hairline and carries no other chrome. */
+
+html:not(.enhanced) .step-card {
+  width:auto;
+  padding:var(--s5) 0;
+  background:none;
+  border:0;
+  border-top:1px solid var(--rule);
+  border-radius:0;
+  box-shadow:none;
+}
+
+/* With scripts off the stage shows one state and no caption, so the card's
+   caption is the only one and it is shown. */
+
+html:not(.enhanced) .static-caption {
+  position:static;
+  width:auto;
+  height:auto;
+  overflow:visible;
+  clip-path:none;
+  white-space:normal;
+}
+
+
+/* responsive. The stage gives up its column first, at 1000px, because below
+   that the drawing and a readable card cannot share a row. The rest of the
+   page stacks at 760px. */
+
+@media(max-width:1000px) {
+
+  .scrolly {
+    display:block;
+  }
+
+  .stage {
+    top:var(--header);
+    height:var(--band);
+    padding-top:0;
+    background:var(--paper);
+    z-index:var(--z-stage);
+    box-shadow:0 1px 0 var(--rule);
+    margin-inline:calc(var(--gutter) * -1);
+    padding-inline:var(--gutter);
+  }
+
+  /* Card text passes under the band instead of being sliced by it. The edge
+     starts as solid paper so a heading crossing it dims for less of its own
+     height. */
+
+  .stage:after {
+    content:'';
+    position:absolute;
+    top:100%;
+    left:0;
+    right:0;
+    height:var(--band-skirt);
+    background:linear-gradient(var(--paper) 25%,transparent);
+    pointer-events:none;
+  }
+
+  .stage .ink-art,.stage-progress {
+    width:100%;
+  }
+
+  .stage .ink-art {
+    height:calc(100% - var(--s9));
+  }
+
+  .stage figcaption,.stage-progress {
+    margin-top:var(--s3);
+  }
+
+  /* The band sits at the top of the section, so the column needs no lead-in
+     and no tail. One slot is one screen: the card is alone in the frame and
+     the trigger still fires as it appears. */
+
+  .steps {
+    padding-top:0;
+    margin-top:0;
+  }
+
+  /* The card rests in the middle of what the band leaves, not in the middle
+     of the slot, so it is never half under the band. It clears the soft edge
+     as well as the band, so a card at rest is never dimmed by it. */
+
+  .step {
+    min-height:100vh;
+    min-height:100svh;
+    padding-top:calc(var(--header) + var(--band) + var(--band-skirt));
+  }
+
+  /* The card keeps its own width and centers under the band, so a card is one
+     width everywhere and the band above it always overhangs it. */
+
+  .step-card {
+    margin-inline:auto;
+  }
+
+  .methods {
+    grid-template-columns:minmax(0,1fr);
+  }
+
+}
+
+@media(max-width:760px) {
+
+  .hero-top {
+    flex-direction:column;
+    align-items:flex-start;
+    gap:var(--s2);
+  }
+
+  .byline {
+    justify-content:flex-start;
+    text-align:left;
+  }
+
+  .hero-main {
+    grid-template-columns:1fr;
+    gap:var(--s6);
+  }
+
+  .hero-copy {
+    grid-row:1;
+  }
+
+  .step-card {
+    --card-pad:var(--s4);
+  }
+
+  .findings {
+    grid-template-columns:1fr;
+    gap:var(--s6);
+  }
+
+  .site-footer {
+    grid-template-columns:1fr;
+  }
+
+  .colophon-links {
+    align-items:start;
+    text-align:left;
+    margin-top:0;
+  }
+
+}
+
+@media(max-width:420px) {
+
+  /* The report's header drops the name at 760px and the motion label at
+     1000px, where its own links and its section title need the room. This is
+     the guide and the examples index, which carry no links past two, no
+     controls and no title, so they keep the name until the phone band. */
+
+  .brand-name {
+    display:none;
+  }
+
+  .contents nav {
+    left:var(--gutter);
+    right:var(--gutter);
+    width:auto;
+  }
+
+}
+
+/* The reader's own setting is the default, and the motion control is the
+   reader overruling it. Without the .motion-on gate the control would report
+   a state the page does not have. */
+
+@media(prefers-reduced-motion:reduce) {
+
+  :root:not(.motion-on) *,:root:not(.motion-on) *:before,:root:not(.motion-on) *:after {
+    transition-duration:.01ms!important;
+    transition-delay:0s!important;
+    animation-duration:.01ms!important;
+    animation-delay:0s!important;
+  }
+
+}
+
+
+/* print. Paper is white, ink is black, and everything that only makes sense on
+   a screen goes away: the grain, the sticky frames, the shadows, the card
+   fills and the controls. The scrolly cannot scroll on paper, so it prints as
+   small multiples with the captions under the states. */
+
+@media print {
+
+  :root {
+    /* Paper is white here whatever the theme is, so the sheet asks for a light
+       scheme as well. A dark theme keeps the dark scheme its own theme block
+       states, and a printer with background graphics on then paints the canvas
+       black around a white content box. */
+    color-scheme:light;
+    /* Every band on paper starts at the page margin, so the role widths take a
+       start margin of zero rather than the auto that centres them on a screen.
+       A sheet is normally narrower than the widest role, which made the two
+       values look the same; a landscape or an oversize sheet is not, and the
+       wide layout only printed at the margin because its own screen band set
+       this token. The paper states it for both layouts now. */
+    --role-inline:0;
+    --paper:#fff;
+    --ink:#000;
+    --wash:#fff;
+    --rule:color-mix(in oklab,var(--ink) 30%,var(--paper));
+    --shadow-card:none;
+    --shadow-header:none;
+    --shadow-panel:none;
+  }
+
+  body {
+    background:var(--paper);
+    color:var(--ink);
+    font-size:11pt;
+    line-height:1.5;
+  }
+
+  /* The stage goes whole: the print figure carries the drawing and the
+     captions, so nothing prints twice. Everything else that makes sense on a
+     screen only carries the screen-only class, so a component states what it
+     hides on its own markup and no selector list grows here. */
+
+  body:before,.steps:after,.screen-only {
+    display:none!important;
+  }
+
+  /* report.js marks a scrolly section print-ready once its small multiples
+     exist. Scripts off, or a section whose copies could not be built, keeps
+     this rule from matching, so the fallback stage and its static captions
+     stay on the printed page instead of both being lost. */
+
+  .print-ready .stage,.print-ready .step-card .static-caption {
+    display:none!important;
+  }
+
+  p {
+    orphans:2;
+    widows:2;
+  }
+
+  .eyebrow,h2,h3 {
+    break-after:avoid;
+  }
+
+  /* The header keeps the brand and hands the title to the cover under it. */
+
+  .site-header {
+    position:static;
+    min-height:0;
+    padding:0 0 var(--s3);
+    border-bottom:1px solid var(--rule);
+  }
+
+  /* A label and the heading it belongs to never land on separate sheets. */
+
+  .section-heading {
+    break-inside:avoid;
+    break-after:avoid;
+  }
+
+  .hero {
+    min-height:0;
+    padding:var(--s5) 0;
+    gap:var(--s5);
+  }
+
+  .hero h1 {
+    font-size:24pt;
+  }
+
+  .hero .ink-art {
+    max-height:60mm;
+  }
+
+  /* A printed page is narrower than the browser window that laid the cover
+     out, so the deck needs the same measure the body has. */
+
+  .standfirst {
+    max-width:var(--reading-print);
+  }
+
+  .section {
+    padding:var(--s5) 0;
+    break-inside:auto;
+  }
+
+  /* The wide layout is a screen layout and its own band states so, with the
+     screen media type in front of the width, so no rule of the rail reaches
+     paper at any sheet size and nothing here has to undo one. The three rules
+     that stood here for a wide sheet said the same thing the rules above and
+     in 50-endmatter.css already say: every band starts at the page margin. */
+
+  .section h2 {
+    font-size:17pt;
+  }
+
+  .section h3 {
+    font-size:12pt;
+  }
+
+  /* Measure on paper. The column is set in em so it follows the printed body
+     size, and 27em is what holds this serif under 68 characters a line. */
+
+  .reading,.section-heading {
+    max-width:var(--reading-print);
+    width:auto;
+    margin-inline:0;
+  }
+
+  /* On paper every section starts at the page margin. A centered column would
+     leave a third of the sheet empty down the left side. */
+
+  blockquote,.step-card {
+    margin-inline:0;
+  }
+
+  .methods {
+    display:block;
+  }
+
+  .section-methods ol {
+    margin-top:var(--s5);
+  }
+
+  .scrolly {
+    display:block;
+  }
+
+  .steps {
+    padding-top:0;
+    margin-top:0;
+  }
+
+  .step {
+    min-height:0;
+    padding:0 0 var(--s4);
+    break-inside:avoid;
+  }
+
+  /* A step opens with a hairline, like a finding does, and starts at the
+     page margin. An indent would make these four blocks the only content on
+     the sheet with a left edge of their own. */
+
+  .step-card {
+    width:auto;
+    max-width:var(--reading-print);
+    margin:0;
+    padding:var(--s3) 0 0;
+    background:none;
+    border:0;
+    border-top:1px solid var(--rule);
+    border-radius:0;
+    box-shadow:none;
+  }
+
+  /* The four states sit in a row above the four step texts. Their animation
+     never runs inside a hidden container, so the lines are drawn outright. */
+
+  /* Two by two, not four across: at a quarter of the text block a state is
+     too small to read and the word inside the ring disappears. */
+
+  .print-figure {
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:var(--s5) var(--s6);
+    margin-bottom:var(--s6);
+  }
+
+  /* The grid itself no longer avoids a break: a long report's small
+     multiples have to split across pages. Each figure still avoids one, so
+     a state and its caption are never cut in half. */
+
+  .print-figure figure {
+    margin:0;
+    break-inside:avoid;
+  }
+
+  .print-figure .ink-art {
+    width:100%;
+  }
+
+  /* State colors must stay legible on white paper in every preset. */
+  .scrolly .ink-art[data-state] .mark,
+  .scrolly .ink-art[data-state] .connections,
+  .scrolly .ink-art .center-ring {
+    stroke:var(--ink);
+  }
+
+  .scrolly .ink-art .center-label {
+    fill:var(--ink);
+  }
+
+  .print-figure .connections path {
+    animation:none;
+    stroke-dasharray:none;
+  }
+
+  .print-figure figcaption {
+    font-family:var(--font-label);
+    font-size:8pt;
+    line-height:var(--lh-label);
+    color:var(--muted);
+    margin-top:var(--s2);
+  }
+
+  /* Paper is narrower than the screen the grid was written for, so the row
+     packs itself from the space it has instead of collapsing to one column. */
+
+  .findings {
+    grid-template-columns:repeat(auto-fit,minmax(38mm,1fr));
+    gap:var(--s5);
+    break-inside:avoid;
+  }
+
+  .findings article {
+    break-inside:avoid;
+  }
+
+  .finding-value {
+    font-size:30pt;
+  }
+
+  .section-quote {
+    break-inside:avoid;
+  }
+
+  blockquote p {
+    font-size:16pt;
+  }
+
+  .notice {
+    padding-inline:0;
+    background:none;
+  }
+
+  .site-footer {
+    padding:var(--s5) 0 0;
+    grid-template-columns:1fr;
+    gap:var(--s2);
+  }
+
+  .colophon-links {
+    align-items:start;
+    text-align:left;
+    margin-top:0;
+  }
+
+  .colophon-links a {
+    min-height:0;
+  }
+
+  @page {
+    margin:18mm 26mm;
+  }
+
+}

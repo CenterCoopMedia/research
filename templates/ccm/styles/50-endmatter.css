@@ -1,0 +1,299 @@
+/* end matter */
+
+/* Every block after the last section is quiet: a hairline, a small label and
+   the content. No card, no tint and no icon. The report is over, and these
+   blocks answer the questions it leaves rather than starting a new one. */
+
+.endmatter {
+  border-top:1px solid var(--rule);
+  padding-block:var(--s6);
+  padding-inline:var(--gutter);
+}
+
+/* One wrapper states the block's role width, so the label opens the column it
+   belongs to. The measure is in em and the wrapper holds the body size, so the
+   width is the same one the reading column has everywhere else. */
+
+.endmatter-inner {
+  width:var(--col);
+  margin-inline:var(--role-inline);
+}
+
+.endmatter-related .endmatter-inner {
+  width:min(var(--figure),100%);
+}
+
+.endmatter-label {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+  margin-bottom:var(--s5);
+}
+
+/* Every end-matter link carries the quiet underline the notice and the footer
+   carry, and takes the accent under the pointer. */
+
+.endmatter a {
+  text-decoration:underline;
+  text-decoration-color:var(--rule-strong);
+  transition:text-decoration-color var(--dur-hover) var(--ease);
+}
+
+.endmatter a:hover,.series-link:hover .series-title {
+  text-decoration-color:var(--accent);
+}
+
+/* authors */
+
+.author + .author {
+  margin-top:var(--s6);
+}
+
+.author-name {
+  font-family:var(--font-label);
+  font-weight:600;
+  font-size:var(--t1);
+  line-height:var(--lh-body);
+  margin-bottom:var(--s2);
+}
+
+.author-role,.author-bio,.author-link {
+  font-size:var(--t0);
+  line-height:var(--lh-body);
+  color:var(--ink-soft);
+  margin-bottom:0;
+}
+
+.author-role {
+  font-family:var(--font-label);
+}
+
+.author-bio,.author-link {
+  margin-top:var(--s2);
+}
+
+/* The hit area sits behind the link, so the target reaches --tap while the
+   line stays the height of the type the reader sees. */
+
+.author-link a {
+  position:relative;
+}
+
+.author-link a:before {
+  content:'';
+  position:absolute;
+  inset:calc((var(--tap) - 100%) / -2) 0;
+}
+
+/* credits */
+
+.contributors {
+  margin:0;
+}
+
+.contributors > div {
+  display:grid;
+  grid-template-columns:var(--s10) minmax(0,1fr);
+  align-items:baseline;
+  gap:0 var(--s4);
+  border-top:1px solid var(--rule);
+  padding-block:var(--s3);
+}
+
+.contributors dt {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+}
+
+.contributors dd {
+  margin:0;
+  font-size:var(--t0);
+  line-height:var(--lh-body);
+}
+
+/* read next */
+
+.read-next {
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:var(--s6);
+}
+
+.read-next[data-count="1"] {
+  grid-template-columns:minmax(0,var(--reading));
+}
+
+.read-next[data-count="2"] {
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+
+.read-next li {
+  border-top:1px solid var(--rule);
+  padding-top:var(--s3);
+}
+
+.read-next a {
+  display:inline-flex;
+  align-items:center;
+  min-height:var(--tap);
+  font-family:var(--font-label);
+  font-size:var(--t1);
+  line-height:var(--lh-body);
+}
+
+.read-next p {
+  font-size:var(--t0);
+  line-height:var(--lh-body);
+  color:var(--ink-soft);
+  margin:var(--s2) 0 0;
+}
+
+/* series links */
+
+.series-links {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:var(--s5);
+}
+
+/* The whole link carries no underline, and the title inside it carries one.
+   The selector holds two classes, because `.endmatter a` above would otherwise
+   win and underline the direction label with the title. */
+
+.endmatter .series-link {
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:var(--s1);
+  min-height:var(--tap);
+  border-top:1px solid var(--rule);
+  padding-top:var(--s3);
+  text-decoration:none;
+}
+
+/* The two ends of a series sit at the two ends of the row, so a lone next
+   link still reads as the one that follows. */
+
+.series-next {
+  grid-column:2;
+  text-align:right;
+}
+
+.series-direction {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+}
+
+.series-title {
+  font-size:var(--t1);
+  line-height:var(--lh-body);
+  text-decoration:underline;
+  text-decoration-color:var(--rule-strong);
+  transition:text-decoration-color var(--dur-hover) var(--ease);
+}
+
+/* corrections */
+
+.corrections {
+  list-style:none;
+  margin:0;
+  padding:0;
+}
+
+.corrections li {
+  border-top:1px solid var(--rule);
+  padding-block:var(--s3);
+}
+
+.correction-date {
+  display:block;
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  font-variant-numeric:tabular-nums;
+  color:var(--muted);
+  margin-bottom:var(--s1);
+}
+
+.correction-text {
+  font-size:var(--t0);
+  line-height:var(--lh-body);
+  margin:0;
+}
+
+/* A specimen sits inside a guide section that already holds the gutter, so
+   the block it renders gives its own back, the way a section specimen does. */
+
+.specimen-render .endmatter {
+  padding-inline:0;
+  border-top:0;
+}
+
+/* The row holds its item count down to the phone breakpoint. Two columns at
+   1000px left a row of three wrapped two and one, with a hole where the third
+   column was; three columns of 275px carry the title in two lines and the
+   description in three, and the row still reads as a row.
+
+   Every count is named here, because `.read-next[data-count="2"]` above holds
+   one class more than `.read-next` and would otherwise keep its two columns on
+   a phone. */
+
+@media(max-width:760px) {
+
+  .read-next,.read-next[data-count="1"],.read-next[data-count="2"],.series-links {
+    grid-template-columns:minmax(0,1fr);
+  }
+
+  .series-next {
+    grid-column:1;
+    text-align:left;
+  }
+
+}
+
+@media print {
+
+  /* On paper every block starts at the page margin, and none of them is cut
+     in half by a sheet edge. */
+
+  .endmatter {
+    padding:var(--s5) 0;
+    break-inside:avoid;
+  }
+
+  .endmatter-inner {
+    width:auto;
+    max-width:var(--reading-print);
+    margin-inline:0;
+  }
+
+  .endmatter-related .endmatter-inner {
+    max-width:none;
+  }
+
+  .read-next {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:var(--s5);
+  }
+
+  .read-next a,.series-link {
+    min-height:0;
+  }
+
+  .author-link a:before {
+    content:none;
+  }
+
+}

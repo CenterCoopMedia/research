@@ -1,0 +1,123 @@
+/* diagram */
+
+/* The heading opens the drawing, so it takes the drawing's width. */
+
+.section-diagram .section-heading {
+  width:min(var(--figure),100%);
+}
+
+.diagram {
+  width:min(var(--figure),100%);
+  margin-block:0;
+  margin-inline:var(--role-inline);
+}
+
+/* The drawing is authored one unit to one pixel of the figure column, so a
+   label set at 16 units is a label set at 16 pixels. It holds that size
+   whatever the window does and its own frame scrolls instead, because a
+   label that scales with the page stops being readable on a phone. The list
+   under the drawing says the same thing in sentences either way. */
+
+.diagram-frame {
+  overflow-x:auto;
+}
+
+/* One picture that never animates and that nothing can trigger. The marks
+   and the bowed lines are the cover's own, so a diagram is drawn in the hand
+   the rest of the report is drawn in. */
+
+.diagram-art {
+  display:block;
+  width:100%;
+  min-width:var(--figure);
+  height:auto;
+}
+
+.diagram-lines path {
+  stroke:var(--line);
+}
+
+/* The drawing carries its colors as attributes as well, so that an SVG lifted
+   out of the page is still right. These rules are what follows the token when
+   the token changes. */
+
+.diagram-marks {
+  stroke:var(--ink);
+}
+
+.diagram-edge-label {
+  stroke:var(--paper);
+}
+
+.diagram-label,.diagram-edge-label {
+  font-family:var(--font-label);
+  fill:var(--ink);
+}
+
+/* The drawing is hidden from assistive technology, because a bare SVG tells
+   a screen reader nothing. This list is the drawing in sentences, and it is
+   shown rather than hidden: a reader who can see the picture still gains
+   from reading what it claims. */
+
+.diagram-edges {
+  width:var(--col);
+  margin:var(--s5) 0 0;
+  padding-left:var(--s5);
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+}
+
+.diagram-edges li {
+  margin-bottom:var(--s1);
+}
+
+/* Below this width the frame is narrower than a third of the drawing, so a
+   reader met the middle of the picture and had to scroll to find the node the
+   flow starts from. The drawing takes the width it is given instead and the
+   edge list under it carries the same information in sentences. */
+
+@media(max-width:760px) {
+
+  .diagram-art {
+    min-width:0;
+  }
+
+  .diagram-frame {
+    overflow-x:visible;
+  }
+
+}
+
+@media print {
+
+  /* Paper cannot scroll, so the drawing takes the width of the text block
+     and its labels come down with it. */
+
+  .section-diagram .section-heading {
+    max-width:var(--reading-print);
+    width:auto;
+    margin-inline:0;
+  }
+
+  .diagram {
+    width:auto;
+    margin-inline:0;
+    break-inside:avoid;
+  }
+
+  .diagram-frame {
+    overflow:visible;
+  }
+
+  .diagram-art {
+    min-width:0;
+  }
+
+  .diagram-edges {
+    max-width:var(--reading-print);
+  }
+
+}

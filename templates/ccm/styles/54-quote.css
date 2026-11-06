@@ -1,0 +1,42 @@
+/* quote */
+
+/* A short accent rule opens the quote. No glyph, no fill, no centering. */
+
+blockquote {
+  width:var(--col);
+  margin-inline:var(--role-inline);
+}
+
+blockquote:before {
+  content:'';
+  display:block;
+  width:var(--quote-rule);
+  border-top:2px solid var(--accent);
+  margin-bottom:var(--s5);
+}
+
+/* The quote takes the reading column and nothing narrower: at --t3 that is
+   under 40 characters a line, which is already display measure. */
+
+blockquote p {
+  font-size:var(--t3);
+  line-height:var(--lh-title);
+  text-wrap:balance;
+  margin-bottom:var(--s5);
+}
+
+.quote-attribution {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+  margin-bottom:0;
+}
+
+/* The design carries no italics, and a citation is not an aside. */
+
+.quote-attribution cite {
+  font-style:normal;
+}
+

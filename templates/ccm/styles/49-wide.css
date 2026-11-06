@@ -1,0 +1,86 @@
+/* the wide layout: the reading column against the left gutter, with a rail
+
+   A report writes "layout": "wide" and build.py puts the name on <body>. The
+   selectors read the name off any ancestor rather than off <body> alone, so the
+   guide can show both layouts on one page.
+
+   The column keeps the same 34em measure the reading layout has, so no line grows
+   past 66 characters; what changes is where the column sits and what stands
+   beside it. The rail holds the sidenotes, the pull quotes and any figure or
+   table the author marks for it. A figure, a table, a timeline and the stage
+   keep the full --figure width and break past the column on purpose.
+
+   Nothing here applies below the fold, so the wide layout is the reading
+   layout on a narrow window and on a phone, and every block the rail held
+   comes back into the column at the place the author wrote it.
+
+   The band is a screen band. A sheet of paper is narrower than 1001px, so the
+   width alone kept the rail off nearly every printed page, but a landscape or
+   an oversize sheet has a print viewport of 1001px or more and took the rail
+   with it: a figure marked for the rail printed at 330px against the right
+   edge with its caption one word to a line. The media type says what the width
+   only implied, so one word here holds every rule of the band off paper and
+   the print stylesheet needs no rule of its own to undo them. */
+
+@media screen and (min-width:1001px) {
+
+  [data-layout="wide"] {
+    --role-inline:0;
+    /* The rail takes its room from the column, so a window between the fold
+       and the width the whole layout wants narrows the measure rather than
+       pushing the rail past the edge of the page. */
+    --col:min(var(--reading),100% - var(--rail) - var(--s7));
+  }
+
+  /* Every band starts at the report's own left edge, which is the gutter the
+     header, the cover, the notice and the colophon already sit on. */
+
+  [data-layout="wide"] .section,[data-layout="wide"] .endmatter {
+    padding-inline:var(--pad-wrapper);
+  }
+
+  /* The notes of a section stand in the rail beside it. The offset is written
+     out here rather than read from --col, because an absolutely positioned box
+     is measured from the section's padding edge while the column is measured
+     from inside the padding, so the two need different arithmetic to land on
+     the same line. */
+
+  [data-layout="wide"] .sidenotes {
+    --rail-start:min(var(--reading),100% - var(--pad-wrapper) * 2 - var(--rail) - var(--s7));
+    inset-inline-start:calc(var(--pad-wrapper) + var(--rail-start) + var(--s7));
+    width:var(--rail);
+  }
+
+  /* The column holds its own float. A pull quote at the end of a short run of
+     paragraphs is taller than the sentences left beside it, and a plain block
+     stops at its last line and lets the quote hang below it, into the band of
+     the next section. flow-root is a block that measures its floats, and it
+     clips nothing, so the quote still stands in the rail outside the column
+     and the sidenote script still reads the same box. */
+
+  [data-layout="wide"] .reading {
+    display:flow-root;
+  }
+
+  /* A pull quote is the one block inside a run of paragraphs that goes to the
+     rail. It floats out of the column and gives back the room it took, so no
+     line of the paragraph beside it is shortened and the quote still stands
+     level with the sentence it lifts. */
+
+  [data-layout="wide"] .pullquote {
+    float:inline-end;
+    width:var(--rail);
+    margin-block:0 var(--s5);
+    margin-inline:0 calc((var(--rail) + var(--s7)) * -1);
+    font-size:var(--t2);
+  }
+
+  /* A figure or a table the author marks with "rail": true renders at rail
+     width beside the column it belongs to, and its heading goes with it. */
+
+  [data-layout="wide"] .section[data-rail] > * {
+    width:min(var(--rail),100%);
+    margin-inline:calc(var(--col) + var(--s7)) 0;
+  }
+
+}

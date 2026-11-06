@@ -1,0 +1,192 @@
+/* glossary, and the definition control every {term} renders */
+
+.glossary {
+  margin:0;
+}
+
+.glossary-entry {
+  border-top:1px solid var(--rule);
+  padding:var(--s4) 0;
+}
+
+.glossary dt {
+  font-family:var(--font-label);
+  font-size:var(--t1);
+  line-height:var(--lh-subhead);
+  margin-bottom:var(--s1);
+}
+
+/* A term is a landing place, so it takes focus and it takes the focus ring. */
+
+.glossary dt:focus-visible {
+  outline:var(--focus-width) solid var(--focus);
+  outline-offset:var(--focus-offset);
+}
+
+.glossary dd {
+  margin:0;
+  color:var(--ink-soft);
+}
+
+/* The term in the text. The button is set inline so a two-word term breaks
+   across a line the way the words around it do. It carries no hit box: an
+   inline target inside a sentence is the one target WCAG 2.5.8 excepts, and a
+   44px box around a word in body copy covers the lines above and below it. */
+
+.definition-term,.definition-link {
+  display:inline;
+  font:inherit;
+  color:inherit;
+  background:none;
+  border:0;
+  padding:0;
+  text-decoration:underline;
+  text-decoration-style:dotted;
+  text-decoration-color:var(--rule-strong);
+  text-underline-offset:var(--s1);
+  transition:text-decoration-color var(--dur-hover) var(--ease);
+}
+
+.definition-term:hover,.definition-link:hover {
+  text-decoration-color:var(--accent);
+}
+
+/* One of the two is on the page at a time. With scripts off, and in a browser
+   with no popover API, the plain link to the glossary entry is the whole
+   control, so the definition is never behind an overlay the reader cannot
+   open. 50-definition.js adds the no-popover class when it finds no
+   showPopover on the button. */
+
+.definition-link {
+  display:none;
+}
+
+html:not(.enhanced) .definition-term,html.no-popover .definition-term {
+  display:none;
+}
+
+html:not(.enhanced) .definition-link,html.no-popover .definition-link {
+  display:inline;
+}
+
+/* The popover. It holds the term, the definition and a link to the entry, and
+   it is capped at 40 words by the build, so it never needs a scrollbar. */
+
+.definition-popover {
+  width:max-content;
+  max-width:var(--panel-w);
+  padding:var(--s4);
+  border:1px solid var(--card-border);
+  border-radius:var(--radius-card);
+  background:var(--paper);
+  color:var(--ink);
+  box-shadow:var(--shadow-panel);
+  z-index:var(--z-popover);
+  opacity:0;
+  transform:translateY(var(--s1));
+  /* display and overlay are discrete swaps, not animation: they hold the
+     element on the page for the length of the one transition that runs. */
+  transition:opacity var(--dur-reveal) var(--ease),transform var(--dur-reveal) var(--ease),display var(--dur-reveal) allow-discrete,overlay var(--dur-reveal) allow-discrete;
+}
+
+.definition-popover:popover-open {
+  opacity:1;
+  transform:none;
+}
+
+@starting-style {
+
+  .definition-popover:popover-open {
+    opacity:0;
+    transform:translateY(var(--s1));
+  }
+
+}
+
+.definition-name {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+  margin-bottom:var(--s2);
+}
+
+.definition-text {
+  font-size:var(--t0);
+  line-height:var(--lh-body);
+  margin-bottom:var(--s3);
+}
+
+.definition-more {
+  display:inline-flex;
+  align-items:center;
+  min-height:var(--tap);
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  text-decoration:underline;
+  text-decoration-color:var(--rule-strong);
+  transition:text-decoration-color var(--dur-hover) var(--ease);
+}
+
+.definition-more:hover {
+  text-decoration-color:var(--accent);
+}
+
+/* Where anchor positioning is supported the popover sits under the button that
+   opened it with no script at all. The button is the popover's implicit
+   anchor, because the button names it in popovertarget. */
+
+@supports (position-area:block-end) {
+
+  .definition-popover {
+    position:absolute;
+    position-anchor:auto;
+    position-area:block-end;
+    position-try-fallbacks:flip-block;
+    margin:var(--s2) 0 0;
+  }
+
+}
+
+@media(max-width:760px) {
+
+  .definition-popover {
+    max-width:calc(100vw - var(--gutter) * 2);
+  }
+
+  /* A phone is narrower than the box plus the space beside a term, so the box
+     stops centring itself on the term and centres in the window instead. It
+     keeps the term's block axis, so it still opens under the word. */
+
+  @supports (position-area:block-end) {
+
+    .definition-popover {
+      justify-self:center;
+    }
+
+  }
+
+}
+
+/* On paper the term is a word with a glossary entry behind it, and the entry
+   holds the definition, so the control prints as plain text. */
+
+@media print {
+
+  .definition-term {
+    display:none;
+  }
+
+  .definition-link {
+    display:inline;
+    text-decoration:none;
+  }
+
+  .glossary-entry {
+    break-inside:avoid;
+  }
+
+}

@@ -1,0 +1,589 @@
+{
+  "repository": "jamditis/stash",
+  "commit": "46f9fbb929d83143239e9c4976801ec4bb2783f3",
+  "source_path": "docs/ccm-report-template/template.zip",
+  "template_url": "https://jamditis.com/ccm-report-template/",
+  "archive_sha256": "1555a75f8f6b33f3638637be0bb8a62c438d3485c9a0e936cdb0228a32c585b7",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 38732,
+      "sha256": "430aee5d8c48b143e51f29871df3b6e64b77ab268f3787df142c6fde5ce8f235"
+    },
+    {
+      "path": "DESIGN.md",
+      "bytes": 91739,
+      "sha256": "fbc9751ebe18ac5dc003d48a7b7be0f195ddc099e69b637e0dfa7ebe82d5bba1"
+    },
+    {
+      "path": "build.py",
+      "bytes": 2193,
+      "sha256": "19e25bdee2edfaa03525ab41c754a912a4443901ac8a0b037c04ccf815a56497"
+    },
+    {
+      "path": "package.py",
+      "bytes": 8359,
+      "sha256": "82967d8dff37ba55af179e4687fdf198632c4fa649ba9b91905715026e4b3cb5"
+    },
+    {
+      "path": "report.json",
+      "bytes": 15343,
+      "sha256": "3650036d6006010a015ce9a83cb48059a49fcac61aa19e4dffc40cc76e30077d"
+    },
+    {
+      "path": "report.css",
+      "bytes": 133414,
+      "sha256": "096998f8c697ed368df7e4f843d62360330a88fc128f69ad345fa4577fad16ec"
+    },
+    {
+      "path": "report.js",
+      "bytes": 106647,
+      "sha256": "1e80eace318a47e84ea5525353a457ac74d4f08e15605ba5b64f353a613b6ea1"
+    },
+    {
+      "path": "index.html",
+      "bytes": 455533,
+      "sha256": "cd40b2db10a845b63b34a88cb196ed8a6071913dc724f351da6d7a7a24c8d51f"
+    },
+    {
+      "path": "starter.html",
+      "bytes": 85700,
+      "sha256": "4fc2ab05fc87afc5f0fdf48461d7f1f289ebdfee76ec785f54dca232292fe4b5"
+    },
+    {
+      "path": "guide.template.html",
+      "bytes": 27413,
+      "sha256": "9d331628581813dec590d95115c7fb9d4ce8a947ab434d6965c5404d3e424725"
+    },
+    {
+      "path": "guide.html",
+      "bytes": 181106,
+      "sha256": "7c7dbe2c613d363cb43eccb6024f7f311cf63dc98175e372ab9dcc67108b867d"
+    },
+    {
+      "path": "favicon.svg",
+      "bytes": 426,
+      "sha256": "1cf06f5d8e3faa40472ab3457ba374456479ec0637fb3908009ada3e0141eef8"
+    },
+    {
+      "path": "kit/__init__.py",
+      "bytes": 238,
+      "sha256": "c1db3a6a2fe1fd4a29ae0e2bea700a897cc86fc09d12563185c77be6b4416d3c"
+    },
+    {
+      "path": "kit/art.py",
+      "bytes": 9467,
+      "sha256": "438b884cfd12bc06a010b2e43201e84c26083e36e7192e6393edb96421e03ed8"
+    },
+    {
+      "path": "kit/assets.py",
+      "bytes": 2510,
+      "sha256": "16338a04daf595802b9d127a796b0fadcfdcaceaddb6c7e9d1c04d1484dd9904"
+    },
+    {
+      "path": "kit/charts.py",
+      "bytes": 23462,
+      "sha256": "2ec91b00cd83461f98724492e010ecc74a7d133f6adb42bfcb0df153770054ac"
+    },
+    {
+      "path": "kit/cite.py",
+      "bytes": 5266,
+      "sha256": "bcf111eb4b0ff6a8a65e08896a2ad0aa916a9227329b5f9381b5a4b71285bfb6"
+    },
+    {
+      "path": "kit/endmatter.py",
+      "bytes": 26318,
+      "sha256": "04721b9acf6f20fc3042d44994847ef55629131904fd90d00e02164ea2fd7c6a"
+    },
+    {
+      "path": "kit/fonts.py",
+      "bytes": 9955,
+      "sha256": "ed139005be047852fa7f733c8ad076ec6cf62803f8f2a1ea29361e178acd5154"
+    },
+    {
+      "path": "kit/guide.py",
+      "bytes": 15230,
+      "sha256": "7c29547144815875495c4e2c01aede4e7806be07a521d53f16f03303c98a394d"
+    },
+    {
+      "path": "kit/inline.py",
+      "bytes": 6432,
+      "sha256": "3a06381ca00082915a3a39408fe2b59b6b0f1181e4540dce52181df6e684d770"
+    },
+    {
+      "path": "kit/notes.py",
+      "bytes": 4129,
+      "sha256": "a3f2ebe8d53704c2e0e67d2e4266b4fa81310041d4ee3441d7f6cb8a8a4ad0b0"
+    },
+    {
+      "path": "kit/page.py",
+      "bytes": 28108,
+      "sha256": "d288b30e028f4ed02ce5f8257564629d902785cde18ae42c89a34ffe3c9131c2"
+    },
+    {
+      "path": "kit/registry.py",
+      "bytes": 1606,
+      "sha256": "9db35ce59492e7a0c3a3f9e22fd8dbb76078e517ca65af71aa1cea07a31e6148"
+    },
+    {
+      "path": "kit/sections/__init__.py",
+      "bytes": 122,
+      "sha256": "b603f4d3d472412524b338b2e3e67ae79bb76cb59381d58625fdccb3ab2a2039"
+    },
+    {
+      "path": "kit/sections/accordion.py",
+      "bytes": 3691,
+      "sha256": "abd47e76575dd42c4629f9ebdb206541d1adad89142a1d386e7e7e888687fc84"
+    },
+    {
+      "path": "kit/sections/compare.py",
+      "bytes": 2909,
+      "sha256": "1576af61b95a1ed82a5cc865e2092cb1cf8a7305d2c8cde4c999866bc04502bb"
+    },
+    {
+      "path": "kit/sections/diagram.py",
+      "bytes": 16319,
+      "sha256": "e2f74bf089ea26e1c5af852cdbc22dc41c689e18523687753f991350bd30b6f5"
+    },
+    {
+      "path": "kit/sections/figure.py",
+      "bytes": 19682,
+      "sha256": "f5a514b05b5828003305b5eb657249b4b04274d790090dd62852d1295ce4a6c7"
+    },
+    {
+      "path": "kit/sections/findings.py",
+      "bytes": 5986,
+      "sha256": "f9637bad3b8e0e692ce49256e07001c431e9f7cd53114fd54f270a90611799f1"
+    },
+    {
+      "path": "kit/sections/gallery.py",
+      "bytes": 3636,
+      "sha256": "f14c47b9dd8086ab66da6eebadc30057a2cc953eebb8b5c56ebac6b34d7798cc"
+    },
+    {
+      "path": "kit/sections/glossary.py",
+      "bytes": 6861,
+      "sha256": "a60247ebd60e3c90e9982bca721f9c7957d5011b42659f3fdec2fd0b72e37a7b"
+    },
+    {
+      "path": "kit/sections/image.py",
+      "bytes": 9026,
+      "sha256": "1a39284c657842c5e938883ea7aec245c5ecae311b3463e0c3289245d6218737"
+    },
+    {
+      "path": "kit/sections/methods.py",
+      "bytes": 4131,
+      "sha256": "e4ae82c82542b225c9a8f4379b8067a02b5d6638304d4151e53a963f466714a0"
+    },
+    {
+      "path": "kit/sections/part.py",
+      "bytes": 1960,
+      "sha256": "1ffb01ac0317fd04aa517ffb1bcaed3afd28fce5dca2e884940d73995b6f72ee"
+    },
+    {
+      "path": "kit/sections/prose.py",
+      "bytes": 7314,
+      "sha256": "04cc31346c30ae1928ed6b87fc0b792d5a39e3688d05a2e4aed4939903703df1"
+    },
+    {
+      "path": "kit/sections/quote.py",
+      "bytes": 1233,
+      "sha256": "2b649fe74a2cefcb9cfc0bb8f1307c9b3be711a488ec9e1215d39f7100197c21"
+    },
+    {
+      "path": "kit/sections/scrolly.py",
+      "bytes": 3850,
+      "sha256": "0313b73d5107475dc933d9f9372301b7fc5f44fc648c6d98afabb47dc4d318d4"
+    },
+    {
+      "path": "kit/sections/steps.py",
+      "bytes": 2433,
+      "sha256": "faecaeb9da96f8f1ddfdc5d62a65b0621fca47dc1f24ad108d9b744b5eca3073"
+    },
+    {
+      "path": "kit/sections/summary.py",
+      "bytes": 2140,
+      "sha256": "92afbeeba37bf6591c6906f72900bddbc5ac556eda0e6c0a8853cd52aa8fe95b"
+    },
+    {
+      "path": "kit/sections/table.py",
+      "bytes": 8751,
+      "sha256": "f800a5451fdf4aa0cbffb0ad80322e688b9d6caf61e2b67fba55fb6f40e8125e"
+    },
+    {
+      "path": "kit/sections/tabs.py",
+      "bytes": 4485,
+      "sha256": "540dd258235c66a5c2abdf5c8f1c8ac00e9ffc4969fc2157ed329a06222f2df9"
+    },
+    {
+      "path": "kit/sections/takeaways.py",
+      "bytes": 1896,
+      "sha256": "c8b437588e3abc03384bb2971c366d75373f092e58f31adf173bf8cb41fc86f3"
+    },
+    {
+      "path": "kit/sections/timeline.py",
+      "bytes": 2837,
+      "sha256": "539e609225172bd02ae53bce163c3cd8e659fc03c12d86936dfc396e695b4126"
+    },
+    {
+      "path": "kit/sections/waterfall.py",
+      "bytes": 7720,
+      "sha256": "c4053b7c6318116a5b12287921b20752c9e81d76259f252661339e93bbbaf905"
+    },
+    {
+      "path": "kit/text.py",
+      "bytes": 3367,
+      "sha256": "942ad8ba22ddb9c65db91ec0061ba5533622402c3fe02b9a599a455e3d5a402f"
+    },
+    {
+      "path": "kit/theme.py",
+      "bytes": 8382,
+      "sha256": "1b6f445cb45449048bd9d97e7cbbeb482a6808b8f48c1ccd6814a0f1694a14c3"
+    },
+    {
+      "path": "kit/waterfall.html",
+      "bytes": 29256,
+      "sha256": "b42942b0a9568ea3dcf416b924cd44eaf8c32f08da86759e039d42bcc42404b4"
+    },
+    {
+      "path": "styles/00-tokens.css",
+      "bytes": 8448,
+      "sha256": "8ecf1a578c5b27307d69b5f57be68488363c3d1e9610541a61065e9dbe561805"
+    },
+    {
+      "path": "styles/10-base.css",
+      "bytes": 4652,
+      "sha256": "ad837ce3ddadad8028a76f6bc1fef5e17029675aed5dfae2006476369df949f2"
+    },
+    {
+      "path": "styles/20-chrome.css",
+      "bytes": 8946,
+      "sha256": "d97d73f7ba1cafa180a86a07cf62482ae96138b302f1c8a32c12568ca82c7a8a"
+    },
+    {
+      "path": "styles/25-cover.css",
+      "bytes": 1928,
+      "sha256": "60a0f0738149fb551d04cc913936c127f55630267c67566ebef752101da3d5e3"
+    },
+    {
+      "path": "styles/30-artwork.css",
+      "bytes": 3111,
+      "sha256": "bebfed0d0898eea1365b7c30265639b37a70fbdf7bf95f07629aa48d1d250136"
+    },
+    {
+      "path": "styles/40-cover.css",
+      "bytes": 1976,
+      "sha256": "33ccafc0dd219a815ad2c42ac8c1feaa2c1c97bd6e7f3e3f6c1d56e4033930df"
+    },
+    {
+      "path": "styles/45-controls.css",
+      "bytes": 1546,
+      "sha256": "a95f1c21d501a503c22b72820be2a22a7e825e269086a37ad7750626dc2ccdb0"
+    },
+    {
+      "path": "styles/48-layout.css",
+      "bytes": 1348,
+      "sha256": "e5489b4a7049558fe102a8f8fb7f289e622993dbf345f5b24cf4a10355e3487e"
+    },
+    {
+      "path": "styles/49-wide.css",
+      "bytes": 3897,
+      "sha256": "3ac4d340daf99c5e8757ffc36d9ec5c49ed3e712cfdb6076db00e442e057e429"
+    },
+    {
+      "path": "styles/50-accordion.css",
+      "bytes": 2186,
+      "sha256": "a90b1f63296b99a83d9e400226176a28c0025de931a052aaf171658f141a6b0c"
+    },
+    {
+      "path": "styles/50-cite.css",
+      "bytes": 2372,
+      "sha256": "f8d0ea5018aa0f5cffc530610de8b333e0faf9cae3e7fa3252d97866d59a3f6e"
+    },
+    {
+      "path": "styles/50-compare.css",
+      "bytes": 3716,
+      "sha256": "1710c1abc131c765937e8c66b264d5ec679d7b6107583afe7e3a5e4dc95f76bd"
+    },
+    {
+      "path": "styles/50-diagram.css",
+      "bytes": 2811,
+      "sha256": "ac811a6fa50f54b3f2f0831b6a05fcc5b094afffdf2d04fb698f5e0e5873a6b2"
+    },
+    {
+      "path": "styles/50-endmatter.css",
+      "bytes": 6342,
+      "sha256": "6a2a1a4d15a6114e1f9a399f77973ed38e9d82f8f6f6e4c702b8b082eff95337"
+    },
+    {
+      "path": "styles/50-figure.css",
+      "bytes": 12849,
+      "sha256": "b7c3ae6666c7630668f46b38d0f35ba5ee70ae452b5d89b5e670ae82d16dc3ae"
+    },
+    {
+      "path": "styles/50-form.css",
+      "bytes": 4087,
+      "sha256": "99daa90cdd260d18c053fabac6deff1401a14a4076484060e4d8402b25ede7bb"
+    },
+    {
+      "path": "styles/50-gallery.css",
+      "bytes": 2365,
+      "sha256": "5d24fc9c74343e0533a3d5a7b6649602997bf11849e7574fcdbaa7e87d506757"
+    },
+    {
+      "path": "styles/50-glossary.css",
+      "bytes": 4760,
+      "sha256": "948dde5afe8c4d5627ddf0cb8d406b419c2e29d03045a04246d6510ab02eaa02"
+    },
+    {
+      "path": "styles/50-image.css",
+      "bytes": 4485,
+      "sha256": "5b32f9e805222b272f1d61185ed482a45730f3e39ada66b8abc27986587ae9f1"
+    },
+    {
+      "path": "styles/50-notes.css",
+      "bytes": 3597,
+      "sha256": "07a8975c56d7118890c6075356e822e0d389655b1e3d54ba387c7dde100bf0a8"
+    },
+    {
+      "path": "styles/50-part.css",
+      "bytes": 1761,
+      "sha256": "48557cac48aadf3b89992556bbd8bc8bb4fd9399396c5911602fcbed7e2a2954"
+    },
+    {
+      "path": "styles/50-prose-blocks.css",
+      "bytes": 2340,
+      "sha256": "bb37317149e43719107243ff27cc86646d954b001359d79978895ebf01dc2296"
+    },
+    {
+      "path": "styles/50-scrolly.css",
+      "bytes": 5549,
+      "sha256": "fba8e6107f5015eca1a078478ab9287d19838bdcebe9239ba1362fb20c0ec6da"
+    },
+    {
+      "path": "styles/50-steps.css",
+      "bytes": 1463,
+      "sha256": "5e137f5fd911f18160f0c9ac641d09af03dbbc46de117b62662096dba1aa105e"
+    },
+    {
+      "path": "styles/50-summary.css",
+      "bytes": 830,
+      "sha256": "058522bf42b84add84862573a2cc1e373605b3cc6e69cb1378dae6c1df379773"
+    },
+    {
+      "path": "styles/50-table.css",
+      "bytes": 6115,
+      "sha256": "ecabc25d222dee9ac28cae841c2e1ab93f70de7248677f0ac4f0b76799128b47"
+    },
+    {
+      "path": "styles/50-tabs.css",
+      "bytes": 2853,
+      "sha256": "4dc10261752db2f8997ab2caebbb19e6f5d1bfcf1b9cabb0d9cfff51f51c8f95"
+    },
+    {
+      "path": "styles/50-takeaways.css",
+      "bytes": 1182,
+      "sha256": "11c4e357507e0102c86742d10b88fb570b645799450c46cb194c82f5eba7c0cd"
+    },
+    {
+      "path": "styles/50-timeline.css",
+      "bytes": 2014,
+      "sha256": "d5c91af5adec4619b606e9df5cac1d1480a67ddee21f07e515291027b063975a"
+    },
+    {
+      "path": "styles/50-toast.css",
+      "bytes": 2126,
+      "sha256": "c949d86752fb7f1d92041b4abc229c0ebb86c426642f9fb5816ce9661e078770"
+    },
+    {
+      "path": "styles/50-waterfall.css",
+      "bytes": 240,
+      "sha256": "8bdbfedbad72762101e60e5ac1373cad2258fc15ccc045a04072471a6a85390e"
+    },
+    {
+      "path": "styles/52-findings.css",
+      "bytes": 2382,
+      "sha256": "26eaa2ab082807559df60dae9f0a05b77664687640dac08ac84738fb3be75631"
+    },
+    {
+      "path": "styles/54-quote.css",
+      "bytes": 883,
+      "sha256": "f1bdab01a885f27e66ea5f18dc9cf0add6ac4020895ab6274e7776dba18a7135"
+    },
+    {
+      "path": "styles/56-methods.css",
+      "bytes": 4547,
+      "sha256": "0317ef5c4e8bcafea4eda119cf5f9cb07630f260a906e897e0dbdfcdb8048c19"
+    },
+    {
+      "path": "styles/58-footer.css",
+      "bytes": 1345,
+      "sha256": "501f3aaf22d8b4efa1cdbb8e9a5180b80f1938b68a66f63bb6c44c215a96cf0a"
+    },
+    {
+      "path": "styles/90-state.css",
+      "bytes": 2153,
+      "sha256": "47a244e39adabc861da2a97e918a6950b395b011ede04510b2a7ecb4916e4e75"
+    },
+    {
+      "path": "styles/95-responsive.css",
+      "bytes": 3430,
+      "sha256": "85da31fd1ec9269d42033c1344c32dc50ee8429e22152a3f81e4f181d00614d2"
+    },
+    {
+      "path": "styles/99-print.css",
+      "bytes": 6742,
+      "sha256": "83d535a97cab91610fcafad14909ebe09127429e95951a91f3bf544a42d1fc11"
+    },
+    {
+      "path": "scripts/00-runtime.js",
+      "bytes": 2781,
+      "sha256": "fb96c05d0e5ed084dc876818f69b1749c73fcfe6886356635933e69ea3b1bb61"
+    },
+    {
+      "path": "scripts/10-contents.js",
+      "bytes": 3224,
+      "sha256": "cb51cb286038ccbe89693dbee6831033edfcded2f6728d7102079676a1070129"
+    },
+    {
+      "path": "scripts/30-artwork.js",
+      "bytes": 13598,
+      "sha256": "49b7975bf0e6c43e08ea134a69c1989ac960379db604b7dcc6fae2bd9f06d4b4"
+    },
+    {
+      "path": "scripts/40-motion.js",
+      "bytes": 972,
+      "sha256": "4bedee0f1f2aa8fc725c4f099d5d29a407101b332192f098f8a2762bf00dd2aa"
+    },
+    {
+      "path": "scripts/50-compare.js",
+      "bytes": 1957,
+      "sha256": "696da0c20a7316e47edf78ba7a116af9207f60ed6982bb908c6b482d61fe6cbb"
+    },
+    {
+      "path": "scripts/50-count.js",
+      "bytes": 2499,
+      "sha256": "4a5530063169e92d7564ed40b1d232f9fe7a32ec7dbbb7d496485a8d731f79fa"
+    },
+    {
+      "path": "scripts/50-definition.js",
+      "bytes": 5402,
+      "sha256": "c96b3ee4b80c1c5361679900aa6f3f4ff16d900c6433740a40982f002a9daab1"
+    },
+    {
+      "path": "scripts/50-figure.js",
+      "bytes": 1054,
+      "sha256": "47dcc76a7b8425a5b35f37033e578981166eb9414840300f1830c951fcfc9454"
+    },
+    {
+      "path": "scripts/50-form.js",
+      "bytes": 6209,
+      "sha256": "30183c08a9a88d95cac9dc8213d3d440e957c85602574045110bf53d602ba495"
+    },
+    {
+      "path": "scripts/50-gallery.js",
+      "bytes": 2933,
+      "sha256": "5fd0cc70c727610effdd9945f5fedf0ee75c1d9c6ced47d80d9ef4c43c46549f"
+    },
+    {
+      "path": "scripts/50-lightbox.js",
+      "bytes": 2129,
+      "sha256": "6ccb550f4002670202df5e7fae1784166f3a67ca99fd72debcdd78d385548303"
+    },
+    {
+      "path": "scripts/50-notes.js",
+      "bytes": 5619,
+      "sha256": "87a01447190c43e87c57073b1d93b19bcffb6518a3dab16384dafde3f10179ab"
+    },
+    {
+      "path": "scripts/50-progress.js",
+      "bytes": 1685,
+      "sha256": "9fdd1cbb7b8ea9faecf73b5435949281dbcd04272a0b7b900e933a1695271a9c"
+    },
+    {
+      "path": "scripts/50-scrolly.js",
+      "bytes": 12574,
+      "sha256": "42254a3d3221523c032b777ba491d3fd6607834b96f0055b7e1bc87d3b238ae9"
+    },
+    {
+      "path": "scripts/50-share.js",
+      "bytes": 5047,
+      "sha256": "2c934101e981ca78759827b7efd8678e973f5207f1bd8bd3459aea7e229b9c19"
+    },
+    {
+      "path": "scripts/50-table.js",
+      "bytes": 2428,
+      "sha256": "f5c9a46a9a94ce4aea5f674eb9fbcbbf677463ed33c6f97d2189a7143f597a7d"
+    },
+    {
+      "path": "scripts/50-tabs.js",
+      "bytes": 2316,
+      "sha256": "d87cedefdd85f857370d995fb1298db18fada60d8c4f312d9d139c656d972397"
+    },
+    {
+      "path": "scripts/50-waterfall.js",
+      "bytes": 33496,
+      "sha256": "1b1c999133dd67950b7738cf63ec079ca5797b3911e8652fa95ae764ee0dce93"
+    },
+    {
+      "path": "scripts/60-print.js",
+      "bytes": 161,
+      "sha256": "07145ce07d631a0d361f2af892306b4f244050056eb488954d1ee0654f5a13ba"
+    },
+    {
+      "path": "scripts/99-boot.js",
+      "bytes": 298,
+      "sha256": "b4323399a6d1e471497d5bff76a14bb0032a597910bfd66ece33725e57d8021e"
+    },
+    {
+      "path": "fonts/bricolage-grotesque-OFL.txt",
+      "bytes": 4403,
+      "sha256": "4b5a7d8f37f5602621c8a8d7358a6a2e71317e6c231c661e15aef0275d3e07ba"
+    },
+    {
+      "path": "fonts/bricolage-grotesque.woff2",
+      "bytes": 76888,
+      "sha256": "a79fdb52d4a5c76552452f69202add96e287401fff03d3e8c0e38b4dcb5a99cd"
+    },
+    {
+      "path": "fonts/figtree-OFL.txt",
+      "bytes": 4388,
+      "sha256": "140d37233e7f3ce7313798befa9600893bcceaf41a55fa0fa5ad52f7f657a268"
+    },
+    {
+      "path": "fonts/figtree.woff2",
+      "bytes": 20156,
+      "sha256": "4ba7d3d096695818fe0686be4f1e82c6b05134e18a22260336130335027462dd"
+    },
+    {
+      "path": "fonts/fraunces-OFL.txt",
+      "bytes": 4391,
+      "sha256": "bdf4c22802eaf804f998195871c6b8938aac2ac14b2d78a8bd66a6f1eced833b"
+    },
+    {
+      "path": "fonts/fraunces.woff2",
+      "bytes": 121016,
+      "sha256": "7e744849028e2219e2aa1bc467dc4032980dc4487c9c3da3010081cd72d3b103"
+    },
+    {
+      "path": "fonts/nunito-sans-OFL.txt",
+      "bytes": 4393,
+      "sha256": "efbb0c9e864cef973982d9a17567e6be5c3d1759695574586f3f18c7ecca064b"
+    },
+    {
+      "path": "fonts/nunito-sans.woff2",
+      "bytes": 31076,
+      "sha256": "29e3890496844a9ea81975c52771c587c872b4eb317026422d1995b88d21b57d"
+    },
+    {
+      "path": "fonts/recursive-OFL.txt",
+      "bytes": 4389,
+      "sha256": "f9f539cf7549bd417159dbdb9c400943a5b60a7366c2c6fbde9f095173d82479"
+    },
+    {
+      "path": "fonts/recursive.woff2",
+      "bytes": 304988,
+      "sha256": "14ef41458aeba3d812284c4e32ee956910b88845062c61e91cc8578c2b78bccb"
+    }
+  ]
+}

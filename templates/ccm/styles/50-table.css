@@ -1,0 +1,254 @@
+/* tables. A real table first: the head names the columns, the first column
+   names the rows, and the sort control is a button inside the head cell. With
+   no script the table still reads and still holds every value. */
+
+.table-wrap {
+  width:min(var(--figure),100%);
+  margin-inline:var(--role-inline);
+}
+
+.data-table {
+  width:100%;
+  border-collapse:collapse;
+  font-size:var(--t0);
+  line-height:var(--lh-label);
+}
+
+.data-table caption {
+  width:var(--col);
+  text-align:left;
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+  margin-bottom:var(--s4);
+}
+
+.data-table th,.data-table td {
+  padding:var(--s3) var(--s4);
+  border-bottom:1px solid var(--rule);
+  text-align:left;
+  vertical-align:baseline;
+}
+
+.data-table th:first-child,.data-table td:first-child {
+  padding-inline-start:0;
+}
+
+.data-table th:last-child,.data-table td:last-child {
+  padding-inline-end:0;
+}
+
+/* The head stays with the reader while a long table passes under the sticky
+   page header, so a value never loses the name of its column. */
+
+.data-table thead th {
+  position:sticky;
+  top:var(--header);
+  padding:0;
+  background:var(--paper);
+  border-bottom:1px solid var(--rule-strong);
+  font-family:var(--font-label);
+  font-weight:600;
+  font-size:var(--t-1);
+  letter-spacing:var(--track-label);
+  white-space:nowrap;
+}
+
+.data-table thead th:not(:has(.column-sort)) {
+  padding:var(--s3) var(--s4);
+}
+
+.data-table tbody th {
+  font-family:var(--font-label);
+  font-weight:600;
+  font-size:var(--t-1);
+  letter-spacing:var(--track-label);
+}
+
+/* A numeral column is right aligned and set in tabular figures, so two rows
+   compare by eye without reading every digit. */
+
+.data-table .numeric {
+  width:1%;
+  white-space:nowrap;
+  text-align:right;
+}
+
+.data-table td.numeric {
+  font-family:var(--font-numeral);
+  font-variant-numeric:var(--num-display);
+}
+
+.data-table tbody tr {
+  transition:background var(--dur-hover) var(--ease);
+}
+
+.data-table tbody tr:hover {
+  background:var(--tint-row);
+}
+
+.column-head {
+  display:block;
+}
+
+.column-unit {
+  display:block;
+  font-weight:400;
+  color:var(--muted);
+}
+
+/* The source and the note under a table start at the table's own left edge,
+   not at the page gutter. */
+
+.section-table .figure-source,.section-table .figure-note {
+  width:min(var(--figure),100%);
+  margin-inline:var(--role-inline);
+}
+
+.section-table .figure-source {
+  margin-top:var(--s4);
+}
+
+/* the sort control */
+
+.column-sort {
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:var(--s2);
+  width:100%;
+  min-height:var(--tap);
+  padding:var(--s2) var(--s4);
+  border:0;
+  background:none;
+  font-family:var(--font-label);
+  font-weight:600;
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  text-align:left;
+  transition:background var(--dur-control) var(--ease);
+}
+
+.column-sort:hover {
+  background:var(--wash);
+}
+
+th:first-child .column-sort {
+  padding-inline-start:0;
+}
+
+th.numeric .column-sort {
+  justify-content:flex-end;
+  padding-inline-end:0;
+}
+
+/* The mark is two borders turned, so the direction is drawn rather than
+   typed as a glyph. It is empty until a column is sorted.
+
+   A box turned 45 degrees is measured, after the turn, by its own diagonal:
+   a var(--s2) square reaches calc(var(--s2) * sqrt(2)) corner to corner,
+   which is about 1.66px wider than var(--s2) on each side. In a numeric
+   column, which sits flush against the cell's own end with no padding left
+   to absorb that, the turn was pushing a numeral column's own mark, and the
+   table under it, that far past its right edge. The margin below moves the
+   box the same 1.66px the other way before it turns, so the corner the turn
+   adds lands exactly back on the edge the box started flush against. */
+
+.sort-mark {
+  width:var(--s2);
+  height:var(--s2);
+  margin-inline-end:calc(var(--s2) * .20710678);
+  border-right:var(--focus-width) solid var(--muted);
+  border-bottom:var(--focus-width) solid var(--muted);
+  opacity:.55;
+  transform:rotate(45deg);
+  transition:opacity var(--dur-hover) var(--ease),transform var(--dur-hover) var(--ease),border-color var(--dur-hover) var(--ease);
+}
+
+/* The mark stands at rest on every column a reader can sort, so the table
+   says that it sorts before anything is hovered. A reader on a touch screen
+   has no hover, and a head with no mark reads as a plain bold label. */
+
+.column-sort:hover .sort-mark,.column-sort:focus-visible .sort-mark {
+  opacity:1;
+}
+
+/* The sorted column takes the full mark in full ink, so the state differs from
+   the resting affordance by weight and by color, not by direction alone. */
+
+[aria-sort="ascending"] .sort-mark,[aria-sort="descending"] .sort-mark {
+  border-color:currentColor;
+  opacity:1;
+}
+
+[aria-sort="ascending"] .sort-mark {
+  transform:rotate(-135deg);
+}
+
+[aria-sort="descending"] .sort-mark {
+  transform:rotate(45deg);
+}
+
+@media(max-width:760px) {
+
+  /* Below this width the table scrolls sideways rather than stacking its
+     rows into cards: a stacked row loses the link between a value and the
+     name of its column. */
+
+  .table-wrap {
+    overflow-x:auto;
+  }
+
+  /* The wrapper is the scroll box here, so a head that sticks under the page
+     header would sit on top of the first rows instead. The head holds its
+     place in the table and the wrapper carries the scroll. */
+
+  .data-table thead th {
+    position:static;
+  }
+
+  .data-table th,.data-table td {
+    padding:var(--s2) var(--s3);
+  }
+
+  .column-sort {
+    padding:var(--s2) var(--s3);
+  }
+
+}
+
+@media print {
+
+  /* The head repeats on every sheet, so a value on page three still has the
+     name of its column above it. Nothing here is a control any more. */
+
+  .data-table thead {
+    display:table-header-group;
+  }
+
+  .data-table thead th {
+    position:static;
+  }
+
+  .table-wrap {
+    overflow:visible;
+    box-shadow:none;
+  }
+
+  .column-sort {
+    min-height:0;
+    padding:0;
+  }
+
+  .sort-mark {
+    display:none;
+  }
+
+  .data-table tbody tr {
+    break-inside:avoid;
+  }
+
+}

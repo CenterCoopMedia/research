@@ -1,0 +1,110 @@
+/* prose blocks: subhead, list, callout, caveat, pull quote */
+
+/* A subhead opens a part of the argument, so it takes more space above it than
+   below it. Only a subhead written into the run of paragraphs is a direct
+   child of the reading column, so the steps and the glossary keep their own. */
+
+.section-prose .reading > h3 {
+  margin-top:var(--s7);
+}
+
+.prose-list {
+  margin:0 0 var(--s5);
+  padding-inline-start:var(--s5);
+}
+
+.prose-list li {
+  margin-bottom:var(--s2);
+}
+
+.prose-list li:last-child {
+  margin-bottom:0;
+}
+
+.prose-list li::marker {
+  color:var(--muted);
+}
+
+/* An ordered list counts in the numeral face, like the citation list. */
+
+ol.prose-list li::marker {
+  font-family:var(--font-numeral);
+  font-variant-numeric:var(--num-display);
+  color:var(--accent);
+}
+
+/* A callout is an aside on the wash, opened by a hairline. A caveat is the
+   same block with a stronger rule and a name: a limit a reader has to notice
+   cannot depend on a border to say what it is, and it takes no color of its
+   own, because a warning color is a sixth color the theme does not hold. */
+
+.callout {
+  margin:0 0 var(--s5);
+  padding:var(--s5);
+  background:var(--wash);
+  border-top:1px solid var(--rule);
+  --muted:color-mix(in oklab,var(--ink) 66%,var(--wash));
+}
+
+.callout > :last-child {
+  margin-bottom:0;
+}
+
+.callout-title {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+  margin-bottom:var(--s2);
+}
+
+.caveat {
+  border-top:2px solid var(--rule-strong);
+}
+
+/* The pull quote reuses the quote section's rule and its size, inside the
+   reading column. The build has already read the sentence back against the
+   paragraphs of the same section, so it is always an exact lift. */
+
+.pullquote {
+  font-size:var(--t3);
+  line-height:var(--lh-title);
+  text-wrap:balance;
+  margin:var(--s6) 0;
+}
+
+.pullquote:before {
+  content:'';
+  display:block;
+  width:var(--quote-rule);
+  border-top:2px solid var(--accent);
+  margin-bottom:var(--s5);
+}
+
+@media(max-width:760px) {
+
+  .callout {
+    padding:var(--s4);
+  }
+
+  .pullquote {
+    font-size:var(--t2);
+  }
+
+}
+
+@media print {
+
+  .callout {
+    padding:var(--s3) 0 0;
+    background:none;
+    break-inside:avoid;
+  }
+
+  .pullquote {
+    font-size:14pt;
+    break-inside:avoid;
+  }
+
+}

@@ -1,0 +1,77 @@
+/* steps */
+
+/* The numeral is the list's own count, so the markup holds the words and the
+   stylesheet holds the number. One hairline sits between two steps. There is
+   no card, no icon and no line down the column: the scrolly is the type that
+   carries a drawing, and this one carries the instructions. */
+
+.steps-list {
+  margin:0;
+  padding:0;
+  list-style:none;
+  counter-reset:step;
+}
+
+.steps-list li {
+  display:grid;
+  grid-template-columns:var(--s7) minmax(0,1fr);
+  align-items:baseline;
+  gap:0 var(--s4);
+  padding-block:var(--s5);
+}
+
+.steps-list li:first-child {
+  padding-block-start:0;
+}
+
+.steps-list li:last-child {
+  padding-block-end:0;
+}
+
+.steps-list li + li {
+  border-top:1px solid var(--rule);
+}
+
+.steps-list li:before {
+  counter-increment:step;
+  content:counter(step,decimal);
+  grid-column:1;
+  grid-row:1 / span 2;
+  font-family:var(--font-numeral);
+  font-variant-numeric:var(--num-display);
+  font-size:var(--t2);
+  line-height:var(--lh-subhead);
+  color:var(--accent);
+}
+
+.steps-list h3 {
+  grid-column:2;
+  font-family:var(--font-label);
+  font-size:var(--t1);
+  line-height:var(--lh-subhead);
+  margin-bottom:var(--s2);
+}
+
+.steps-list p {
+  grid-column:2;
+  margin-bottom:0;
+}
+
+@media(max-width:760px) {
+
+  .steps-list li {
+    grid-template-columns:var(--s6) minmax(0,1fr);
+    gap:0 var(--s3);
+    padding-block:var(--s4);
+  }
+
+}
+
+@media print {
+
+  .steps-list li {
+    break-inside:avoid;
+    padding-block:var(--s3);
+  }
+
+}

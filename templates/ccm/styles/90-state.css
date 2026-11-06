@@ -1,0 +1,85 @@
+/* paused and reduced motion share one path: states change, nothing animates */
+
+.no-motion *,.no-motion *:before,.no-motion *:after {
+  transition-duration:.01ms!important;
+  transition-delay:0s!important;
+  animation-duration:.01ms!important;
+  animation-delay:0s!important;
+}
+
+/* Scripts off. All text is already in the document, but the stage has no
+   state to show and nothing to pin, so the scrolly stops being a staged
+   column: the drawing sits once at --figure, then the steps run down the
+   reading column in the order they are written. */
+
+html:not(.enhanced) .scrolly {
+  display:block;
+}
+
+html:not(.enhanced) .stage {
+  position:relative;
+  top:auto;
+  z-index:auto;
+  width:min(var(--figure),100%);
+  height:auto;
+  margin-inline:var(--role-inline);
+  padding:0;
+  background:none;
+  box-shadow:none;
+}
+
+/* The drawing carries its own paint from build.py, so it reads without a
+   state. It is capped like the cover's, so it opens the section instead of
+   filling a screen. */
+
+html:not(.enhanced) .stage .ink-art {
+  width:auto;
+  max-width:100%;
+  max-height:var(--cover-art);
+}
+
+/* The stage caption names a state the reader cannot reach here, and the card
+   carries its own caption instead. */
+
+html:not(.enhanced) .stage:after,html:not(.enhanced) .steps:after,html:not(.enhanced) .stage-progress,html:not(.enhanced) .stage figcaption {
+  display:none;
+}
+
+html:not(.enhanced) .steps {
+  padding-top:0;
+  margin-top:var(--s6);
+}
+
+html:not(.enhanced) .step {
+  display:block;
+  width:var(--col);
+  min-height:0;
+  margin-inline:var(--role-inline);
+  padding:0;
+}
+
+/* Nothing here can become active, so a card is a block of text under a
+   hairline and carries no other chrome. */
+
+html:not(.enhanced) .step-card {
+  width:auto;
+  padding:var(--s5) 0;
+  background:none;
+  border:0;
+  border-top:1px solid var(--rule);
+  border-radius:0;
+  box-shadow:none;
+}
+
+/* With scripts off the stage shows one state and no caption, so the card's
+   caption is the only one and it is shown. */
+
+html:not(.enhanced) .static-caption {
+  position:static;
+  width:auto;
+  height:auto;
+  overflow:visible;
+  clip-path:none;
+  white-space:normal;
+}
+

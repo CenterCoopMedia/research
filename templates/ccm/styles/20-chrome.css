@@ -1,0 +1,332 @@
+/* header */
+
+.site-header {
+  position:sticky;
+  top:0;
+  z-index:var(--z-header);
+  min-height:var(--header);
+  background:var(--paper);
+  border-bottom:1px solid var(--rule);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:var(--s5);
+  padding-inline:var(--pad-wrapper);
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  transition:box-shadow var(--dur-control) var(--ease);
+}
+
+/* The rule alone is too quiet once the page is moving under it. */
+
+.site-header.is-scrolled {
+  box-shadow:var(--shadow-header);
+}
+
+/* Three items share the header row, and only two of them give up width. The
+   brand takes min-width:0 so its name can be cut short before the row is
+   overfull, and the mark inside it never is: a header that shrinks its brand
+   to the width of one word wraps the name down three lines. */
+
+.brand {
+  display:flex;
+  gap:var(--s3);
+  align-items:center;
+  text-decoration:none;
+  min-width:0;
+}
+
+.brand-mark {
+  flex:none;
+  font-family:var(--font-body);
+  font-size:var(--t2);
+  line-height:1;
+  letter-spacing:-.03em;
+  color:var(--accent);
+}
+
+.brand-name {
+  border-left:1px solid var(--rule);
+  padding-left:var(--s3);
+  text-decoration-color:transparent;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+/* The links and the two controls hold their own width. They are what the
+   reader came to the header for, and there is no smaller form of a link than
+   its own words: a shrunk group wrapped "Sample report" and "Resume motion"
+   onto two lines each and stood the header's own type three lines deep. */
+
+.header-actions {
+  display:flex;
+  align-items:center;
+  gap:var(--s3);
+  flex:none;
+}
+
+/* The guide and the examples index, as plain links in the label face. They
+   take the same tap height as the contents control beside them, so the three
+   sit on one baseline and every one of them clears 24px on a phone. */
+
+.header-link {
+  display:inline-flex;
+  align-items:center;
+  min-height:var(--tap);
+  padding-inline:var(--s2);
+  border-radius:var(--radius-control);
+  color:var(--muted);
+  text-decoration-color:transparent;
+  transition:background var(--dur-hover) var(--ease),color var(--dur-hover) var(--ease),text-decoration-color var(--dur-hover) var(--ease);
+}
+
+.header-link:hover {
+  color:var(--ink);
+  text-decoration-color:currentColor;
+}
+
+/* The panel copy of the same links. It waits until the header runs out of room,
+   which is 560px, and the header copy goes at the same width, so one of the two
+   is on the page and never both. */
+
+.contents nav .panel-link {
+  display:none;
+}
+
+.contents summary {
+  list-style:none;
+  display:flex;
+  align-items:center;
+  gap:var(--s2);
+  min-height:var(--tap);
+  padding-inline:var(--s3);
+  border-radius:var(--radius-control);
+  transition:background var(--dur-hover) var(--ease);
+}
+
+.contents summary:hover {
+  background:var(--wash);
+}
+
+/* The scrim starts below the header so the control stays reachable.
+   A click on it reports the <details> as the event target. */
+
+.contents[open]:before {
+  content:'';
+  position:fixed;
+  inset:var(--header) 0 0;
+  background:var(--scrim);
+}
+
+/* The state is a drawn mark, not a character: a "+" typed into the summary is
+   read aloud as the word "plus" after the label. The bar stays and the upright
+   goes, so the open panel shows a minus. */
+
+.contents-icon {
+  flex:none;
+  color:var(--muted);
+}
+
+.contents[open] summary .icon-cross {
+  display:none;
+}
+
+.contents nav {
+  position:absolute;
+  top:100%;
+  right:var(--pad-wrapper);
+  margin-top:-1px;
+  padding:var(--s2);
+  background:var(--paper);
+  border:1px solid var(--card-border);
+  border-radius:var(--radius-card);
+  width:var(--panel-w);
+  box-shadow:var(--shadow-panel);
+}
+
+.contents[open] nav {
+  animation:panel var(--dur-panel) var(--ease);
+}
+
+@keyframes panel {
+
+  from {
+    opacity:0;
+    transform:translateY(calc(var(--s2) * -1));
+  }
+
+}
+
+.contents nav a {
+  display:flex;
+  align-items:center;
+  min-height:var(--tap);
+  padding-inline:var(--s3);
+  font-size:var(--t0);
+  text-decoration:none;
+  border-bottom:1px solid var(--rule);
+  border-radius:var(--radius-control);
+  transition:background var(--dur-hover) var(--ease),color var(--dur-hover) var(--ease),box-shadow var(--dur-hover) var(--ease);
+}
+
+.contents nav a:last-child {
+  border-bottom:0;
+}
+
+.contents nav a:hover {
+  background:var(--wash);
+}
+
+/* The reader's current section keeps full ink and takes an accent rule at its
+   leading edge; the rest step back. The rule is the marker and nothing else
+   uses it, so a reader who cannot separate the hues still has the ink step and
+   the panel still states the same thing with aria-current. */
+
+.contents nav:has(a[aria-current]) a {
+  color:var(--muted);
+}
+
+.contents nav a[aria-current] {
+  color:var(--ink);
+  box-shadow:inset var(--rule-mark) 0 0 var(--accent);
+}
+
+/* The reading progress rule sits on the header's own bottom edge. 50-progress.js
+   writes scaleX and nothing else, and the rule never transitions, so it follows
+   the scroll under reduced motion the same way it does with motion on. */
+
+.reading-progress {
+  position:absolute;
+  bottom:-1px;
+  left:0;
+  height:var(--progress-h);
+  width:100%;
+  background:var(--rule-strong);
+  transform:scaleX(0);
+  transform-origin:left;
+}
+
+/* With no script the rule can only report zero, which is worse than no rule. */
+
+html:not(.enhanced) .reading-progress {
+  display:none;
+}
+
+/* The title of the section the reader is in. It is empty until report.js
+   fills it, and an empty box would take the header's gap. */
+
+.header-section {
+  min-width:0;
+  /* The title is the one part of the header the reader is told twice, by the
+     panel's aria-current, so it is the first thing to go when the row is
+     short. The factor is large enough that the title is down to nothing
+     before the brand beside it gives up a letter. */
+  flex-shrink:999;
+  margin-inline-end:auto;
+  padding-left:var(--s3);
+  border-left:1px solid var(--rule);
+  color:var(--muted);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.header-section:empty {
+  display:none;
+}
+
+/* The skip link lands under the header, at the same gutter every band on the
+   page starts at. Over the header it would cover the brand, which is the one
+   part of the chrome a reader uses to tell the page apart from another. */
+
+.skip-link {
+  position:fixed;
+  top:calc(var(--s10) * -1);
+  left:var(--pad-wrapper);
+  min-height:var(--tap);
+  display:inline-flex;
+  align-items:center;
+  background:var(--ink);
+  color:var(--paper);
+  padding-inline:var(--s4);
+  border-radius:var(--radius-control);
+  z-index:var(--z-skip);
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  letter-spacing:var(--track-label);
+  text-decoration:none;
+}
+
+.skip-link:focus {
+  top:calc(var(--header) + var(--s2));
+}
+
+/* A report may carry three links of its own, and the links arrive at 561px.
+   The row then has to hold the brand, the title of the section, three links
+   and two controls, and each part it can state another way goes at the width
+   the page already folds at.
+
+   Below 1000px the section title goes and the motion control is its icon. The
+   contents panel marks the same section with aria-current, and the button
+   keeps the aria-label report.js holds in step with the state. Measured with
+   three links: the full row wants about 916px of a 1001px header, and those
+   two parts are 276px of it.
+
+   Below 760px the organisation name goes as well, because the brand mark
+   beside it still names the report. Three links then want about 554px of the
+   761px they have, and about 544px at 561px, which is the width they arrive
+   at. With all three parts in place they wanted about 878px, and the page
+   scrolled sideways from 561px to about 624px.
+
+   The guide and the examples index carry no panel, no controls and no section
+   title, so their brand name stays to 420px; the class is what tells the two
+   headers apart. */
+
+@media(max-width:1000px) {
+
+  .header-section {
+    display:none;
+  }
+
+  .with-contents .motion-label {
+    display:none;
+  }
+
+}
+
+@media(max-width:760px) {
+
+  .with-contents .brand-name {
+    display:none;
+  }
+
+}
+
+/* Below 560px the brand, the motion control and the contents control fill a
+   report's header on their own, so the links to the guide and the examples move
+   into the contents panel. They keep the row the section links take, under a
+   heavier rule that separates the two groups. The guide and the examples index
+   carry no panel and no controls, so their links stay in the header. */
+
+@media(max-width:560px) {
+
+  .with-contents .header-link {
+    display:none;
+  }
+
+  .contents nav .panel-link {
+    display:flex;
+  }
+
+  .contents nav .panel-link:first-of-type {
+    margin-top:var(--s2);
+    border-top:1px solid var(--rule-strong);
+  }
+
+}
+

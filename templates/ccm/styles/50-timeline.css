@@ -1,0 +1,96 @@
+/* timeline */
+
+/* The heading opens a two column list, so it takes that list's width. */
+
+.section-timeline .section-heading {
+  width:min(var(--figure),100%);
+}
+
+/* Dates on the left, events on the right. The row is a subgrid, so every
+   date shares one edge and one hairline runs the whole width of the row.
+   No dots, no connector line, no alternating sides: a chronology is a list,
+   and the column of dates is what the eye scans down. */
+
+.timeline {
+  display:grid;
+  grid-template-columns:max-content minmax(0,var(--reading));
+  column-gap:var(--s6);
+  row-gap:var(--s5);
+  width:min(var(--figure),100%);
+  margin-block:0;
+  margin-inline:var(--role-inline);
+  padding:0;
+  list-style:none;
+}
+
+.timeline li {
+  display:grid;
+  grid-column:1 / -1;
+  grid-template-columns:subgrid;
+  border-top:1px solid var(--rule);
+  padding-top:var(--s4);
+}
+
+/* A column of dates is scanned, not read, so the figures are tabular and the
+   face is the one with lining numerals. */
+
+.timeline-date {
+  font-family:var(--font-numeral);
+  font-variant-numeric:var(--num-display);
+  font-size:var(--t1);
+  line-height:var(--lh-body);
+  color:var(--muted);
+}
+
+.timeline-event h3 {
+  font-family:var(--font-label);
+  font-weight:600;
+  font-size:var(--t1);
+  line-height:var(--lh-body);
+  margin-bottom:var(--s2);
+}
+
+.timeline-event p {
+  margin-bottom:0;
+}
+
+@media(max-width:760px) {
+
+  /* A date column and a readable measure cannot share a phone screen, so the
+     date moves above the event it belongs to. */
+
+  .timeline {
+    grid-template-columns:minmax(0,1fr);
+  }
+
+  .timeline li {
+    display:block;
+  }
+
+  .timeline-date {
+    display:block;
+    margin-bottom:var(--s2);
+  }
+
+}
+
+@media print {
+
+  .section-timeline .section-heading {
+    max-width:var(--reading-print);
+    width:auto;
+    margin-inline:0;
+  }
+
+  .timeline {
+    grid-template-columns:max-content minmax(0,var(--reading-print));
+    column-gap:var(--s5);
+    width:auto;
+    margin-inline:0;
+  }
+
+  .timeline li {
+    break-inside:avoid;
+  }
+
+}

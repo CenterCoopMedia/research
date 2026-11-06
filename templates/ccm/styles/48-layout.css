@@ -1,0 +1,52 @@
+/* sections: one flat rhythm, three role widths */
+
+.section {
+  padding-block:var(--section);
+  padding-inline:var(--gutter);
+}
+
+.section > :last-child {
+  margin-bottom:0;
+}
+
+.reading,.section-heading {
+  width:var(--col);
+  margin-inline:var(--role-inline);
+}
+
+/* A heading opens the block under it, so it takes that block's role width.
+   The title itself still sets on the reading measure. */
+
+.section-findings .section-heading,.section-scrolly .section-heading {
+  width:min(var(--figure),100%);
+}
+
+.section-heading {
+  margin-bottom:var(--s7);
+}
+
+.section-heading h2 {
+  max-width:var(--reading);
+}
+
+.section-heading h2 {
+  margin-bottom:0;
+}
+
+
+/* One hint for anything that scrolls sideways: the table wrapper below 760px
+   and the diagram frame at every width. 00-runtime.js marks the box while the
+   reader is short of the end, so the hint always means there is more to the
+   side, and it goes at the end of the scroll.
+
+   The hint is an inset shade at the trailing edge rather than a drop shadow.
+   A drop shadow reads as a card, and on a phone, where the box is the width
+   of the screen, it falls outside the gutter and cannot be seen at all. */
+
+.scroll-edge {
+  overscroll-behavior-x:contain;
+}
+
+.scroll-edge[data-scroll="more"] {
+  box-shadow:inset calc(var(--s5) * -1) 0 var(--s4) calc(var(--s4) * -1) var(--rule-strong);
+}

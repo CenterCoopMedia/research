@@ -1,0 +1,174 @@
+/* compare */
+
+.section-compare .section-heading {
+  width:min(var(--figure),100%);
+}
+
+.compare {
+  width:min(var(--figure),100%);
+  margin-block:0;
+  margin-inline:var(--role-inline);
+}
+
+/* Side by side is the base. It is what prints, and what a reader with no
+   scripting gets, so both pictures stay whole and both keep their label. */
+
+.compare-pair {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:var(--s5);
+}
+
+.compare-side {
+  min-width:0;
+  margin:0;
+}
+
+.compare-side img {
+  display:block;
+  width:100%;
+  height:auto;
+}
+
+/* The label sits above its own picture. One label under both pictures makes
+   the reader work out which picture it names. */
+
+.compare-label {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+  margin-bottom:var(--s2);
+}
+
+/* With the script the two pictures stack and a divider moves over them. The
+   split is a live value with no transition on it: a divider that eases is a
+   divider that lags behind the pointer. */
+
+.compare.is-overlay .compare-pair {
+  --split:50%;
+  position:relative;
+  grid-template-columns:minmax(0,1fr);
+  grid-template-areas:"stack";
+  gap:0;
+  touch-action:pan-y;
+}
+
+.compare.is-overlay .compare-side {
+  grid-area:stack;
+}
+
+.compare.is-overlay .compare-after {
+  clip-path:inset(0 0 0 var(--split));
+}
+
+/* Stacked, the two labels sit on their own halves of the picture. */
+
+.compare.is-overlay .compare-label {
+  position:absolute;
+  top:var(--s3);
+  z-index:var(--z-stage);
+  margin:0;
+  padding:var(--s1) var(--s2);
+  background:var(--paper);
+}
+
+.compare.is-overlay .compare-before .compare-label {
+  left:var(--s3);
+}
+
+.compare.is-overlay .compare-after .compare-label {
+  right:var(--s3);
+}
+
+/* The divider is the same 2px rule the header progress uses. */
+
+.compare.is-overlay .compare-pair:after {
+  content:'';
+  position:absolute;
+  top:0;
+  bottom:0;
+  left:var(--split);
+  width:var(--progress-h);
+  margin-left:calc(var(--progress-h) / -2);
+  background:var(--rule-strong);
+  pointer-events:none;
+}
+
+/* The range input is the divider a reader can reach with one pointer and
+   with the keyboard, which is what WCAG 2.5.7 asks a drag to have beside it.
+   It carries a visible label and its own value. */
+
+.compare-control {
+  display:flex;
+  align-items:center;
+  gap:var(--s3);
+  margin-top:var(--s4);
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+}
+
+.compare-control input {
+  flex:1;
+  min-width:0;
+  min-height:var(--tap);
+  accent-color:var(--accent);
+}
+
+.compare-control input:focus-visible {
+  outline:var(--focus-width) solid var(--focus);
+  outline-offset:var(--focus-offset);
+}
+
+@media(max-width:760px) {
+
+  /* Two pictures side by side on a phone are two pictures nobody can read,
+     so the base state stacks them. The overlay already stacks them. */
+
+  .compare-pair {
+    grid-template-columns:minmax(0,1fr);
+  }
+
+}
+
+@media print {
+
+  /* Paper cannot hold a divider, so the pair goes back to side by side even
+     when the script has already overlaid it. */
+
+  .compare {
+    width:auto;
+    margin-inline:0;
+  }
+
+  .compare-pair,.compare.is-overlay .compare-pair {
+    grid-template-columns:repeat(2,1fr);
+    grid-template-areas:none;
+    gap:var(--s5);
+    break-inside:avoid;
+  }
+
+  .compare.is-overlay .compare-side {
+    grid-area:auto;
+  }
+
+  .compare.is-overlay .compare-after {
+    clip-path:none;
+  }
+
+  .compare.is-overlay .compare-label {
+    position:static;
+    padding:0;
+    background:none;
+    margin-bottom:var(--s2);
+  }
+
+  .compare.is-overlay .compare-pair:after {
+    display:none;
+  }
+
+}

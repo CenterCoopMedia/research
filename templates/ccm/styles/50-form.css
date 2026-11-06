@@ -1,0 +1,168 @@
+/* form */
+
+/* One column, the full width of the reading measure. A form beside a report
+   is a short errand, not a second document, so the fields stack and the
+   button sits with the sentence that says what the reader gets. */
+
+.signup {
+  display:grid;
+  gap:var(--s5);
+}
+
+.form-field {
+  display:grid;
+  gap:var(--s2);
+}
+
+.form-field label {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+}
+
+.form-input {
+  width:100%;
+  min-height:var(--tap);
+  padding:var(--s2) var(--s3);
+  border:1px solid var(--rule-strong);
+  border-radius:var(--radius-control);
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--font-label);
+  font-size:var(--t0);
+  line-height:var(--lh-body);
+  transition:border-color var(--dur-control) var(--ease);
+}
+
+.form-input:focus-visible {
+  outline:var(--focus-width) solid var(--focus);
+  outline-offset:var(--focus-offset);
+}
+
+/* A field in error takes a heavier ink edge, never a color. Color alone
+   cannot carry the message, and the wording under the label carries it. */
+
+.form-input[aria-invalid="true"] {
+  border-width:var(--rule-error);
+  border-color:var(--ink);
+}
+
+.field-error,.form-summary-title,.form-send-error,.form-summary a {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--ink);
+  margin:0;
+}
+
+/* The summary repeats every error at the top of the form and links to the
+   field that holds it, so a reader who cannot see the whole form still finds
+   each one. It carries no fill: the ink edge is the whole signal. */
+
+.form-summary {
+  border:var(--rule-error) solid var(--ink);
+  border-radius:var(--radius-control);
+  padding:var(--s4);
+}
+
+.form-summary:focus-visible {
+  outline:var(--focus-width) solid var(--focus);
+  outline-offset:var(--focus-offset);
+}
+
+.form-summary ul {
+  list-style:none;
+  margin:var(--s2) 0 0;
+  padding:0;
+}
+
+/* The row is a block and not a flex line, so the first letter of the message
+   is a letter the stylesheet can lift. */
+
+.form-summary a {
+  display:block;
+  min-height:var(--tap);
+  padding-block:var(--s3);
+  text-decoration:underline;
+  text-decoration-color:var(--rule-strong);
+  transition:text-decoration-color var(--dur-hover) var(--ease);
+}
+
+.form-summary a:hover {
+  text-decoration-color:var(--accent);
+}
+
+/* The message opens in lower case, because the field shows it after the word
+   "Error" and a colon. In the summary it starts the line, so it starts with a
+   capital. The word a screen reader hears does not change. */
+
+.form-summary a:first-letter {
+  text-transform:uppercase;
+}
+
+/* The reason states what the reader gets and how often, and it sits beside
+   the button so it is read before the click, not after it. */
+
+.form-actions {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:var(--s3) var(--s5);
+}
+
+.form-reason {
+  flex:1;
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+  margin:0;
+}
+
+/* The spam trap. It is hidden from the eye and from the accessibility tree,
+   and it is out of the tab order, so only a machine fills it in. */
+
+.form-trap {
+  position:absolute;
+  width:1px;
+  height:1px;
+  overflow:hidden;
+  clip-path:inset(50%);
+  white-space:nowrap;
+}
+
+/* The field takes the width of the box that hides it. At its own width its
+   layout box would reach past the page edge inside a clipped parent. */
+
+.form-trap input {
+  width:100%;
+}
+
+/* The end of the flow: the form goes, and one sentence takes its place and
+   names what the reader gave. */
+
+.form-status {
+  font-size:var(--t1);
+  line-height:var(--lh-body);
+  margin:0;
+}
+
+.form-status:focus-visible {
+  outline:var(--focus-width) solid var(--focus);
+  outline-offset:var(--focus-offset);
+}
+
+@media(max-width:760px) {
+
+  /* The button takes the row on its own, so a reason of two lines does not
+     push it off the screen edge. */
+
+  .form-actions .button {
+    width:100%;
+  }
+
+}

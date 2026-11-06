@@ -1,0 +1,71 @@
+/* controls */
+
+.button,.control {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:var(--s2);
+  min-height:var(--tap);
+  padding:var(--s2) var(--s4);
+  border:1px solid var(--rule-strong);
+  border-radius:var(--radius-control);
+  background:none;
+  color:var(--ink);
+  text-decoration:none;
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  transition:background var(--dur-control) var(--ease),border-color var(--dur-control) var(--ease),color var(--dur-control) var(--ease),transform var(--dur-control) var(--ease);
+}
+
+.button:hover,.control:hover {
+  background:var(--wash);
+  transform:translateY(-1px);
+}
+
+.button:active,.control:active {
+  transform:none;
+}
+
+.button.primary {
+  background:var(--ink);
+  border-color:var(--ink);
+  color:var(--paper);
+}
+
+.button.primary:hover {
+  background:var(--ink-strong);
+  border-color:var(--ink-strong);
+  color:var(--paper);
+}
+
+.motion-icon {
+  flex:none;
+}
+
+.motion-button .icon-play,.motion-button[aria-pressed="true"] .icon-pause {
+  display:none;
+}
+
+.motion-button[aria-pressed="true"] .icon-play {
+  display:inline;
+}
+
+/* notice */
+
+.notice {
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:var(--s3) var(--s5);
+  padding-block:var(--s3);
+  padding-inline:var(--pad-wrapper);
+  border-block:1px solid var(--rule);
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+}
+

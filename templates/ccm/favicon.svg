@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<style>
+#tile{fill:#f6f3eb}
+@media(prefers-color-scheme:dark){#tile{fill:#292925}#ink{stroke:#c9877c}}
+</style>
+<rect id="tile" width="32" height="32" rx="6"/>
+<g id="ink" fill="none" stroke="#a33e36" stroke-width="3.2" stroke-linecap="round">
+<path d="M6.9 7Q4 16 7.7 24.9"/>
+<path d="M16.2 7.7Q13.3 16 17 24.3"/>
+<path d="M25.6 7.2Q22.7 16 26.4 25"/>
+</g>
+</svg>

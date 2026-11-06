@@ -1,0 +1,74 @@
+/* part */
+
+/* A chapter opener is a pause, so it takes the bookend rhythm the cover and
+   the footer take instead of the flat section rhythm. */
+
+.section-part {
+  padding-block:var(--bookend);
+  /* The one formula that puts a block on the wrapper. It is what the cover,
+     the notice and the footer sit on, so a chapter opener starts on the
+     report's own left edge rather than on the section gutter. */
+  padding-inline:var(--pad-wrapper);
+}
+
+/* The part number is a numeral, which is the second of the two places on the
+   page where display size is allowed. It counts 1, 2, 3 and never pads. */
+
+.part-number {
+  position:relative;
+  font-family:var(--font-display);
+  font-variation-settings:var(--vs-display);
+  font-weight:var(--w-display);
+  font-variant-numeric:var(--num-display);
+  font-size:var(--t4);
+  line-height:var(--lh-numeral);
+  letter-spacing:-.02em;
+  color:var(--accent);
+  margin-bottom:var(--s5);
+}
+
+/* The word "Part" is in the page for a screen reader and not on it for the
+   eye: a lone numeral above a chapter title reads as a part number, and a
+   lone numeral read aloud does not. */
+
+.part-kicker {
+  position:absolute;
+  width:1px;
+  height:1px;
+  overflow:hidden;
+  clip-path:inset(50%);
+  white-space:nowrap;
+}
+
+.part h2 {
+  max-width:var(--reading);
+  margin-bottom:var(--s5);
+}
+
+.part-deck {
+  width:var(--col);
+  color:var(--ink-soft);
+  margin-bottom:0;
+}
+
+@media print {
+
+  /* A chapter opener starts a sheet. Giving the reader a new page is the
+     whole job of the component. */
+
+  .section-part {
+    break-before:page;
+    break-inside:avoid;
+    padding-block:var(--s7);
+    padding-inline:0;
+  }
+
+  .part h2,.part-deck {
+    max-width:var(--reading-print);
+  }
+
+  .part-number {
+    font-size:30pt;
+  }
+
+}

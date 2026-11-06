@@ -1,0 +1,41 @@
+/* summary */
+
+/* The block that says what the report holds. It carries a hairline above and
+   below, the way the findings do, and no tint: the takeaways are the tinted
+   block, and two tinted blocks at the top of one report read as one. */
+
+.section-summary {
+  border-top:1px solid var(--rule);
+  border-bottom:1px solid var(--rule);
+}
+
+/* The abstract sets one step above the body. It is the lead of the report, and
+   it is capped at 100 words, so the larger size never runs past a screen. */
+
+.summary p {
+  font-size:var(--t2);
+  line-height:var(--lh-subhead);
+  margin-bottom:0;
+}
+
+.summary-heading h2 {
+  margin-bottom:var(--s5);
+}
+
+@media(max-width:760px) {
+
+  .summary p {
+    font-size:var(--t1);
+    line-height:var(--lh-body);
+  }
+
+}
+
+@media print {
+
+  .summary p {
+    font-size:12pt;
+    line-height:1.45;
+  }
+
+}

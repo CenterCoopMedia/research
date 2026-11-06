@@ -1,0 +1,195 @@
+/* methods */
+
+.section-methods {
+  background:var(--wash);
+  --muted:color-mix(in oklab,var(--ink) 66%,var(--wash));
+}
+
+/* Two columns on the band: the note on the reading measure and the citations
+   beside it, both inside the figure. One column of prose in the middle of a
+   full-bleed tint leaves the band empty on both sides. */
+
+.methods {
+  display:grid;
+  grid-template-columns:minmax(0,var(--reading)) minmax(0,1fr);
+  gap:var(--s7);
+  width:min(var(--figure),100%);
+  margin-inline:var(--role-inline);
+}
+
+/* Fewer than two rows leaves the second column mostly empty tint beside the
+   note, so stack them under it in one column instead. The count holds the
+   citations and the downloads together, because they share the column. */
+
+.methods[data-aside="0"],.methods[data-aside="1"] {
+  grid-template-columns:minmax(0,1fr);
+}
+
+.methods .reading {
+  width:auto;
+  margin-inline:0;
+}
+
+.methods-aside {
+  min-width:0;
+}
+
+/* "How we did this": the plain lead a reader takes when they will not read
+   the whole note. The label is small and the sentence is not, so the lead
+   reads before the note under it. */
+
+.methods-brief {
+  margin-bottom:var(--s5);
+}
+
+.methods-brief h3 {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+  margin-bottom:var(--s2);
+}
+
+.methods-brief p {
+  font-size:var(--t2);
+  line-height:var(--lh-subhead);
+  margin-bottom:0;
+}
+
+/* The sources are a citation list, not a browser default: a plain numeral in
+   the accent, a hairline row, and the host under the label so a reader can see
+   where a citation points before following it. The numeral carries no leading
+   zero, because the list can never pass nine and needs no sort order. */
+
+.section-methods ol {
+  list-style:none;
+  margin:0;
+  padding:0;
+  counter-reset:source;
+}
+
+.section-methods ol li {
+  display:grid;
+  grid-template-columns:var(--s6) 1fr;
+  align-items:start;
+  gap:0 var(--s3);
+  padding-bottom:var(--s3);
+  border-top:1px solid var(--rule);
+}
+
+.section-methods ol li:before {
+  counter-increment:source;
+  content:counter(source,decimal);
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--tap);
+  letter-spacing:var(--track-label);
+  font-variant-numeric:tabular-nums;
+  color:var(--accent);
+}
+
+.section-methods ol li a {
+  display:inline-flex;
+  align-items:center;
+  justify-self:start;
+  min-height:var(--tap);
+}
+
+.source-host {
+  grid-column:2;
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+  overflow-wrap:anywhere;
+}
+
+/* The files the report offers, under the citations they back. The format and
+   the size sit inside the link, so a reader hears them in the link's own name
+   and knows what the click starts before it starts. */
+
+.downloads {
+  margin-top:var(--s6);
+}
+
+.downloads h3 {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+  margin-bottom:var(--s3);
+}
+
+.downloads ul {
+  list-style:none;
+  margin:0;
+  padding:0;
+}
+
+.downloads li {
+  border-top:1px solid var(--rule);
+}
+
+/* The label carries the underline and the format line does not, because an
+   underline under a size reads as part of the file name. The row switches the
+   browser's own underline off first, the way .heading-anchor does, because a
+   decoration on the link paints over every line inside it. */
+
+.downloads li a {
+  display:block;
+  padding-block:var(--s3);
+  text-decoration:none;
+}
+
+.download-label {
+  text-decoration:underline;
+  text-decoration-color:var(--rule-strong);
+  transition:text-decoration-color var(--dur-hover) var(--ease);
+}
+
+.downloads li a:hover .download-label {
+  text-decoration-color:var(--accent);
+}
+
+.download-meta {
+  display:block;
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+}
+
+@media(max-width:1000px) {
+
+  .downloads {
+    margin-top:var(--s5);
+  }
+
+}
+
+@media print {
+
+  /* The lead is a deck on paper, not a second heading: it sits between the
+     11pt note and the 17pt section title. */
+
+  .methods-brief p {
+    font-size:13pt;
+  }
+
+  /* The band is one column on paper, so the files follow the citations
+     instead of sitting beside them, and no row is cut by a sheet edge. */
+
+  .downloads li {
+    break-inside:avoid;
+  }
+
+  .downloads a {
+    padding-block:var(--s2);
+  }
+
+}
+

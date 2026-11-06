@@ -1,0 +1,200 @@
+/* Tokens. build.py writes the five theme colors into :root ahead of this file.
+   Every other value on the page derives from those five or from the scales
+   below. Change a token here and the whole page follows. */
+
+:root {
+  /* type: three roles, one display weight, and the figures a numeral takes.
+     These four are the system preset, which is what a report with no fonts
+     block sets in. A report that names a preset carries one more style
+     element after this stylesheet, and it declares these same tokens with the
+     faces it embeds. kit/fonts.py writes it. */
+  --font-body:'Iowan Old Style','Palatino Linotype','Book Antiqua',Palatino,Charter,Georgia,'Times New Roman',serif;
+  --font-display:var(--font-body);
+  --font-label:ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+  --w-display:800;
+  --vs-body:normal;
+  --vs-display:normal;
+  --num-display:lining-nums tabular-nums;
+  /* The two names the stylesheet used before the presets. Every rule that set
+     a family kept one of them, so they stay as aliases and no component
+     partial had to be rewritten to follow a preset. */
+  --font-serif:var(--font-body);
+  --font-sans:var(--font-label);
+  /* A tabular numeral is the body face with lining figures, so a table and a
+     date column read in the face the sentences do. The large numerals, which
+     are the finding value and the part number, take the display face instead. */
+  --font-numeral:var(--font-body);
+  /* The one place a third face is allowed: a command line has to be
+     transcribed exactly, so the guide sets its code blocks in a mono. No
+     report uses it. */
+  --font-code:ui-monospace,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace;
+
+  --t-1:13px;
+  --t0:15px;
+  --t1:17px;
+  /* The reading size. The body sets on it and the measure follows it, so the
+     steps above it hold their own sizes: a step card, a caption and a label
+     do not grow with the prose. */
+  --t-read:20px;
+  --t2:22px;
+  --t3:28px;
+  --t4:clamp(2.5rem,4.2vw,3.8125rem);
+
+  --lh-numeral:.9;
+  --lh-display:1.2;
+  --lh-title:1.29;
+  --lh-subhead:1.45;
+  --lh-label:1.5;
+  --lh-body:1.55;
+  --track-label:.01em;
+
+  /* space on a 4px base */
+  --s1:4px;
+  --s2:8px;
+  --s3:12px;
+  --s4:16px;
+  --s5:24px;
+  --s6:32px;
+  --s7:48px;
+  --s8:64px;
+  --s9:96px;
+  --s10:128px;
+
+  /* grid: one gutter, three role widths, one section rhythm */
+  --gutter:clamp(32px,calc(8vw - 24px),64px);
+  /* The measure is set in em, so it follows the body size instead of guessing
+     at it. The faces the presets set run .40em to .50em a character, so 34em
+     of the 20px body holds 62 to 66 characters a line in every preset and
+     never reaches 75. Both layouts use it: the reading layout centers it and
+     the wide layout puts it against the left gutter with the rail beside it. */
+  --reading:34em;
+  --reading-print:27em;
+  /* The rail of the wide layout: 22em of the note face it holds, which sets
+     at --t0. It is stated as a product rather than in em, because the track
+     is measured on the section and the notes in it are two sizes down from
+     the section's own. */
+  --rail:calc(22 * var(--t0));
+  /* Where a role width sits inside its section: centered, which is the reading
+     layout, or against the leading gutter, which is what the wide layout needs
+     to put the rail beside the column. Every block that states a role width
+     reads it, so the two layouts share one set of rules. */
+  --role-inline:auto;
+  /* The width of the reading column itself. It gives the rail its room in the
+     wide layout, so a window between the fold and the full width narrows the
+     column rather than pushing the rail off the page. */
+  --col:min(var(--reading),100%);
+  --figure:1092px;
+  --wrapper:1400px;
+  --pad-wrapper:max(var(--gutter),calc((100% - var(--wrapper)) / 2 + var(--gutter)));
+  --section:clamp(40px,5vw,64px);
+  --bookend:clamp(var(--s7),9svh,var(--s10));
+  --cover-art:48svh;
+  --band:clamp(220px,38svh,320px);
+  --header:68px;
+
+  /* shape and hit area */
+  --radius-card:8px;
+  --radius-control:6px;
+  --panel-w:min(380px,92vw);
+  --progress-h:2px;
+  --stage-progress-h:6px;
+  /* The marker rule that states a selection: under the tab that is open, and
+     at the leading edge of the contents row the reader is in. */
+  --rule-mark:2px;
+  /* The heavier ink edge a field in error takes, and the edge of the summary
+     that lists the errors. Color alone cannot carry the message, so the
+     weight of the edge is the signal. */
+  --rule-error:2px;
+  --tap:44px;
+  --focus-width:2px;
+  --focus-offset:3px;
+  /* The lightbox is the picture at the size the window has, so it is sized by
+     the window rather than by the grid. */
+  --overlay-w:96vw;
+  --overlay-h:92svh;
+
+  /* color derived from the theme, with the ratio each pair holds on paper */
+  --ink-soft:color-mix(in oklab,var(--ink) 80%,var(--paper));       /* 7.76:1 */
+  --ink-strong:color-mix(in oklab,var(--ink) 88%,#000);             /* 14.57:1 */
+  --muted:color-mix(in oklab,var(--ink) 62%,var(--paper));          /* 4.55:1 */
+  --rule:color-mix(in oklab,var(--ink) 16%,var(--paper));           /* 1.40:1 */
+  --rule-strong:color-mix(in oklab,var(--ink) 52%,var(--paper));    /* 3.43:1 */
+  --card-border:color-mix(in oklab,var(--ink) 28%,var(--paper));    /* 1.85:1 */
+  --line:color-mix(in oklab,var(--secondary) 70%,var(--ink));       /* 7.29:1 */
+  --focus:var(--accent);                                            /* 5.74:1 */
+  --select:color-mix(in oklab,var(--accent) 22%,var(--paper));
+  --scrim:color-mix(in oklab,var(--paper) 70%,transparent);
+  --shadow-card:0 4px 24px color-mix(in oklab,var(--ink) 6%,transparent);
+  --shadow-header:0 1px 12px color-mix(in oklab,var(--ink) 9%,transparent);
+  --shadow-panel:0 1px 2px color-mix(in oklab,var(--ink) 8%,transparent),0 18px 34px -20px color-mix(in oklab,var(--ink) 40%,transparent);
+  --grain:180px;
+  --grain-strength:.38;
+
+  /* Categorical color for figures: the accent, the secondary, the oklab
+     midpoint of the two, and that midpoint carried toward ink. Four is
+     the cap; a fifth series means small multiples. Each ratio is against
+     paper, and each one also clears 3:1 on the wash. */
+  --series-1:var(--accent);                                          /* 5.74:1 */
+  --series-2:var(--secondary);                                       /* 5.53:1 */
+  --series-3:color-mix(in oklab,var(--accent) 50%,var(--secondary)); /* 5.60:1 */
+  --series-4:color-mix(in oklab,var(--series-3) 55%,var(--ink));     /* 8.43:1 */
+  /* A table row under the pointer, and a figure mark under it. */
+  --tint-row:var(--wash);
+  --mark-hover:var(--ink);
+
+  /* z-order, stated once, so no rule types a number of its own */
+  --z-stage:2;
+  --z-header:10;
+  --z-grain:20;
+  --z-panel:24;
+  --z-popover:26;
+  --z-toast:28;
+  --z-skip:30;
+
+  /* motion: one arrival curve, one drawing curve */
+  --ease:cubic-bezier(.32,.72,0,1);
+  --ease-draw:cubic-bezier(.33,1,.68,1);
+  --dur-instant:90ms;
+  --dur-hover:140ms;
+  --dur-control:160ms;
+  --dur-panel:180ms;
+  --dur-reveal:220ms;
+  /* How long a pointer rests on a term before its definition opens. */
+  --dur-intent:300ms;
+  --dur-enter:320ms;
+  --dur-count:720ms;
+  /* How long the toast holds before it goes. 50-share.js reads it. */
+  --dur-toast:2400ms;
+  /* The rise anything that arrives over the page travels: the toast and the
+     lightbox dialog. */
+  --rise-enter:6px;
+  /* A staggered list steps by --stagger-step and stops at --stagger-cap,
+     so a long list finishes in the same time a short one does. */
+  --stagger-step:16ms;
+  --stagger-cap:180ms;
+
+  /* stage motion. Travel and draw overlap: the lines start at --draw-start,
+     about 70 percent of the way through the travel. */
+  --dur-travel:620ms;
+  --dur-draw:240ms;
+  --dur-erase:140ms;
+  --dur-color:340ms;
+  --dur-ring:380ms;
+  --dur-progress:300ms;
+  --dur-caption:320ms;
+  --draw-start:434ms;
+  --delay-erase:100ms;
+  /* Per-element stage timing. report.js reads these four and writes the delay
+     each line and each stroke carries, so the stagger is stated once, here. */
+  --line-delay-first:14ms;
+  --line-delay-last:110ms;
+  --intro-mark-step:30ms;
+  --intro-stroke-step:12ms;
+  --card-pad:20px;
+  --card-w:416px;
+  --quote-rule:40px;
+  /* The band's soft edge on a phone. The step slots clear it as well as the
+     band, so a card at rest is never under it. */
+  --band-skirt:var(--s7);
+}
+

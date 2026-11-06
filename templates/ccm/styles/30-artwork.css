@@ -1,0 +1,132 @@
+.hero-art {
+  position:relative;
+  min-width:0;
+  margin:0;
+}
+
+/* The drawing is capped by the viewport so the whole cover stays in frame. */
+
+.hero-art .ink-art {
+  width:auto;
+  max-width:100%;
+  max-height:var(--cover-art);
+  margin-inline:auto;
+}
+
+.ink-art {
+  display:block;
+  width:100%;
+  overflow:visible;
+}
+
+.paper-grid {
+  fill:none;
+  stroke:var(--ink);
+  stroke-width:.5;
+  opacity:.16;
+}
+
+/* Marks are placed in view-box coordinates, so the CSS transform report.js
+   writes and the transform attribute build.py writes mean the same thing.
+   Each mark keeps its own stroke-width from build.py. The rule is scoped to
+   the cover drawing, because the mark specimen on the guide and the nodes of
+   a diagram carry the same class and take their paint from the group above
+   them; a bare .mark rule would reach into both from a file neither of them
+   reads. */
+
+.ink-art .mark {
+  fill:none;
+  stroke:var(--ink);
+  stroke-linecap:round;
+  transform-box:view-box;
+  transform-origin:0 0;
+}
+
+/* Transitions wait for the first state, so nothing travels in from the
+   corner on load. */
+
+.ink-art.is-live .mark {
+  transition:transform var(--dur-travel) var(--ease) var(--md,0ms),stroke var(--dur-color) var(--ease);
+}
+
+.ink-art .mark.is-highlight {
+  stroke:var(--accent);
+}
+
+.connections {
+  stroke:var(--line);
+  stroke-width:1.1;
+  fill:none;
+  opacity:.85;
+}
+
+/* Lines are drawn, not revealed, and they start while the marks are still
+   travelling. Old lines clear out under them. */
+
+.connections path {
+  stroke-dasharray:var(--len,600);
+  animation:draw-line var(--dur-draw) var(--ease-draw) calc(var(--draw-start) + var(--d,0ms)) both;
+  transition:opacity var(--dur-erase) var(--ease) var(--delay-erase);
+}
+
+.connections path.is-leaving {
+  animation:none;
+  opacity:0;
+}
+
+@keyframes draw-line {
+
+  from {
+    stroke-dashoffset:var(--len,600);
+  }
+
+  to {
+    stroke-dashoffset:0;
+  }
+
+}
+
+/* The cover draws its own strokes in, once per load. Every stroke carries
+   pathLength from build.py, so --stroke-len is one dash for all of them and
+   no stroke is drawn short. */
+
+.ink-art.is-intro .mark path {
+  stroke-dasharray:var(--stroke-len);
+  animation:draw-stroke var(--dur-draw) var(--ease-draw) calc(var(--i,0) * var(--intro-mark-step) + var(--j,0) * var(--intro-stroke-step)) both;
+}
+
+@keyframes draw-stroke {
+
+  from {
+    stroke-dashoffset:var(--stroke-len);
+  }
+
+  to {
+    stroke-dashoffset:0;
+  }
+
+}
+
+/* --i is the mark's index and --j the stroke's, both written by build.py, so
+   a mark of any stroke count staggers from one rule. */
+
+/* The ring and its label arrive after the lines that point at them. */
+
+.center-ring {
+  fill:none;
+  stroke:var(--accent);
+  stroke-width:.8;
+  opacity:0;
+  transition:opacity var(--dur-ring) var(--ease) var(--ring-delay,0ms);
+}
+
+/* The size lives on the element, in frame units, because the label has to
+   hold its own against the drawing at every scale the drawing is used at. */
+
+.center-label {
+  font-family:var(--font-label);
+  fill:var(--ink);
+  opacity:0;
+  transition:opacity var(--dur-ring) var(--ease) var(--ring-delay,0ms);
+}
+

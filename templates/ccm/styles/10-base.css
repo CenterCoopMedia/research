@@ -1,0 +1,176 @@
+/* page */
+
+* {
+  box-sizing:border-box;
+}
+
+[hidden] {
+  display:none!important;
+}
+
+html {
+  /* color-scheme is not here. The browser's chrome has to match the report's
+     own paper, and this file cannot know whether that paper is light or dark,
+     so build.py reads it off the paper and writes it into the theme block
+     above this stylesheet. */
+  /* Jumps are instant on purpose: smooth scrolling over thousands of pixels
+     animates the reader through every scrolly state on the way. */
+  scroll-padding-top:var(--header);
+}
+
+body {
+  margin:0;
+  /* The grain is a layer on the document, so the body is its containing
+     block. */
+  position:relative;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--font-body);
+  font-variation-settings:var(--vs-body);
+  font-size:var(--t-read);
+  line-height:var(--lh-body);
+}
+
+/* The tooth of the paper. It is a layer on the document, not on the window:
+   a fixed layer paints the first screen and leaves a seam at the fold in any
+   full-page render or print preview. */
+
+body:before {
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:var(--z-grain);
+  opacity:var(--grain-strength);
+  mix-blend-mode:multiply;
+  background-size:var(--grain) var(--grain);
+  background-repeat:repeat;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23808080' filter='url(%23n)' opacity='.4' d='M0 0h180v180H0z'/%3E%3C/svg%3E");
+}
+
+::selection {
+  background:var(--select);
+  color:var(--ink);
+}
+
+a {
+  color:inherit;
+  text-underline-offset:var(--s1);
+}
+
+/* Text links carry a quiet underline and take the accent on hover. */
+
+.notice a,.site-footer a,.section-methods ol li a,.brand-name {
+  text-decoration:underline;
+  text-decoration-color:var(--rule-strong);
+  transition:text-decoration-color var(--dur-hover) var(--ease);
+}
+
+.notice a:hover,.site-footer a:hover,.section-methods ol li a:hover,.brand:hover .brand-name {
+  text-decoration-color:var(--accent);
+}
+
+button,summary,.button {
+  font:inherit;
+  cursor:pointer;
+}
+
+button {
+  color:inherit;
+}
+
+button:focus-visible,a:focus-visible,summary:focus-visible {
+  outline:var(--focus-width) solid var(--focus);
+  outline-offset:var(--focus-offset);
+}
+
+/* Two links sit at the size of their own type: the brand in the header and
+   the template link in the notice. A pseudo-element behind them used to carry
+   the hit area. It works for a pointer, and it fails every measurement of the
+   target, because the box the link reports is still the box of its own type.
+   The target is the box now: --tap tall, with the type centred in it, the way
+   the contents summary and the motion button already do it. */
+
+.brand,.notice a {
+  display:inline-flex;
+  align-items:center;
+  min-height:var(--tap);
+}
+
+/* type */
+
+h1,h2,h3,p {
+  margin-top:0;
+}
+
+/* Every heading is display type, so it takes the display face, the display
+   weight and the display axis settings of whichever preset the report names.
+   The system preset draws the weight where its stack has it. */
+
+h1,h2,h3 {
+  font-family:var(--font-display);
+  font-variation-settings:var(--vs-display);
+  font-weight:var(--w-display);
+  text-wrap:balance;
+}
+
+h1 {
+  font-size:var(--t4);
+  line-height:var(--lh-display);
+  letter-spacing:normal;
+  margin-bottom:var(--s5);
+}
+
+h2 {
+  font-size:var(--t3);
+  line-height:var(--lh-title);
+  letter-spacing:normal;
+  margin-bottom:var(--s6);
+}
+
+h3 {
+  font-size:var(--t2);
+  line-height:var(--lh-subhead);
+  letter-spacing:normal;
+  margin-bottom:var(--s3);
+}
+
+p {
+  margin-bottom:var(--s5);
+}
+
+/* Every section heading is a link to its own section. It carries no
+   decoration at rest, so a heading still reads as a heading; the underline
+   arrives on hover the way it does on every other text link. The pseudo
+   element carries the hit area, so a one line heading still reaches --tap
+   without a 44px line box. */
+
+.heading-anchor {
+  position:relative;
+  color:inherit;
+  text-decoration:none;
+  transition:text-decoration-color var(--dur-hover) var(--ease);
+}
+
+.heading-anchor:before {
+  content:'';
+  position:absolute;
+  inset:calc((var(--tap) - 100%) / -2) 0;
+}
+
+.heading-anchor:hover {
+  text-decoration:underline;
+  text-decoration-color:var(--accent);
+}
+
+.eyebrow {
+  display:block;
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  font-variant-numeric:tabular-nums;
+  color:var(--muted);
+  margin-bottom:var(--s3);
+}
+

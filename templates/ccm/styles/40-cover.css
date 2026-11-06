@@ -1,0 +1,96 @@
+.hero-art figcaption {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  text-align:center;
+  color:var(--muted);
+  margin-top:var(--s5);
+}
+
+.hero-copy {
+  min-width:0;
+}
+
+/* The deck is prose, so it takes the prose measure. The cover column is wider
+   than the measure at desktop widths and would otherwise run past 70
+   characters a line. */
+
+.standfirst {
+  max-width:var(--reading);
+  color:var(--ink-soft);
+  margin-bottom:var(--s6);
+}
+
+.byline {
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+  gap:var(--s1) var(--s3);
+  margin:0;
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  text-align:right;
+}
+
+.byline-date {
+  color:var(--muted);
+}
+
+.hero-actions {
+  display:flex;
+  gap:var(--s3);
+  flex-wrap:wrap;
+}
+
+.hero-bottom {
+  display:flex;
+  justify-content:space-between;
+  gap:var(--s5);
+  border-top:1px solid var(--rule);
+  padding-top:var(--s4);
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+}
+
+/* A lone tagline already sits left under space-between. A lone cue needs to
+   sit right instead, so push it there with an auto margin. */
+
+.hero-bottom .scroll-cue:only-child {
+  margin-inline-start:auto;
+}
+
+
+/* The byline and the reading time share the right of the masthead, so the
+   reading time reads as one more fact about the report and lands beside the
+   date rather than under it. */
+
+.byline-group {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:baseline;
+  justify-content:flex-end;
+  gap:var(--s1) var(--s3);
+  min-width:0;
+}
+
+.reading-time {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+}
+
+@media(max-width:760px) {
+
+  .byline-group {
+    justify-content:flex-start;
+  }
+
+}

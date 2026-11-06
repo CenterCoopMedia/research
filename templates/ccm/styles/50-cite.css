@@ -1,0 +1,120 @@
+/* cite */
+
+/* A native <dialog>: the browser holds the focus inside it, closes it on
+   Escape and returns focus to the control that opened it. 50-share.js adds
+   the close on a click outside, which <dialog> does not do on its own. */
+
+.cite-dialog {
+  width:min(var(--reading),100%);
+  max-width:100%;
+  max-height:calc(100svh - var(--s9));
+  padding:var(--s6);
+  border:1px solid var(--card-border);
+  border-radius:var(--radius-card);
+  background:var(--paper);
+  color:var(--ink);
+  box-shadow:var(--shadow-panel);
+}
+
+.cite-dialog::backdrop {
+  background:var(--scrim);
+}
+
+.cite-dialog[open] {
+  opacity:1;
+  transform:none;
+  transition:opacity var(--dur-enter) var(--ease),transform var(--dur-enter) var(--ease);
+}
+
+@starting-style {
+
+  .cite-dialog[open] {
+    opacity:0;
+    transform:translateY(var(--s3));
+  }
+
+}
+
+.cite-head {
+  display:flex;
+  align-items:start;
+  justify-content:space-between;
+  gap:var(--s5);
+  margin-bottom:var(--s5);
+}
+
+.cite-head h2 {
+  font-size:var(--t2);
+  line-height:var(--lh-subhead);
+  margin-bottom:0;
+}
+
+.cite-head h2:focus-visible {
+  outline:var(--focus-width) solid var(--focus);
+  outline-offset:var(--focus-offset);
+}
+
+.cite-close {
+  flex:none;
+}
+
+.cite-form {
+  border-top:1px solid var(--rule);
+  padding-top:var(--s4);
+  margin-top:var(--s5);
+}
+
+.cite-form h3 {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+  margin-bottom:var(--s3);
+}
+
+/* The citation itself is the thing the reader came for, so it is set at
+   reading size and it wraps rather than scrolling sideways. */
+
+.cite-text {
+  font-size:var(--t0);
+  line-height:var(--lh-subhead);
+  margin-bottom:var(--s3);
+  overflow-wrap:anywhere;
+}
+
+.cite-code {
+  margin:0 0 var(--s3);
+  font-family:var(--font-code);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
+
+/* The plain citation under the colophon. It is the one part of the share and
+   cite pair that paper keeps, because a printed page has no clipboard. */
+
+.print-citation {
+  display:none;
+}
+
+@media(max-width:760px) {
+
+  .cite-dialog {
+    padding:var(--s5);
+  }
+
+}
+
+@media print {
+
+  .print-citation {
+    display:block;
+    grid-column:1 / -1;
+    margin:var(--s5) 0 0;
+    max-width:var(--reading-print);
+    break-inside:avoid;
+  }
+
+}

@@ -1,0 +1,2453 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CCM report template | Center for Cooperative Media</title>
+<meta name="description" content="Build a scrolling report from one JSON file. Download the kit, read the sample report, and see the section types, the palette, and the type it ships with.">
+<link rel="canonical" href="https://jamditis.com/ccm-report-template/guide.html">
+<meta property="og:title" content="CCM report template | Center for Cooperative Media">
+<meta property="og:description" content="Build a scrolling report from one JSON file. Download the kit, read the sample report, and see the section types, the palette, and the type it ships with.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://jamditis.com/ccm-report-template/guide.html">
+<meta property="og:image" content="https://jamditis.com/ccm-report-template/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CCM report template | Center for Cooperative Media">
+<meta name="twitter:description" content="Build a scrolling report from one JSON file. Download the kit, read the sample report, and see the section types, the palette, and the type it ships with.">
+<meta name="twitter:image" content="https://jamditis.com/ccm-report-template/og-image.png">
+<meta name="theme-color" content="#f6f3eb">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2032%2032%22%3E%0A%3Cstyle%3E%0A%23tile%7Bfill:%23f6f3eb%7D%0A%40media%28prefers-color-scheme:dark%29%7B%23tile%7Bfill:%23292925%7D%23ink%7Bstroke:%23c9877c%7D%7D%0A%3C/style%3E%0A%3Crect%20id=%22tile%22%20width=%2232%22%20height=%2232%22%20rx=%226%22/%3E%0A%3Cg%20id=%22ink%22%20fill=%22none%22%20stroke=%22%23a33e36%22%20stroke-width=%223.2%22%20stroke-linecap=%22round%22%3E%0A%3Cpath%20d=%22M6.9%207Q4%2016%207.7%2024.9%22/%3E%0A%3Cpath%20d=%22M16.2%207.7Q13.3%2016%2017%2024.3%22/%3E%0A%3Cpath%20d=%22M25.6%207.2Q22.7%2016%2026.4%2025%22/%3E%0A%3C/g%3E%0A%3C/svg%3E%0A">
+<style>:root{--paper:#f6f3eb;--ink:#292925;--accent:#a33e36;--secondary:#466958;--wash:#e7e4d9;color-scheme:light}</style>
+<link rel="stylesheet" href="report.css">
+<style>@font-face{font-family:'Figtree';src:url("fonts/figtree.woff2") format("woff2");font-weight:300 900;font-style:normal;font-display:swap}@font-face{font-family:'Nunito Sans';src:url("fonts/nunito-sans.woff2") format("woff2");font-weight:200 1000;font-stretch:100%;font-style:normal;font-display:swap}@font-face{font-family:'Fraunces';src:url("fonts/fraunces.woff2") format("woff2");font-weight:100 900;font-style:normal;font-display:swap}@font-face{font-family:'Recursive';src:url("fonts/recursive.woff2") format("woff2");font-weight:300 1000;font-style:normal;font-display:swap}@font-face{font-family:'Bricolage Grotesque';src:url("fonts/bricolage-grotesque.woff2") format("woff2");font-weight:200 800;font-stretch:100%;font-style:normal;font-display:swap}</style><style>:root{--font-body:'Figtree',ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;--font-display:'Bricolage Grotesque',ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;--font-label:'Figtree',ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;--w-display:800;--vs-body:normal;--vs-display:normal;--num-display:lining-nums tabular-nums}</style>
+<style>
+/* Guide-only layout. Everything else is report.css and report.js, linked
+   beside this page, and the five theme colors are set above that link the way
+   build.py sets them for a hosted export. */
+
+.guide-head {
+  padding-inline:var(--pad-wrapper);
+  padding-block:var(--bookend) var(--s7);
+}
+
+.guide-head h1 {
+  margin-bottom:var(--s5);
+}
+
+.guide-head .standfirst {
+  margin-bottom:0;
+}
+
+/* Theme presets. Four of the kit's own controls, each holding a theme's five
+   colors as five stripes and the name of the theme. The one the page is
+   showing takes the same --rule-mark accent rule the open tab and the current
+   contents row take, and it takes full ink while the rest step back, so the
+   state is a weight and a rule rather than a color alone. */
+
+.theme-presets {
+  display:flex;
+  flex-wrap:wrap;
+  gap:var(--s3);
+  margin-top:var(--s5);
+}
+
+.theme-preset {
+  color:var(--muted);
+}
+
+.theme-preset[aria-pressed="true"] {
+  color:var(--ink);
+  box-shadow:inset var(--rule-mark) 0 0 var(--accent);
+}
+
+.preset-stripes {
+  display:flex;
+  flex:none;
+  width:var(--s6);
+  height:var(--s5);
+  border:1px solid var(--rule-strong);
+  border-radius:var(--radius-control);
+  overflow:hidden;
+}
+
+.preset-stripe {
+  flex:1;
+}
+
+.preset-note {
+  margin-top:var(--s4);
+  margin-bottom:0;
+  width:min(var(--reading),100%);
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+}
+
+/* The mark specimen carries its ink as an attribute, so that it is still
+   right in a file opened on its own. The rule is what follows the token when
+   a preset changes it. */
+
+.mark-art .marks {
+  stroke:var(--ink);
+}
+
+/* The cover drawing at figure width, uncapped: on the report it has a cover
+   to share, here it is the specimen. */
+
+.guide-art {
+  width:min(var(--figure),100%);
+  margin-inline:auto;
+}
+
+.guide-art .ink-art {
+  width:100%;
+  max-height:none;
+}
+
+.guide-section > .reading + .reading {
+  margin-top:var(--s7);
+}
+
+/* steps */
+
+.guide-steps {
+  list-style:none;
+  margin:0;
+  padding:0;
+  counter-reset:guide-step;
+}
+
+.guide-steps li {
+  counter-increment:guide-step;
+  display:grid;
+  grid-template-columns:var(--s6) 1fr;
+  gap:0 var(--s3);
+  padding-block:var(--s5);
+  border-top:1px solid var(--rule);
+}
+
+/* Every child of a step goes in the text column; only the numeral sits in
+   the first one. */
+
+.guide-steps li > * {
+  grid-column:2;
+}
+
+.guide-steps li:before {
+  grid-column:1;
+  content:counter(guide-step,decimal);
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-body);
+  letter-spacing:var(--track-label);
+  font-variant-numeric:tabular-nums;
+  color:var(--accent);
+}
+
+.guide-steps p {
+  margin-bottom:0;
+}
+
+.guide-steps p + pre {
+  margin-top:var(--s3);
+}
+
+pre + p {
+  margin-top:var(--s5);
+}
+
+/* code. Long commands wrap instead of scrolling, so nothing runs off a
+   narrow screen. */
+
+pre {
+  margin:0;
+  padding:var(--s4);
+  background:var(--wash);
+  border:1px solid var(--rule);
+  border-radius:var(--radius-card);
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
+
+/* A command has to be transcribed exactly, so code is the one place the kit
+   sets a third face. Nothing in a report uses it. */
+
+pre,code {
+  font-family:var(--font-code);
+  font-size:var(--t0);
+  line-height:var(--lh-label);
+}
+
+code {
+  font-size:.9em;
+}
+
+/* specimens. Each block states what the type does, the JSON it is built
+   from, and the section that JSON makes. A heading takes the width of the
+   block it opens, so the two sections whose block is --figure wide take that
+   width for their heading as well. */
+
+#kit .section-heading,#specimens .section-heading {
+  width:min(var(--figure),100%);
+}
+
+.specimen-list {
+  width:min(var(--figure),100%);
+  margin-inline:auto;
+}
+
+/* The index. One entry for each specimen, in columns, so a long list is a few
+   lines of the page rather than a screen of it. */
+
+.specimen-nav {
+  border-top:1px solid var(--rule);
+  padding-top:var(--s5);
+  margin-bottom:var(--s8);
+}
+
+.specimen-nav p {
+  color:var(--muted);
+}
+
+.specimen-index {
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:0 var(--s5);
+}
+
+/* The row is --tap tall, so the hit box behind each link fills its own row and
+   never reaches the row above or the row below it. */
+
+.specimen-index a,.file-list a {
+  display:flex;
+  align-items:center;
+  min-height:var(--tap);
+  text-decoration:none;
+}
+
+/* The name is the link, so the name carries the kit's own link treatment. */
+
+.specimen-index a code,.file-list a code {
+  text-decoration:underline;
+  text-decoration-color:var(--rule-strong);
+  transition:text-decoration-color var(--dur-hover) var(--ease);
+}
+
+.specimen-index a:hover code,.file-list a:hover code {
+  text-decoration-color:var(--accent);
+}
+
+/* The type and the layout specimens. Both read like the component specimens
+   under them: the name, the sentence that says when to use it, the JSON a
+   reader copies, and what that JSON makes. The type specimen carries the
+   preset's tokens in its own style attribute, so four presets show on one page
+   without four pages; the layout specimen carries the layout name on a wrapper
+   rather than on <body>, for the same reason. */
+
+.type-block,.layout-block {
+  border-top:1px solid var(--rule);
+  padding-top:var(--s5);
+  margin-bottom:var(--s8);
+  width:min(var(--figure),100%);
+  margin-inline:var(--role-inline);
+}
+
+.type-block > h3,.layout-block > h3 {
+  margin-bottom:var(--s2);
+}
+
+.type-block > .use-when,.layout-block > .use-when {
+  color:var(--muted);
+}
+
+.type-block pre,.layout-block pre {
+  margin-top:var(--s4);
+}
+
+.type-render {
+  font-family:var(--font-body);
+  font-variation-settings:var(--vs-body);
+  border-top:1px solid var(--rule);
+  padding-top:var(--s5);
+  margin-top:var(--s5);
+  width:var(--col);
+}
+
+.type-title {
+  font-family:var(--font-display);
+  font-variation-settings:var(--vs-display);
+  font-weight:var(--w-display);
+  font-size:var(--t3);
+  line-height:var(--lh-display);
+  margin-bottom:var(--s4);
+}
+
+.type-numerals {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:baseline;
+  gap:var(--s6);
+  margin-bottom:0;
+}
+
+/* The page inside the page. The border is the paper's edge, so a reader can
+   see where the gutter, the column and the rail sit inside it. */
+
+.layout-render {
+  border:1px solid var(--rule);
+  margin-top:var(--s5);
+  overflow:hidden;
+}
+
+.layout-render .section:first-child {
+  padding-block-start:var(--s6);
+}
+
+.specimen-block {
+  border-top:1px solid var(--rule);
+  padding-top:var(--s5);
+  margin-bottom:var(--s8);
+}
+
+.specimen-block > h3 {
+  margin-bottom:var(--s2);
+}
+
+.specimen-block > .use-when {
+  color:var(--muted);
+}
+
+.specimen-block pre {
+  margin-top:var(--s4);
+}
+
+/* A specimen sits inside a section that already holds the gutter, so the
+   section it renders gives its own back. */
+
+.specimen-render .section {
+  padding-inline:0;
+  padding-block:var(--s5) 0;
+}
+
+/* The scrolly specimen. Its live pinned mechanic needs four screens of
+   scroll room to read, which the sample report earns with the argument
+   around it and this list of 26 specimens cannot spare: dropped in whole it
+   is a long stretch of blank paper with one small card in it. report.js
+   already clones the stage once per step for print, laid out by the same
+   function the live stage uses; the guide shows those same clones on screen
+   instead of only on paper, as a row, and hides the pinned stage and the
+   step column behind them. */
+
+#specimen-scrolly .scrolly {
+  display:block;
+}
+
+/* report.js marks a scrolly section print-ready once its small multiples
+   exist, the same class 99-print.css keys its own fallback rule on. Scripts
+   off, or a scene whose copies could not be built, leaves this rule from
+   matching, so the server-rendered stage and step cards stay the specimen
+   instead of both being hidden behind an empty .print-figure. */
+
+#specimen-scrolly .scrolly.print-ready .stage,#specimen-scrolly .scrolly.print-ready .steps {
+  display:none;
+}
+
+#specimen-scrolly .print-figure {
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:var(--s5) var(--s6);
+}
+
+#specimen-scrolly .print-figure figure {
+  flex:1 1 200px;
+  max-width:280px;
+  min-width:0;
+  margin:0;
+}
+
+#specimen-scrolly .print-figure .ink-art {
+  width:100%;
+}
+
+#specimen-scrolly .print-figure figcaption {
+  margin-top:var(--s2);
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  color:var(--muted);
+}
+
+#specimen-scrolly .specimen-note {
+  margin-top:var(--s5);
+  color:var(--muted);
+}
+
+/* specimens */
+
+.specimens {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));
+  gap:var(--s7);
+  width:min(var(--figure),100%);
+  margin-inline:auto;
+}
+
+.specimen {
+  border-top:1px solid var(--rule);
+  padding-top:var(--s4);
+}
+
+.specimen p {
+  color:var(--muted);
+  margin-bottom:0;
+}
+
+/* Three marks to a row at every width: the caption wraps under its own
+   mark instead of setting the figure's width. */
+
+.mark-row {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:var(--s4);
+  margin-bottom:var(--s5);
+}
+
+.mark-row figure {
+  margin:0;
+  min-width:0;
+}
+
+.mark-art {
+  display:block;
+  width:100%;
+  max-width:80px;
+  height:auto;
+}
+
+.mark-row figcaption,.swatch-role,.type-note {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+}
+
+.mark-row figcaption {
+  margin-top:var(--s2);
+}
+
+.palette {
+  list-style:none;
+  margin:0 0 var(--s5);
+  padding:0;
+}
+
+.palette li {
+  display:grid;
+  grid-template-columns:auto 1fr;
+  column-gap:var(--s3);
+  row-gap:var(--s1);
+  padding-block:var(--s3);
+  border-top:1px solid var(--rule);
+}
+
+.palette li:first-child {
+  border-top:0;
+  padding-top:0;
+}
+
+/* The edge is the stronger rule, not the card border: a paper swatch on paper
+   showed as almost nothing at 1.85:1, and the edge is what makes it a swatch. */
+
+.swatch {
+  grid-row:1 / 3;
+  width:var(--s6);
+  height:var(--s6);
+  border:1px solid var(--rule-strong);
+  border-radius:var(--radius-control);
+}
+
+.swatch-name {
+  font-family:var(--font-label);
+  font-size:var(--t0);
+  line-height:var(--lh-label);
+  align-self:end;
+}
+
+.type-line {
+  margin-bottom:var(--s3);
+  font-size:var(--t2);
+  line-height:var(--lh-subhead);
+}
+
+.type-display {
+  font-family:var(--font-display);
+  font-variation-settings:var(--vs-display);
+  font-weight:var(--w-display);
+}
+
+.type-body {
+  font-family:var(--font-body);
+  font-variation-settings:var(--vs-body);
+}
+
+.type-note {
+  display:block;
+  margin-bottom:var(--s5);
+}
+
+/* table */
+
+.table-wrap {
+  overflow-x:auto;
+  margin-block:var(--s6);
+}
+
+table {
+  width:100%;
+  border-collapse:collapse;
+  text-align:left;
+}
+
+th,td {
+  border-top:1px solid var(--rule);
+  padding:var(--s3) var(--s4) var(--s3) 0;
+  vertical-align:top;
+}
+
+th {
+  font-family:var(--font-label);
+  font-weight:400;
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+  border-top:0;
+}
+
+td:first-child {
+  font-family:var(--font-label);
+  font-size:var(--t0);
+  white-space:nowrap;
+}
+
+td:last-child {
+  padding-right:0;
+}
+
+tbody tr:last-child td {
+  border-bottom:1px solid var(--rule);
+}
+
+/* downloads */
+
+.button-row {
+  display:flex;
+  flex-wrap:wrap;
+  gap:var(--s3);
+  margin-bottom:var(--s5);
+}
+
+/* The showcase rows are the same shape as a file row, with the report's own
+   title in place of a file name and its line under it. The whole row is the
+   link, so no hit box reaches into the row above or below. */
+
+.wild-list {
+  list-style:none;
+  margin:0 0 var(--s5);
+  padding:0;
+}
+
+.wild-list li {
+  border-top:1px solid var(--rule);
+}
+
+.wild-list li:last-child {
+  border-bottom:1px solid var(--rule);
+}
+
+.wild-list a {
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:var(--s1);
+  min-height:var(--tap);
+  padding-block:var(--s3);
+  text-decoration:none;
+}
+
+.wild-name {
+  text-decoration:underline;
+  text-decoration-color:var(--rule-strong);
+  transition:text-decoration-color var(--dur-hover) var(--ease);
+}
+
+.wild-list a:hover .wild-name {
+  text-decoration-color:var(--accent);
+}
+
+.wild-line {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+}
+
+/* A file link is a row of its own, so the whole row is the target and no hit
+   box reaches into the line above or the line below it. An inline link in a
+   paragraph gets no such box: it would take clicks from the prose around it. */
+
+.file-list {
+  list-style:none;
+  margin:0 0 var(--s5);
+  padding:0;
+}
+
+.file-list li {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:0 var(--s2);
+  min-height:var(--tap);
+  border-top:1px solid var(--rule);
+}
+
+.file-list li:last-child {
+  border-bottom:1px solid var(--rule);
+}
+
+/* Text links take the report's own link treatment. Buttons are not text
+   links and keep theirs. */
+
+.guide-section p a {
+  text-decoration:underline;
+  text-decoration-color:var(--rule-strong);
+  transition:text-decoration-color var(--dur-hover) var(--ease);
+}
+
+.guide-section p a:hover {
+  text-decoration-color:var(--accent);
+}
+
+@media(max-width:760px) {
+
+  .guide-head {
+    padding-block:var(--s7);
+  }
+
+}
+
+@media print {
+
+  .site-header,.button-row,.skip-link,.back-to-top {
+    display:none!important;
+  }
+
+}
+</style>
+</head>
+<body data-layout="reading">
+<a class="skip-link" href="#main">Skip to the guide</a>
+<header class="site-header">
+<a class="brand" href="#top"><span class="brand-mark" aria-hidden="true">ccm</span><span class="brand-name">Center for Cooperative Media</span></a>
+<div class="header-actions"><a class="header-link" href="index.html">Sample report</a><a class="header-link" href="https://jamditis.com/ccm-report-template/examples/">Examples</a></div>
+</header>
+<main id="main">
+
+<section class="guide-head" id="top">
+<span class="eyebrow">Report template kit</span>
+<h1>CCM report template</h1>
+<p class="standfirst">One JSON file and one Python script build a standalone report with paper texture, ink drawings, and a stage that changes as the reader scrolls.</p>
+<div class="theme-presets" role="group" aria-label="Theme presets">
+<button type="button" class="control theme-preset" aria-pressed="true" data-paper="#f6f3eb" data-ink="#292925" data-accent="#a33e36" data-secondary="#466958" data-wash="#e7e4d9" data-scheme="light"><span class="preset-stripes" aria-hidden="true"><span class="preset-stripe" style="background:#f6f3eb"></span><span class="preset-stripe" style="background:#292925"></span><span class="preset-stripe" style="background:#a33e36"></span><span class="preset-stripe" style="background:#466958"></span><span class="preset-stripe" style="background:#e7e4d9"></span></span><span class="preset-name">warm</span></button>
+<button type="button" class="control theme-preset" aria-pressed="false" data-paper="#f1f4f3" data-ink="#1b2828" data-accent="#315d73" data-secondary="#51694b" data-wash="#dce5e2" data-scheme="light"><span class="preset-stripes" aria-hidden="true"><span class="preset-stripe" style="background:#f1f4f3"></span><span class="preset-stripe" style="background:#1b2828"></span><span class="preset-stripe" style="background:#315d73"></span><span class="preset-stripe" style="background:#51694b"></span><span class="preset-stripe" style="background:#dce5e2"></span></span><span class="preset-name">cool</span></button>
+<button type="button" class="control theme-preset" aria-pressed="false" data-paper="#1f2023" data-ink="#ece9e1" data-accent="#d98b7c" data-secondary="#8fb3a0" data-wash="#2a2b2f" data-scheme="dark"><span class="preset-stripes" aria-hidden="true"><span class="preset-stripe" style="background:#1f2023"></span><span class="preset-stripe" style="background:#ece9e1"></span><span class="preset-stripe" style="background:#d98b7c"></span><span class="preset-stripe" style="background:#8fb3a0"></span><span class="preset-stripe" style="background:#2a2b2f"></span></span><span class="preset-name">night</span></button>
+<button type="button" class="control theme-preset" aria-pressed="false" data-paper="#f7f4ef" data-ink="#292831" data-accent="#9b5324" data-secondary="#3f5f8a" data-wash="#ebe6dd" data-scheme="light"><span class="preset-stripes" aria-hidden="true"><span class="preset-stripe" style="background:#f7f4ef"></span><span class="preset-stripe" style="background:#292831"></span><span class="preset-stripe" style="background:#9b5324"></span><span class="preset-stripe" style="background:#3f5f8a"></span><span class="preset-stripe" style="background:#ebe6dd"></span></span><span class="preset-name">clay</span></button>
+</div>
+<p class="preset-note">A swatch repaints this page, so you can read a theme before you take it. It changes nothing in the kit: the <code>theme</code> block of <code>report.json</code> holds the five colors, and that block is what you copy into your own report.</p>
+</section>
+
+<section class="section">
+<figure class="hero-art guide-art">
+<svg class="ink-art" viewBox="0 0 720 540" aria-hidden="true" data-art="hero" data-marks="12" data-inset="60" data-mark="40" fill="none" style="--stroke-len:48"><defs><radialGradient id="hero--fade"><stop offset=".55" stop-color="#fff"/><stop offset="1" stop-color="#000"/></radialGradient><mask id="hero--mask" maskUnits="userSpaceOnUse" x="0" y="0" width="720" height="540"><rect width="720" height="540" fill="url(#hero--fade)"/></mask></defs><g class="paper-grid" mask="url(#hero--mask)" fill="none" stroke="#292925" stroke-width=".5" opacity=".16"><path d="M30 25 Q26.4 270 32.4 515"/><path d="M60 25 Q55.8 270 63.2 515"/><path d="M90 25 Q86.8 270 91.7 515"/><path d="M120 25 Q116.1 270 121.6 515"/><path d="M150 25 Q146.8 270 151.1 515"/><path d="M180 25 Q176.4 270 183.3 515"/><path d="M210 25 Q207.9 270 212.3 515"/><path d="M240 25 Q236.8 270 242.5 515"/><path d="M270 25 Q266.0 270 272.1 515"/><path d="M300 25 Q297.6 270 302.2 515"/><path d="M330 25 Q327.8 270 332.6 515"/><path d="M360 25 Q357.1 270 362.7 515"/><path d="M390 25 Q385.8 270 391.1 515"/><path d="M420 25 Q417.2 270 421.5 515"/><path d="M450 25 Q447.4 270 451.9 515"/><path d="M480 25 Q476.2 270 482.3 515"/><path d="M510 25 Q505.9 270 511.2 515"/><path d="M540 25 Q535.9 270 542.3 515"/><path d="M570 25 Q566.3 270 573.2 515"/><path d="M600 25 Q596.0 270 601.3 515"/><path d="M630 25 Q626.6 270 632.4 515"/><path d="M660 25 Q656.7 270 662.1 515"/><path d="M690 25 Q687.7 270 693.0 515"/><path d="M20 30 Q360 33.8 700 27.9"/><path d="M20 60 Q360 63.5 700 57.5"/><path d="M20 90 Q360 93.3 700 87.5"/><path d="M20 120 Q360 122.2 700 118.4"/><path d="M20 150 Q360 153.1 700 147.1"/><path d="M20 180 Q360 184.0 700 177.9"/><path d="M20 210 Q360 214.1 700 207.1"/><path d="M20 240 Q360 243.0 700 238.4"/><path d="M20 270 Q360 273.6 700 268.2"/><path d="M20 300 Q360 303.5 700 298.3"/><path d="M20 330 Q360 333.7 700 327.9"/><path d="M20 360 Q360 362.7 700 358.9"/><path d="M20 390 Q360 393.4 700 386.9"/><path d="M20 420 Q360 423.2 700 417.5"/><path d="M20 450 Q360 453.2 700 449.0"/><path d="M20 480 Q360 483.9 700 478.0"/><path d="M20 510 Q360 514.4 700 507.5"/></g><g class="connections" fill="none" stroke="#466958" stroke-width="1.1" opacity=".85"></g><g class="marks" fill="none" stroke="#292925" stroke-linecap="round"><g class="mark" data-index="0" data-angle="123.7" style="--i:0;--md:89ms" stroke-width="1.78" transform="translate(360.0 60.0) rotate(123.7)"><path style="--j:0" pathLength="48" d="M-25.00 -25.06Q-30.52 0 -24.22 20.93"/><path style="--j:1" pathLength="48" d="M-20.00 -23.90Q-26.42 0 -19.02 21.67"/><path style="--j:2" pathLength="48" d="M-15.00 -21.75Q-21.89 0 -13.51 24.62"/><path style="--j:3" pathLength="48" d="M-10.00 -23.41Q-15.88 0 -9.26 19.92"/><path style="--j:4" pathLength="48" d="M-5.00 -23.79Q-10.69 0 -3.11 21.89"/><path style="--j:5" pathLength="48" d="M0.00 -22.00Q-4.78 0 1.09 23.97"/><path style="--j:6" pathLength="48" d="M5.00 -22.07Q0.41 0 6.15 21.51"/><path style="--j:7" pathLength="48" d="M10.00 -20.38Q3.47 0 11.39 22.65"/><path style="--j:8" pathLength="48" d="M15.00 -20.27Q8.25 0 15.70 21.91"/><path style="--j:9" pathLength="48" d="M20.00 -20.56Q15.50 0 20.97 19.88"/><path style="--j:10" pathLength="48" d="M25.00 -22.01Q19.33 0 26.03 21.53"/></g><g class="mark" data-index="1" data-angle="60.0" style="--i:1;--md:70ms" stroke-width="1.70" transform="translate(465.0 88.1) rotate(60.0)"><path style="--j:0" pathLength="48" d="M-20.10 -23.11Q-25.32 0 -17.89 20.01"/><path style="--j:1" pathLength="48" d="M-14.36 -24.96Q-20.72 0 -13.28 23.47"/><path style="--j:2" pathLength="48" d="M-8.61 -24.96Q-16.43 0 -6.70 21.70"/><path style="--j:3" pathLength="48" d="M-2.87 -22.27Q-9.50 0 -0.64 23.49"/><path style="--j:4" pathLength="48" d="M2.87 -20.92Q-4.04 0 3.95 21.37"/><path style="--j:5" pathLength="48" d="M8.61 -23.60Q2.91 0 9.30 24.36"/><path style="--j:6" pathLength="48" d="M14.36 -21.30Q6.85 0 15.80 24.65"/><path style="--j:7" pathLength="48" d="M20.10 -23.04Q13.12 0 20.87 22.14"/></g><g class="mark" data-index="2" data-angle="179.4" style="--i:2;--md:87ms" stroke-width="1.88" transform="translate(541.9 165.0) rotate(179.4)"><path style="--j:0" pathLength="48" d="M-16.52 -22.50Q-22.86 0 -15.19 21.83"/><path style="--j:1" pathLength="48" d="M-9.91 -26.01Q-16.98 0 -7.48 25.91"/><path style="--j:2" pathLength="48" d="M-3.30 -23.84Q-12.55 0 -1.71 24.41"/><path style="--j:3" pathLength="48" d="M3.30 -24.53Q-5.37 0 5.60 24.16"/><path style="--j:4" pathLength="48" d="M9.91 -23.41Q2.73 0 10.94 26.46"/><path style="--j:5" pathLength="48" d="M16.52 -26.42Q8.42 0 18.55 26.59"/></g><g class="mark" data-index="3" data-angle="234.2" style="--i:3;--md:79ms" stroke-width="2.12" transform="translate(570.0 270.0) rotate(234.2)"><path style="--j:0" pathLength="48" d="M-25.00 -24.10Q-32.83 0 -22.71 23.62"/><path style="--j:1" pathLength="48" d="M-18.75 -23.46Q-24.55 0 -17.78 22.60"/><path style="--j:2" pathLength="48" d="M-12.50 -20.15Q-19.46 0 -10.76 21.60"/><path style="--j:3" pathLength="48" d="M-6.25 -24.02Q-14.67 0 -4.41 23.04"/><path style="--j:4" pathLength="48" d="M0.00 -23.52Q-7.39 0 1.77 23.49"/><path style="--j:5" pathLength="48" d="M6.25 -24.17Q-1.39 0 7.90 22.83"/><path style="--j:6" pathLength="48" d="M12.50 -19.65Q5.40 0 14.26 23.78"/><path style="--j:7" pathLength="48" d="M18.75 -23.81Q12.06 0 20.06 20.43"/><path style="--j:8" pathLength="48" d="M25.00 -24.68Q19.15 0 27.14 20.68"/></g><g class="mark" data-index="4" data-angle="18.1" style="--i:4;--md:76ms" stroke-width="1.47" transform="translate(541.9 375.0) rotate(18.1)"><path style="--j:0" pathLength="48" d="M-22.67 -28.76Q-28.71 0 -21.97 29.94"/><path style="--j:1" pathLength="48" d="M-16.19 -31.06Q-22.30 0 -15.38 30.46"/><path style="--j:2" pathLength="48" d="M-9.71 -28.72Q-18.27 0 -7.35 29.70"/><path style="--j:3" pathLength="48" d="M-3.24 -28.50Q-11.85 0 -2.34 28.50"/><path style="--j:4" pathLength="48" d="M3.24 -33.08Q-2.72 0 5.49 31.57"/><path style="--j:5" pathLength="48" d="M9.71 -31.21Q2.96 0 10.44 31.19"/><path style="--j:6" pathLength="48" d="M16.19 -28.10Q7.63 0 17.43 31.53"/><path style="--j:7" pathLength="48" d="M22.67 -30.35Q15.55 0 23.72 31.17"/></g><g class="mark" data-index="5" data-angle="357.5" style="--i:5;--md:9ms" stroke-width="1.50" transform="translate(465.0 451.9) rotate(357.5)"><path style="--j:0" pathLength="48" d="M-23.49 -23.56Q-31.70 0 -21.64 26.74"/><path style="--j:1" pathLength="48" d="M-17.62 -23.23Q-23.22 0 -16.99 25.82"/><path style="--j:2" pathLength="48" d="M-11.75 -24.49Q-19.77 0 -10.07 24.54"/><path style="--j:3" pathLength="48" d="M-5.87 -25.80Q-12.93 0 -4.47 23.05"/><path style="--j:4" pathLength="48" d="M0.00 -24.36Q-5.69 0 1.65 26.53"/><path style="--j:5" pathLength="48" d="M5.87 -26.10Q-0.96 0 6.98 25.59"/><path style="--j:6" pathLength="48" d="M11.75 -26.38Q6.31 0 12.85 26.16"/><path style="--j:7" pathLength="48" d="M17.62 -22.32Q11.45 0 19.61 24.69"/><path style="--j:8" pathLength="48" d="M23.49 -23.05Q17.12 0 25.14 24.68"/></g><g class="mark" data-index="6" data-angle="174.2" style="--i:6;--md:85ms" stroke-width="2.02" transform="translate(360.0 480.0) rotate(174.2)"><path style="--j:0" pathLength="48" d="M-15.00 -24.65Q-21.69 0 -13.52 29.39"/><path style="--j:1" pathLength="48" d="M-9.00 -26.77Q-17.19 0 -8.11 26.85"/><path style="--j:2" pathLength="48" d="M-3.00 -27.30Q-8.94 0 -0.90 28.58"/><path style="--j:3" pathLength="48" d="M3.00 -29.04Q-2.61 0 5.39 24.55"/><path style="--j:4" pathLength="48" d="M9.00 -29.67Q2.78 0 10.63 26.94"/><path style="--j:5" pathLength="48" d="M15.00 -27.08Q8.08 0 16.03 25.18"/></g><g class="mark" data-index="7" data-angle="256.0" style="--i:7;--md:44ms" stroke-width="1.93" transform="translate(255.0 451.9) rotate(256.0)"><path style="--j:0" pathLength="48" d="M-15.00 -27.29Q-23.02 0 -12.26 26.01"/><path style="--j:1" pathLength="48" d="M-7.50 -25.02Q-16.91 0 -6.72 26.16"/><path style="--j:2" pathLength="48" d="M0.00 -30.75Q-7.19 0 1.88 30.51"/><path style="--j:3" pathLength="48" d="M7.50 -27.27Q-2.96 0 9.17 29.67"/><path style="--j:4" pathLength="48" d="M15.00 -27.73Q5.98 0 17.83 30.03"/></g><g class="mark" data-index="8" data-angle="118.6" style="--i:8;--md:115ms" stroke-width="1.68" transform="translate(178.1 375.0) rotate(118.6)"><path style="--j:0" pathLength="48" d="M-19.33 -23.38Q-25.66 0 -18.15 26.32"/><path style="--j:1" pathLength="48" d="M-12.89 -24.42Q-19.08 0 -10.89 28.30"/><path style="--j:2" pathLength="48" d="M-6.44 -28.57Q-13.57 0 -4.08 23.55"/><path style="--j:3" pathLength="48" d="M0.00 -26.87Q-7.06 0 1.22 24.66"/><path style="--j:4" pathLength="48" d="M6.44 -22.91Q-1.56 0 7.30 26.19"/><path style="--j:5" pathLength="48" d="M12.89 -25.70Q4.27 0 13.89 27.10"/><path style="--j:6" pathLength="48" d="M19.33 -22.95Q11.70 0 20.79 25.04"/></g><g class="mark" data-index="9" data-angle="322.4" style="--i:9;--md:50ms" stroke-width="1.37" transform="translate(150.0 270.0) rotate(322.4)"><path style="--j:0" pathLength="48" d="M-15.00 -23.29Q-25.31 0 -13.37 21.47"/><path style="--j:1" pathLength="48" d="M-7.50 -25.45Q-16.19 0 -6.47 24.93"/><path style="--j:2" pathLength="48" d="M0.00 -23.54Q-8.04 0 1.39 24.68"/><path style="--j:3" pathLength="48" d="M7.50 -21.83Q-2.78 0 8.51 21.98"/><path style="--j:4" pathLength="48" d="M15.00 -26.10Q4.50 0 16.69 23.22"/></g><g class="mark" data-index="10" data-angle="291.2" style="--i:10;--md:20ms" stroke-width="1.60" transform="translate(178.1 165.0) rotate(291.2)"><path style="--j:0" pathLength="48" d="M-25.00 -25.45Q-31.26 0 -23.50 28.30"/><path style="--j:1" pathLength="48" d="M-19.44 -26.43Q-25.26 0 -18.25 27.83"/><path style="--j:2" pathLength="48" d="M-13.89 -23.97Q-19.29 0 -12.11 28.69"/><path style="--j:3" pathLength="48" d="M-8.33 -24.32Q-15.96 0 -6.65 28.22"/><path style="--j:4" pathLength="48" d="M-2.78 -25.96Q-8.18 0 -2.06 24.10"/><path style="--j:5" pathLength="48" d="M2.78 -23.24Q-3.49 0 3.95 24.91"/><path style="--j:6" pathLength="48" d="M8.33 -24.30Q3.27 0 9.11 24.98"/><path style="--j:7" pathLength="48" d="M13.89 -28.41Q6.92 0 15.38 25.07"/><path style="--j:8" pathLength="48" d="M19.44 -28.79Q12.49 0 20.66 27.90"/><path style="--j:9" pathLength="48" d="M25.00 -22.94Q19.44 0 26.57 23.24"/></g><g class="mark" data-index="11" data-angle="262.4" style="--i:11;--md:81ms" stroke-width="1.65" transform="translate(255.0 88.1) rotate(262.4)"><path style="--j:0" pathLength="48" d="M-15.00 -26.51Q-24.75 0 -12.40 22.98"/><path style="--j:1" pathLength="48" d="M-7.50 -24.45Q-17.81 0 -4.80 27.21"/><path style="--j:2" pathLength="48" d="M0.00 -24.27Q-7.35 0 1.02 25.36"/><path style="--j:3" pathLength="48" d="M7.50 -23.70Q-2.44 0 8.41 24.20"/><path style="--j:4" pathLength="48" d="M15.00 -25.61Q7.11 0 17.62 22.38"/></g></g><circle class="center-ring" cx="360" cy="270" r="72" fill="none" stroke="#a33e36" stroke-width=".8" opacity="0"/><text class="center-label" x="360" y="270" font-size="22" dominant-baseline="central" text-anchor="middle" fill="#292925" opacity="0">Community</text></svg>
+<figcaption>Individual voices. Shared public knowledge.</figcaption>
+</figure>
+</section>
+
+<section class="section guide-section" id="make">
+<div class="section-heading"><span class="eyebrow">Make a report</span><h2><a class="heading-anchor" href="#make">Four steps from a download to a page.</a></h2></div>
+<div class="reading">
+<ol class="guide-steps">
+<li>
+<p>Copy the folder for your new report. The download unpacks to a folder that already builds.</p>
+<pre>unzip template.zip
+cd CCM-report-template</pre>
+</li>
+<li>
+<p>Edit <code>report.json</code> with a text editor. Every heading, paragraph, statistic, link, and color on the page comes from that one file.</p>
+</li>
+<li>
+<p>Run the build from the copied folder. Python 3.11 or later works with no packages to install.</p>
+<pre>python3 build.py</pre>
+</li>
+<li>
+<p>Open <code>index.html</code> in a browser. The export is one file and it opens from disk.</p>
+</li>
+</ol>
+</div>
+<div class="reading">
+<p>Build a second report beside the template by naming its content file and its output.</p>
+<pre>python3 build.py my-report.json --output ../my-report/index.html</pre>
+<p>To load the stylesheet and the script from this folder instead of embedding them, pass the base URL. That export needs the network; the default one does not.</p>
+<pre>python3 build.py report.json --output starter.html \
+  --assets-url https://jamditis.com/ccm-report-template</pre>
+<p>Rebuild after each edit. Changes typed into the exported HTML disappear on the next build.</p>
+</div>
+</section>
+
+<section class="section guide-section" id="kit">
+<div class="section-heading"><span class="eyebrow">What you get</span><h2><a class="heading-anchor" href="#kit">12 marks, five colors, four type presets.</a></h2></div>
+<div class="specimens">
+
+<div class="specimen">
+<span class="eyebrow">The marks</span>
+<div class="mark-row">
+<figure><svg class="mark-art" viewBox="-36 -36 72 72" width="80" height="80" aria-hidden="true" fill="none"><g class="marks" fill="none" stroke="#292925" stroke-linecap="round"><g class="mark" stroke-width="1.78"><path style="--j:0" pathLength="48" d="M-25.00 -25.06Q-30.52 0 -24.22 20.93"/><path style="--j:1" pathLength="48" d="M-20.00 -23.90Q-26.42 0 -19.02 21.67"/><path style="--j:2" pathLength="48" d="M-15.00 -21.75Q-21.89 0 -13.51 24.62"/><path style="--j:3" pathLength="48" d="M-10.00 -23.41Q-15.88 0 -9.26 19.92"/><path style="--j:4" pathLength="48" d="M-5.00 -23.79Q-10.69 0 -3.11 21.89"/><path style="--j:5" pathLength="48" d="M0.00 -22.00Q-4.78 0 1.09 23.97"/><path style="--j:6" pathLength="48" d="M5.00 -22.07Q0.41 0 6.15 21.51"/><path style="--j:7" pathLength="48" d="M10.00 -20.38Q3.47 0 11.39 22.65"/><path style="--j:8" pathLength="48" d="M15.00 -20.27Q8.25 0 15.70 21.91"/><path style="--j:9" pathLength="48" d="M20.00 -20.56Q15.50 0 20.97 19.88"/><path style="--j:10" pathLength="48" d="M25.00 -22.01Q19.33 0 26.03 21.53"/></g></g></svg><figcaption>11 strokes</figcaption></figure>
+<figure><svg class="mark-art" viewBox="-36 -36 72 72" width="80" height="80" aria-hidden="true" fill="none"><g class="marks" fill="none" stroke="#292925" stroke-linecap="round"><g class="mark" stroke-width="2.12"><path style="--j:0" pathLength="48" d="M-25.00 -24.10Q-32.83 0 -22.71 23.62"/><path style="--j:1" pathLength="48" d="M-18.75 -23.46Q-24.55 0 -17.78 22.60"/><path style="--j:2" pathLength="48" d="M-12.50 -20.15Q-19.46 0 -10.76 21.60"/><path style="--j:3" pathLength="48" d="M-6.25 -24.02Q-14.67 0 -4.41 23.04"/><path style="--j:4" pathLength="48" d="M0.00 -23.52Q-7.39 0 1.77 23.49"/><path style="--j:5" pathLength="48" d="M6.25 -24.17Q-1.39 0 7.90 22.83"/><path style="--j:6" pathLength="48" d="M12.50 -19.65Q5.40 0 14.26 23.78"/><path style="--j:7" pathLength="48" d="M18.75 -23.81Q12.06 0 20.06 20.43"/><path style="--j:8" pathLength="48" d="M25.00 -24.68Q19.15 0 27.14 20.68"/></g></g></svg><figcaption>9 strokes</figcaption></figure>
+<figure><svg class="mark-art" viewBox="-36 -36 72 72" width="80" height="80" aria-hidden="true" fill="none"><g class="marks" fill="none" stroke="#292925" stroke-linecap="round"><g class="mark" stroke-width="2.02"><path style="--j:0" pathLength="48" d="M-15.00 -24.65Q-21.69 0 -13.52 29.39"/><path style="--j:1" pathLength="48" d="M-9.00 -26.77Q-17.19 0 -8.11 26.85"/><path style="--j:2" pathLength="48" d="M-3.00 -27.30Q-8.94 0 -0.90 28.58"/><path style="--j:3" pathLength="48" d="M3.00 -29.04Q-2.61 0 5.39 24.55"/><path style="--j:4" pathLength="48" d="M9.00 -29.67Q2.78 0 10.63 26.94"/><path style="--j:5" pathLength="48" d="M15.00 -27.08Q8.08 0 16.03 25.18"/></g></g></svg><figcaption>6 strokes</figcaption></figure>
+</div>
+<p>Every drawing holds 12 marks. Stroke count, size, weight, and jitter come from the mark's own index, so each one is a sibling of the others and none is a copy. They are an illustration, not a chart.</p>
+</div>
+
+<div class="specimen">
+<span class="eyebrow">The palette</span>
+<ul class="palette">
+<li><span class="swatch" style="background:var(--paper)"></span><span class="swatch-name">paper <code>#f6f3eb</code></span><span class="swatch-role">Page and card background</span></li>
+<li><span class="swatch" style="background:var(--ink)"></span><span class="swatch-name">ink <code>#292925</code></span><span class="swatch-role">Text, marks, primary button</span></li>
+<li><span class="swatch" style="background:var(--accent)"></span><span class="swatch-name">accent <code>#a33e36</code></span><span class="swatch-role">Highlights, numerals, focus ring</span></li>
+<li><span class="swatch" style="background:var(--secondary)"></span><span class="swatch-name">secondary <code>#466958</code></span><span class="swatch-role">Connection lines and cover caption</span></li>
+<li><span class="swatch" style="background:var(--wash)"></span><span class="swatch-name">wash <code>#e7e4d9</code></span><span class="swatch-role">Dividers, code, methods band</span></li>
+</ul>
+<p>Every other color on the page is mixed from these five, so a new theme moves the whole report and leaves no stranded gray behind.</p>
+</div>
+
+<div class="specimen">
+<span class="eyebrow">The type</span>
+<p class="type-line type-display">A story is only the beginning.</p>
+<span class="type-note">Display: the cover, the headings, the large numerals.</span>
+<p class="type-line type-body">Follow the connections.</p>
+<span class="type-note">Body: the sentences, and the labels beside them.</span>
+<p>Three roles carry the page, and a preset fills all three. <a href="#type">Four presets</a> ship with the kit. A report that names none of them sets in the reader's own faces and asks no font server for anything.</p>
+</div>
+
+</div>
+</section>
+
+<section class="section guide-section" id="type">
+<div class="section-heading"><span class="eyebrow">Type</span><h2><a class="heading-anchor" href="#type">Four presets, one line of JSON.</a></h2></div>
+<div class="reading">
+<p>A preset names the display face, the body face and the label face at once, and every one of them carries a display weight of 800 or more. The files are latin subsets under <code>fonts/</code>, each with its OFL licence beside it, and the build writes the ones your preset needs into the page as data, so an export still opens from a disk with no network. The <code>system</code> preset embeds nothing.</p>
+</div>
+<article class="type-block" id="type-system">
+<h3><code>system</code></h3>
+<p class="use-when">The reader&#x27;s own faces, and no file to download. The display weight is 800, which the stack draws where the face has it.</p>
+<pre>{
+  &quot;fonts&quot;: {
+    &quot;preset&quot;: &quot;system&quot;
+  }
+}</pre>
+<div class="type-render" style="--font-body:&#x27;Iowan Old Style&#x27;,&#x27;Palatino Linotype&#x27;,&#x27;Book Antiqua&#x27;,Palatino,Charter,Georgia,&#x27;Times New Roman&#x27;,serif;--font-display:&#x27;Iowan Old Style&#x27;,&#x27;Palatino Linotype&#x27;,&#x27;Book Antiqua&#x27;,Palatino,Charter,Georgia,&#x27;Times New Roman&#x27;,serif;--font-label:ui-sans-serif,system-ui,-apple-system,&#x27;Segoe UI&#x27;,Roboto,&#x27;Helvetica Neue&#x27;,Arial,sans-serif;--w-display:800;--vs-body:normal;--vs-display:normal;--num-display:lining-nums tabular-nums">
+<span class="eyebrow">Example cover</span>
+<p class="type-title">A story is only the beginning.</p>
+<p>A reporter asks a question. A resident shares what they know. An editor connects the account to a wider story.</p>
+<p class="type-numerals"><span class="finding-value">12</span><span class="finding-value">3</span><span class="finding-value">1</span></p>
+</div>
+</article>
+<article class="type-block" id="type-field">
+<h3><code>field</code></h3>
+<p class="use-when">Figtree gets out of the way of the drawing; Bricolage Grotesque at 800 carries the cover and the numerals.</p>
+<pre>{
+  &quot;fonts&quot;: {
+    &quot;preset&quot;: &quot;field&quot;
+  }
+}</pre>
+<div class="type-render" style="--font-body:&#x27;Figtree&#x27;,ui-sans-serif,system-ui,-apple-system,&#x27;Segoe UI&#x27;,Roboto,&#x27;Helvetica Neue&#x27;,Arial,sans-serif;--font-display:&#x27;Bricolage Grotesque&#x27;,ui-sans-serif,system-ui,-apple-system,&#x27;Segoe UI&#x27;,Roboto,&#x27;Helvetica Neue&#x27;,Arial,sans-serif;--font-label:&#x27;Figtree&#x27;,ui-sans-serif,system-ui,-apple-system,&#x27;Segoe UI&#x27;,Roboto,&#x27;Helvetica Neue&#x27;,Arial,sans-serif;--w-display:800;--vs-body:normal;--vs-display:normal;--num-display:lining-nums tabular-nums">
+<span class="eyebrow">Example cover</span>
+<p class="type-title">A story is only the beginning.</p>
+<p>A reporter asks a question. A resident shares what they know. An editor connects the account to a wider story.</p>
+<p class="type-numerals"><span class="finding-value">12</span><span class="finding-value">3</span><span class="finding-value">1</span></p>
+</div>
+</article>
+<article class="type-block" id="type-quill">
+<h3><code>quill</code></h3>
+<p class="use-when">Fraunces at 900, soft and wonky, echoes the hand-drawn marks; Nunito Sans keeps the body warm.</p>
+<pre>{
+  &quot;fonts&quot;: {
+    &quot;preset&quot;: &quot;quill&quot;
+  }
+}</pre>
+<div class="type-render" style="--font-body:&#x27;Nunito Sans&#x27;,ui-sans-serif,system-ui,-apple-system,&#x27;Segoe UI&#x27;,Roboto,&#x27;Helvetica Neue&#x27;,Arial,sans-serif;--font-display:&#x27;Fraunces&#x27;,&#x27;Iowan Old Style&#x27;,&#x27;Palatino Linotype&#x27;,&#x27;Book Antiqua&#x27;,Palatino,Charter,Georgia,&#x27;Times New Roman&#x27;,serif;--font-label:&#x27;Nunito Sans&#x27;,ui-sans-serif,system-ui,-apple-system,&#x27;Segoe UI&#x27;,Roboto,&#x27;Helvetica Neue&#x27;,Arial,sans-serif;--w-display:900;--vs-body:normal;--vs-display:&quot;SOFT&quot; 100,&quot;WONK&quot; 1;--num-display:lining-nums tabular-nums">
+<span class="eyebrow">Example cover</span>
+<p class="type-title">A story is only the beginning.</p>
+<p>A reporter asks a question. A resident shares what they know. An editor connects the account to a wider story.</p>
+<p class="type-numerals"><span class="finding-value">12</span><span class="finding-value">3</span><span class="finding-value">1</span></p>
+</div>
+</article>
+<article class="type-block" id="type-ink">
+<h3><code>ink</code></h3>
+<p class="use-when">One variable file for the whole page: casual at 1000 for display, linear at 400 for the body.</p>
+<pre>{
+  &quot;fonts&quot;: {
+    &quot;preset&quot;: &quot;ink&quot;
+  }
+}</pre>
+<div class="type-render" style="--font-body:&#x27;Recursive&#x27;,ui-sans-serif,system-ui,-apple-system,&#x27;Segoe UI&#x27;,Roboto,&#x27;Helvetica Neue&#x27;,Arial,sans-serif;--font-display:&#x27;Recursive&#x27;,ui-sans-serif,system-ui,-apple-system,&#x27;Segoe UI&#x27;,Roboto,&#x27;Helvetica Neue&#x27;,Arial,sans-serif;--font-label:&#x27;Recursive&#x27;,ui-sans-serif,system-ui,-apple-system,&#x27;Segoe UI&#x27;,Roboto,&#x27;Helvetica Neue&#x27;,Arial,sans-serif;--w-display:1000;--vs-body:&quot;CASL&quot; 0,&quot;MONO&quot; 0;--vs-display:&quot;CASL&quot; 1,&quot;MONO&quot; 0;--num-display:lining-nums tabular-nums">
+<span class="eyebrow">Example cover</span>
+<p class="type-title">A story is only the beginning.</p>
+<p>A reporter asks a question. A resident shares what they know. An editor connects the account to a wider story.</p>
+<p class="type-numerals"><span class="finding-value">12</span><span class="finding-value">3</span><span class="finding-value">1</span></p>
+</div>
+</article>
+</section>
+
+<section class="section guide-section" id="layout">
+<div class="section-heading"><span class="eyebrow">Layout</span><h2><a class="heading-anchor" href="#layout">Two layouts for the same measure.</a></h2></div>
+<div class="reading">
+<p>Both layouts set the reading column at 34em, so a line holds 62 to 66 characters in every preset. The <code>wide</code> layout moves that column to the left gutter and opens a rail beside it for the notes, the pull quotes and any figure or table you mark with <code>"rail": true</code>. Below 1000 pixels the rail folds into the column at the place you wrote each block, so a phone reads one column in both layouts.</p>
+</div>
+<article class="layout-block" id="layout-reading">
+<h3><code>reading</code></h3>
+<p class="use-when">The centered column the kit shipped with. A note goes to the margin beside it where the window is wide enough, and to the foot of the section where it is not.</p>
+<pre>{
+  &quot;layout&quot;: &quot;reading&quot;
+}</pre>
+<div class="layout-render" data-layout="reading">
+<section id="reading-prose" class="section section-prose">
+<div class="reading"><span class="eyebrow">The rail</span><h2 id="reading-prose--title"><a class="heading-anchor" href="#reading-prose">A note and a lifted sentence stand beside the column.</a></h2>
+<p>A reporter asks a question. A resident shares what they know. An editor connects the account to a wider story. Each exchange gives information a place to go.<sup><a href="#reading-prose--note-1" id="reading-prose--ref-1" aria-describedby="reading-prose--note-1">1</a></sup></p>
+<p class="pullquote" aria-hidden="true">Each exchange gives information a place to go.</p>
+<p>The column holds 34em in both layouts, so no line runs past 66 characters. What changes is where the column sits and what stands beside it.</p>
+</div>
+<aside class="sidenotes screen-only">
+<p class="sidenote" tabindex="-1" data-ref="reading-prose--ref-1"><span class="sidenote-number">1</span>An invented example. The wide layout puts this note in the rail. Every narrower window puts it at the foot of the section.</p>
+</aside>
+<div class="footnotes">
+<h3 class="footnotes-title">Notes</h3>
+<ol class="footnote-list">
+<li id="reading-prose--note-1" tabindex="-1">An invented example. The wide layout puts this note in the rail. Every narrower window puts it at the foot of the section. <a class="note-back screen-only" href="#reading-prose--ref-1">Back to the text</a></li>
+</ol>
+</div>
+</section>
+<section id="reading-figure" class="section section-figure">
+<div class="section-heading"><span class="eyebrow">Example figure</span><h2 id="reading-figure--title"><a class="heading-anchor" href="#reading-figure">Partner newsrooms grew in every year of the example set.</a></h2>
+</div>
+<figure class="figure" aria-labelledby="reading-figure--title">
+<p class="figure-unit">Measured in newsrooms.</p>
+<div class="chart-view" aria-hidden="true"><div class="chart chart-bar" style="--rows:4;--per-row:2"><div class="chart-cats"><span class="chart-cat">2022</span><span class="chart-cat">2023</span><span class="chart-cat">2024</span><span class="chart-cat">2025</span></div><div class="chart-plot"><svg class="chart-marks" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><g class="chart-grow" style="--row:0"><rect class="chart-mark" x="0" y="4.75" width="63.64" height="15.50" fill="var(--series-1)"/></g><g class="chart-grow" style="--row:1"><rect class="chart-mark" x="0" y="29.75" width="81.21" height="15.50" fill="var(--series-1)"/></g><g class="chart-grow" style="--row:2"><rect class="chart-mark" x="0" y="54.75" width="92.42" height="15.50" fill="var(--series-1)"/></g><g class="chart-grow" style="--row:3"><rect class="chart-mark" x="0" y="79.75" width="100.00" height="15.50" fill="var(--series-1)"/></g></svg><span class="chart-value" style="--x:63.64%;--y:12.50%">210</span><span class="chart-value inside" style="--x:81.21%;--y:37.50%">268</span><span class="chart-value inside" style="--x:92.42%;--y:62.50%">305</span><span class="chart-value inside" style="--x:100.00%;--y:87.50%">330</span></div></div></div>
+<figcaption>
+<p class="figure-caption">The count rose by 120 newsrooms across the four years. These numbers are invented for the guide.</p>
+<p class="figure-source"><a href="https://centerforcooperativemedia.org/">Invented for this specimen</a><span class="source-host">centerforcooperativemedia.org</span></p>
+</figcaption>
+</figure>
+<details class="figure-data">
+<summary>Show the data<svg class="accordion-chevron" viewBox="0 0 12 12" width="12" height="12" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5 6 7.5 9 4.5"/></svg></summary>
+<div class="table-wrap scroll-edge" tabindex="0" role="region" aria-labelledby="reading-figure--title"><table class="data-table"><thead><tr><th scope="col">Category</th><th scope="col" class="numeric">Value</th></tr></thead><tbody><tr><th scope="row">2022</th><td class="numeric">210</td></tr><tr><th scope="row">2023</th><td class="numeric">268</td></tr><tr><th scope="row">2024</th><td class="numeric">305</td></tr><tr><th scope="row">2025</th><td class="numeric">330</td></tr></tbody></table></div>
+</details>
+</section>
+</div>
+</article>
+<article class="layout-block" id="layout-wide">
+<h3><code>wide</code></h3>
+<p class="use-when">The same column against the left gutter, with the rail beside it. The figure keeps the full figure width and breaks past the column on purpose.</p>
+<pre>{
+  &quot;layout&quot;: &quot;wide&quot;
+}</pre>
+<div class="layout-render" data-layout="wide">
+<section id="wide-prose" class="section section-prose">
+<div class="reading"><span class="eyebrow">The rail</span><h2 id="wide-prose--title"><a class="heading-anchor" href="#wide-prose">A note and a lifted sentence stand beside the column.</a></h2>
+<p>A reporter asks a question. A resident shares what they know. An editor connects the account to a wider story. Each exchange gives information a place to go.<sup><a href="#wide-prose--note-1" id="wide-prose--ref-1" aria-describedby="wide-prose--note-1">1</a></sup></p>
+<p class="pullquote" aria-hidden="true">Each exchange gives information a place to go.</p>
+<p>The column holds 34em in both layouts, so no line runs past 66 characters. What changes is where the column sits and what stands beside it.</p>
+</div>
+<aside class="sidenotes screen-only">
+<p class="sidenote" tabindex="-1" data-ref="wide-prose--ref-1"><span class="sidenote-number">1</span>An invented example. The wide layout puts this note in the rail. Every narrower window puts it at the foot of the section.</p>
+</aside>
+<div class="footnotes">
+<h3 class="footnotes-title">Notes</h3>
+<ol class="footnote-list">
+<li id="wide-prose--note-1" tabindex="-1">An invented example. The wide layout puts this note in the rail. Every narrower window puts it at the foot of the section. <a class="note-back screen-only" href="#wide-prose--ref-1">Back to the text</a></li>
+</ol>
+</div>
+</section>
+<section id="wide-figure" class="section section-figure">
+<div class="section-heading"><span class="eyebrow">Example figure</span><h2 id="wide-figure--title"><a class="heading-anchor" href="#wide-figure">Partner newsrooms grew in every year of the example set.</a></h2>
+</div>
+<figure class="figure" aria-labelledby="wide-figure--title">
+<p class="figure-unit">Measured in newsrooms.</p>
+<div class="chart-view" aria-hidden="true"><div class="chart chart-bar" style="--rows:4;--per-row:2"><div class="chart-cats"><span class="chart-cat">2022</span><span class="chart-cat">2023</span><span class="chart-cat">2024</span><span class="chart-cat">2025</span></div><div class="chart-plot"><svg class="chart-marks" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><g class="chart-grow" style="--row:0"><rect class="chart-mark" x="0" y="4.75" width="63.64" height="15.50" fill="var(--series-1)"/></g><g class="chart-grow" style="--row:1"><rect class="chart-mark" x="0" y="29.75" width="81.21" height="15.50" fill="var(--series-1)"/></g><g class="chart-grow" style="--row:2"><rect class="chart-mark" x="0" y="54.75" width="92.42" height="15.50" fill="var(--series-1)"/></g><g class="chart-grow" style="--row:3"><rect class="chart-mark" x="0" y="79.75" width="100.00" height="15.50" fill="var(--series-1)"/></g></svg><span class="chart-value" style="--x:63.64%;--y:12.50%">210</span><span class="chart-value inside" style="--x:81.21%;--y:37.50%">268</span><span class="chart-value inside" style="--x:92.42%;--y:62.50%">305</span><span class="chart-value inside" style="--x:100.00%;--y:87.50%">330</span></div></div></div>
+<figcaption>
+<p class="figure-caption">The count rose by 120 newsrooms across the four years. These numbers are invented for the guide.</p>
+<p class="figure-source"><a href="https://centerforcooperativemedia.org/">Invented for this specimen</a><span class="source-host">centerforcooperativemedia.org</span></p>
+</figcaption>
+</figure>
+<details class="figure-data">
+<summary>Show the data<svg class="accordion-chevron" viewBox="0 0 12 12" width="12" height="12" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5 6 7.5 9 4.5"/></svg></summary>
+<div class="table-wrap scroll-edge" tabindex="0" role="region" aria-labelledby="wide-figure--title"><table class="data-table"><thead><tr><th scope="col">Category</th><th scope="col" class="numeric">Value</th></tr></thead><tbody><tr><th scope="row">2022</th><td class="numeric">210</td></tr><tr><th scope="row">2023</th><td class="numeric">268</td></tr><tr><th scope="row">2024</th><td class="numeric">305</td></tr><tr><th scope="row">2025</th><td class="numeric">330</td></tr></tbody></table></div>
+</details>
+</section>
+</div>
+</article>
+</section>
+
+<section class="section guide-section" id="types">
+<div class="section-heading"><span class="eyebrow">Section types</span><h2><a class="heading-anchor" href="#types">Twenty kinds of section, in any order.</a></h2></div>
+<div class="reading">
+<p>Give every section a unique <code>id</code> that starts with a lowercase letter, such as <code>key-findings</code>. Use letters, digits, and hyphens. The ids <code>main</code> and <code>top</code> are reserved. The contents menu follows the order of the sections, and quote sections are left out of it because they carry no title.</p>
+<div class="table-wrap scroll-edge">
+<table>
+<thead><tr><th scope="col">Type</th><th scope="col">Fields beyond type and id</th></tr></thead>
+<tbody>
+<tr><td>summary</td><td><code>title</code>, <code>text</code> (under 100 words)</td></tr>
+<tr><td>takeaways</td><td><code>label</code>, <code>title</code>, <code>items</code> (list of text, 2 to 5)</td></tr>
+<tr><td>prose</td><td><code>label</code>, <code>title</code>, <code>paragraphs</code> (list of text, or a block object)</td></tr>
+<tr><td>steps</td><td><code>label</code>, <code>title</code>, <code>items</code>: each has <code>title</code> and <code>text</code></td></tr>
+<tr><td>glossary</td><td><code>title</code>, <code>terms</code>: each has <code>term</code> and <code>definition</code></td></tr>
+<tr><td>scrolly</td><td><code>label</code>, <code>title</code>, optional <code>center_label</code>, <code>steps</code></td></tr>
+<tr><td>waterfall</td><td><code>label</code>, <code>title</code>, <code>dataset</code> (title, unit, totalSquares, status, source, caveat, groups)</td></tr>
+<tr><td>findings</td><td><code>label</code>, <code>title</code>, <code>items</code>: each has <code>value</code>, <code>title</code>, <code>text</code>, and optional <code>unit</code>, <code>note</code> and <code>trend</code></td></tr>
+<tr><td>figure</td><td><code>label</code>, <code>title</code>, <code>chart</code>: <code>kind</code>, <code>unit</code>, <code>value_format</code> and the values the kind reads, <code>caption</code>, and optional <code>source</code>, <code>note</code> and <code>rail</code></td></tr>
+<tr><td>table</td><td><code>title</code>, <code>caption</code>, <code>columns</code>: each has <code>label</code>, <code>type</code> and optional <code>unit</code>, <code>rows</code>, <code>sort</code>, and optional <code>note</code>, <code>source</code> and <code>rail</code></td></tr>
+<tr><td>quote</td><td><code>text</code>, <code>attribution</code></td></tr>
+<tr><td>tabs</td><td><code>label</code>, <code>title</code>, <code>panels</code>: each has <code>label</code> and <code>paragraphs</code></td></tr>
+<tr><td>accordion</td><td><code>label</code>, <code>title</code>, <code>items</code>: each has <code>summary</code> and <code>paragraphs</code>; optional <code>exclusive</code></td></tr>
+<tr><td>timeline</td><td><code>label</code>, <code>title</code>, <code>events</code>: each has <code>date</code>, <code>title</code>, <code>text</code></td></tr>
+<tr><td>image</td><td><code>src</code>, <code>alt</code>, optional <code>caption</code>, <code>credit</code>, <code>decorative</code>, <code>lightbox</code>, and <code>width</code> of <code>reading</code>, <code>figure</code> or <code>bleed</code></td></tr>
+<tr><td>compare</td><td><code>label</code>, <code>title</code>, <code>before</code> and <code>after</code>: each has <code>src</code>, <code>alt</code>, <code>label</code>; optional <code>caption</code></td></tr>
+<tr><td>gallery</td><td><code>label</code>, <code>title</code>, <code>items</code>: each has <code>src</code>, <code>alt</code>, <code>caption</code></td></tr>
+<tr><td>diagram</td><td><code>label</code>, <code>title</code>, <code>nodes</code>: <code>id</code>, <code>label</code>; <code>edges</code>: <code>from</code>, <code>to</code>, optional <code>label</code>; <code>layout</code> of <code>row</code>, <code>column</code> or <code>ring</code>; optional <code>caption</code></td></tr>
+<tr><td>part</td><td><code>number</code>, <code>title</code>, optional <code>deck</code></td></tr>
+<tr><td>methods</td><td><code>title</code>, <code>paragraphs</code>, optional <code>brief</code>, <code>sources</code>: each has <code>label</code>, <code>url</code></td></tr>
+</tbody>
+</table>
+</div>
+<p>A scrolly section needs at least one step, and each step names a <code>layout</code> of <code>scatter</code>, <code>groups</code>, <code>network</code>, or <code>orbit</code>, a <code>caption</code> describing the state in plain text, and a <code>highlight</code>. The <code>README.md</code> in the download lists every field and what it accepts.</p>
+</div>
+</section>
+
+<section class="section guide-section" id="specimens">
+<div class="section-heading"><span class="eyebrow">Specimens</span><h2><a class="heading-anchor" href="#specimens">One of every component.</a></h2></div>
+<div class="specimen-list">
+<nav class="specimen-nav" aria-label="Specimen index">
+<p>20 section types plus seven end-matter blocks (27 components). Each one shows what it does, when to use it, the JSON it is built from, and what that JSON makes.</p>
+<ul class="specimen-index">
+<li><a href="#specimen-summary"><code>summary</code></a></li>
+<li><a href="#specimen-takeaways"><code>takeaways</code></a></li>
+<li><a href="#specimen-prose"><code>prose</code></a></li>
+<li><a href="#specimen-steps"><code>steps</code></a></li>
+<li><a href="#specimen-glossary"><code>glossary</code></a></li>
+<li><a href="#specimen-scrolly"><code>scrolly</code></a></li>
+<li><a href="#specimen-waterfall"><code>waterfall</code></a></li>
+<li><a href="#specimen-findings"><code>findings</code></a></li>
+<li><a href="#specimen-figure"><code>figure</code></a></li>
+<li><a href="#specimen-table"><code>table</code></a></li>
+<li><a href="#specimen-quote"><code>quote</code></a></li>
+<li><a href="#specimen-tabs"><code>tabs</code></a></li>
+<li><a href="#specimen-accordion"><code>accordion</code></a></li>
+<li><a href="#specimen-timeline"><code>timeline</code></a></li>
+<li><a href="#specimen-image"><code>image</code></a></li>
+<li><a href="#specimen-compare"><code>compare</code></a></li>
+<li><a href="#specimen-gallery"><code>gallery</code></a></li>
+<li><a href="#specimen-diagram"><code>diagram</code></a></li>
+<li><a href="#specimen-part"><code>part</code></a></li>
+<li><a href="#specimen-methods"><code>methods</code></a></li>
+<li><a href="#specimen-authors"><code>authors</code></a></li>
+<li><a href="#specimen-contributors"><code>contributors</code></a></li>
+<li><a href="#specimen-related"><code>related</code></a></li>
+<li><a href="#specimen-series_links"><code>series_links</code></a></li>
+<li><a href="#specimen-form"><code>form</code></a></li>
+<li><a href="#specimen-corrections"><code>corrections</code></a></li>
+<li><a href="#specimen-downloads"><code>downloads</code></a></li>
+</ul>
+</nav>
+<article class="specimen-block" id="specimen-summary">
+<h3><code>summary</code></h3>
+<p>A compressed abstract with its own landmark, for the top of a report.</p>
+<p class="use-when">Use it when a reader decides in one screen whether to read on.</p>
+<pre>{
+  &quot;type&quot;: &quot;summary&quot;,
+  &quot;id&quot;: &quot;summary-specimen&quot;,
+  &quot;title&quot;: &quot;In brief&quot;,
+  &quot;text&quot;: &quot;An invented example. This block states what the report holds, so a reader can decide to continue. Write it last, after the report is finished. Do not repeat the standfirst: the standfirst offers the report and this block states its content.&quot;
+}</pre>
+<div class="specimen-render">
+<section id="summary-specimen" class="section section-summary" aria-labelledby="summary-specimen--label">
+<div class="reading summary">
+<div class="summary-heading" id="summary-specimen--label"><h2 id="summary-specimen--title"><a class="heading-anchor" href="#summary-specimen">In brief</a></h2></div>
+<p>An invented example. This block states what the report holds, so a reader can decide to continue. Write it last, after the report is finished. Do not repeat the standfirst: the standfirst offers the report and this block states its content.</p>
+</div>
+</section>
+</div>
+</article>
+<article class="specimen-block" id="specimen-takeaways">
+<h3><code>takeaways</code></h3>
+<p>A short list of the points a reader keeps, on a tinted block.</p>
+<p class="use-when">Use it at the top, when a reader who stops here needs the result.</p>
+<pre>{
+  &quot;type&quot;: &quot;takeaways&quot;,
+  &quot;id&quot;: &quot;takeaways-specimen&quot;,
+  &quot;label&quot;: &quot;Example takeaways&quot;,
+  &quot;title&quot;: &quot;Keep these three points.&quot;,
+  &quot;items&quot;: [
+    &quot;Shared reporting reaches readers that one newsroom cannot reach alone.&quot;,
+    &quot;A collaboration needs one editor who holds the schedule.&quot;,
+    &quot;An invented example. Replace each line with a point your report proves.&quot;
+  ]
+}</pre>
+<div class="specimen-render">
+<section id="takeaways-specimen" class="section section-takeaways">
+<div class="reading"><span class="eyebrow">Example takeaways</span><h2 id="takeaways-specimen--title"><a class="heading-anchor" href="#takeaways-specimen">Keep these three points.</a></h2>
+<ul class="takeaways">
+<li>Shared reporting reaches readers that one newsroom cannot reach alone.</li>
+<li>A collaboration needs one editor who holds the schedule.</li>
+<li>An invented example. Replace each line with a point your report proves.</li>
+</ul>
+</div>
+</section>
+</div>
+</article>
+<article class="specimen-block" id="specimen-prose">
+<h3><code>prose</code></h3>
+<p>A heading and a run of paragraphs, with five blocks a run can hold.</p>
+<p class="use-when">Use it when the reader needs the argument in sentences.</p>
+<pre>{
+  &quot;type&quot;: &quot;prose&quot;,
+  &quot;id&quot;: &quot;prose-specimen&quot;,
+  &quot;label&quot;: &quot;The question&quot;,
+  &quot;title&quot;: &quot;A story is only the beginning.&quot;,
+  &quot;paragraphs&quot;: [
+    &quot;A reporter asks a question. A resident shares what they know. An editor connects the account to a wider story. Each exchange gives information a place to go.[^1] When two newsrooms answer one question together, the work becomes {collaborative reporting}.&quot;,
+    {
+      &quot;pullquote&quot;: &quot;Each exchange gives information a place to go.&quot;
+    },
+    {
+      &quot;subhead&quot;: &quot;What a block does&quot;
+    },
+    &quot;A paragraph can also be a block. Every block keeps the reading column, and none of them adds a card, an icon or a color.&quot;,
+    {
+      &quot;list&quot;: [
+        &quot;A subhead opens one part of the argument.&quot;,
+        &quot;A list holds items a reader scans.&quot;,
+        &quot;A pull quote lifts one sentence the reader has already read.&quot;
+      ],
+      &quot;ordered&quot;: false
+    },
+    {
+      &quot;callout&quot;: {
+        &quot;title&quot;: &quot;One fact, set aside&quot;,
+        &quot;text&quot;: &quot;An invented example. A callout holds a fact that matters and would break the sentence beside it.&quot;
+      }
+    },
+    {
+      &quot;caveat&quot;: {
+        &quot;text&quot;: &quot;An invented example. The sample is too small to carry a claim about the whole state.&quot;
+      }
+    }
+  ],
+  &quot;notes&quot;: [
+    &quot;An invented example. A note holds the source or the limit that would break the sentence.&quot;
+  ]
+}</pre>
+<div class="specimen-render">
+<section id="prose-specimen" class="section section-prose">
+<div class="reading"><span class="eyebrow">The question</span><h2 id="prose-specimen--title"><a class="heading-anchor" href="#prose-specimen">A story is only the beginning.</a></h2>
+<p>A reporter asks a question. A resident shares what they know. An editor connects the account to a wider story. Each exchange gives information a place to go.<sup><a href="#prose-specimen--note-1" id="prose-specimen--ref-1" aria-describedby="prose-specimen--note-1">1</a></sup> When two newsrooms answer one question together, the work becomes <span class="definition"><button type="button" class="definition-term" popovertarget="glossary-specimen--definition-1">collaborative reporting</button><a class="definition-link" href="#glossary-specimen--term-1">collaborative reporting</a></span>.</p>
+<p class="pullquote" aria-hidden="true">Each exchange gives information a place to go.</p>
+<h3>What a block does</h3>
+<p>A paragraph can also be a block. Every block keeps the reading column, and none of them adds a card, an icon or a color.</p>
+<ul class="prose-list">
+<li>A subhead opens one part of the argument.</li>
+<li>A list holds items a reader scans.</li>
+<li>A pull quote lifts one sentence the reader has already read.</li>
+</ul>
+<aside class="callout">
+<p class="callout-title">One fact, set aside</p>
+<p>An invented example. A callout holds a fact that matters and would break the sentence beside it.</p>
+</aside>
+<aside class="callout caveat">
+<p class="callout-title">Caveat</p>
+<p>An invented example. The sample is too small to carry a claim about the whole state.</p>
+</aside>
+</div>
+<aside class="sidenotes screen-only">
+<p class="sidenote" tabindex="-1" data-ref="prose-specimen--ref-1"><span class="sidenote-number">1</span>An invented example. A note holds the source or the limit that would break the sentence.</p>
+</aside>
+<div class="footnotes">
+<h3 class="footnotes-title">Notes</h3>
+<ol class="footnote-list">
+<li id="prose-specimen--note-1" tabindex="-1">An invented example. A note holds the source or the limit that would break the sentence. <a class="note-back screen-only" href="#prose-specimen--ref-1">Back to the text</a></li>
+</ol>
+</div>
+</section>
+</div>
+</article>
+<article class="specimen-block" id="specimen-steps">
+<h3><code>steps</code></h3>
+<p>A numbered sequence, one numeral and one instruction a step.</p>
+<p class="use-when">Use it when the reader has to do the work in order.</p>
+<pre>{
+  &quot;type&quot;: &quot;steps&quot;,
+  &quot;id&quot;: &quot;steps-specimen&quot;,
+  &quot;label&quot;: &quot;Example steps&quot;,
+  &quot;title&quot;: &quot;Start a shared reporting project.&quot;,
+  &quot;items&quot;: [
+    {
+      &quot;title&quot;: &quot;Agree on one question&quot;,
+      &quot;text&quot;: &quot;An invented example. Write the question every partner answers, and keep it to one sentence.&quot;
+    },
+    {
+      &quot;title&quot;: &quot;Name one editor&quot;,
+      &quot;text&quot;: &quot;One editor holds the schedule and answers every partner. The role moves between projects.&quot;
+    },
+    {
+      &quot;title&quot;: &quot;Set the publication date&quot;,
+      &quot;text&quot;: &quot;Every partner publishes on the same day, so the work reaches readers as one story.&quot;
+    }
+  ]
+}</pre>
+<div class="specimen-render">
+<section id="steps-specimen" class="section section-steps">
+<div class="reading"><span class="eyebrow">Example steps</span><h2 id="steps-specimen--title"><a class="heading-anchor" href="#steps-specimen">Start a shared reporting project.</a></h2>
+<ol class="steps-list" role="list">
+<li>
+<h3>Agree on one question</h3>
+<p>An invented example. Write the question every partner answers, and keep it to one sentence.</p>
+</li>
+<li>
+<h3>Name one editor</h3>
+<p>One editor holds the schedule and answers every partner. The role moves between projects.</p>
+</li>
+<li>
+<h3>Set the publication date</h3>
+<p>Every partner publishes on the same day, so the work reaches readers as one story.</p>
+</li>
+</ol>
+</div>
+</section>
+</div>
+</article>
+<article class="specimen-block" id="specimen-glossary">
+<h3><code>glossary</code></h3>
+<p>An alphabetized list of terms, with an anchor on every term.</p>
+<p class="use-when">Use it when the report needs words a general reader does not hold.</p>
+<pre>{
+  &quot;type&quot;: &quot;glossary&quot;,
+  &quot;id&quot;: &quot;glossary-specimen&quot;,
+  &quot;title&quot;: &quot;Terms used in this report&quot;,
+  &quot;terms&quot;: [
+    {
+      &quot;term&quot;: &quot;shared beat&quot;,
+      &quot;definition&quot;: &quot;One reporter who covers a subject for several newsrooms at once. The newsrooms share the cost and publish the same reporting.&quot;
+    },
+    {
+      &quot;term&quot;: &quot;collaborative reporting&quot;,
+      &quot;definition&quot;: &quot;Two or more newsrooms that report one story together. A {shared beat} is one form of it.&quot;
+    }
+  ]
+}</pre>
+<div class="specimen-render">
+<section id="glossary-specimen" class="section section-glossary">
+<div class="reading"><h2 id="glossary-specimen--title"><a class="heading-anchor" href="#glossary-specimen">Terms used in this report</a></h2>
+<dl class="glossary">
+<div class="glossary-entry">
+<dt id="glossary-specimen--term-1" tabindex="-1">collaborative reporting</dt>
+<dd>Two or more newsrooms that report one story together. A <span class="definition"><button type="button" class="definition-term" popovertarget="glossary-specimen--definition-2">shared beat</button><a class="definition-link" href="#glossary-specimen--term-2">shared beat</a></span> is one form of it.</dd>
+</div>
+<div class="glossary-entry">
+<dt id="glossary-specimen--term-2" tabindex="-1">shared beat</dt>
+<dd>One reporter who covers a subject for several newsrooms at once. The newsrooms share the cost and publish the same reporting.</dd>
+</div>
+</dl>
+</div>
+<div class="definitions screen-only">
+<div id="glossary-specimen--definition-1" class="definition-popover" popover>
+<p class="definition-name">collaborative reporting</p>
+<p class="definition-text">Two or more newsrooms that report one story together. A <span class="definition"><button type="button" class="definition-term" popovertarget="glossary-specimen--definition-2">shared beat</button><a class="definition-link" href="#glossary-specimen--term-2">shared beat</a></span> is one form of it.</p>
+<a class="definition-more" href="#glossary-specimen--term-1">Open the glossary entry</a>
+</div>
+<div id="glossary-specimen--definition-2" class="definition-popover" popover>
+<p class="definition-name">shared beat</p>
+<p class="definition-text">One reporter who covers a subject for several newsrooms at once. The newsrooms share the cost and publish the same reporting.</p>
+<a class="definition-more" href="#glossary-specimen--term-2">Open the glossary entry</a>
+</div>
+</div>
+</section>
+</div>
+</article>
+<article class="specimen-block" id="specimen-scrolly">
+<h3><code>scrolly</code></h3>
+<p>A drawing that holds its place while short cards change it.</p>
+<p class="use-when">Use it when one picture carries the whole argument and each step changes it.</p>
+<pre>{
+  &quot;type&quot;: &quot;scrolly&quot;,
+  &quot;id&quot;: &quot;scrolly-specimen&quot;,
+  &quot;label&quot;: &quot;Follow the connections&quot;,
+  &quot;title&quot;: &quot;From one newsroom to a shared network.&quot;,
+  &quot;steps&quot;: [
+    {
+      &quot;title&quot;: &quot;Start with the people doing the work.&quot;,
+      &quot;text&quot;: &quot;Each mark stands for one imagined newsroom. At first, the marks sit apart.&quot;,
+      &quot;caption&quot;: &quot;12 imagined newsrooms, working independently&quot;,
+      &quot;layout&quot;: &quot;scatter&quot;,
+      &quot;highlight&quot;: 0
+    },
+    {
+      &quot;title&quot;: &quot;Keep the community at the center.&quot;,
+      &quot;text&quot;: &quot;The shared work matters when people can find and use it.&quot;,
+      &quot;caption&quot;: &quot;Shared work returns to a common public purpose&quot;,
+      &quot;layout&quot;: &quot;orbit&quot;,
+      &quot;highlight&quot;: 0
+    }
+  ]
+}</pre>
+<div class="specimen-render">
+<section id="scrolly-specimen" class="section section-scrolly">
+<div class="section-heading"><span class="eyebrow">Follow the connections</span><h2 id="scrolly-specimen--title"><a class="heading-anchor" href="#scrolly-specimen">From one newsroom to a shared network.</a></h2>
+</div>
+<div class="scrolly">
+<figure class="stage">
+<svg class="ink-art" viewBox="0 0 720 540" aria-hidden="true" data-art="scrolly-specimen" data-marks="12" data-inset="60" data-mark="40" fill="none" style="--stroke-len:48"><defs><radialGradient id="scrolly-specimen--fade"><stop offset=".55" stop-color="#fff"/><stop offset="1" stop-color="#000"/></radialGradient><mask id="scrolly-specimen--mask" maskUnits="userSpaceOnUse" x="0" y="0" width="720" height="540"><rect width="720" height="540" fill="url(#scrolly-specimen--fade)"/></mask></defs><g class="paper-grid" mask="url(#scrolly-specimen--mask)" fill="none" stroke="#292925" stroke-width=".5" opacity=".16"><path d="M30 25 Q26.4 270 32.4 515"/><path d="M60 25 Q55.8 270 63.2 515"/><path d="M90 25 Q86.8 270 91.7 515"/><path d="M120 25 Q116.1 270 121.6 515"/><path d="M150 25 Q146.8 270 151.1 515"/><path d="M180 25 Q176.4 270 183.3 515"/><path d="M210 25 Q207.9 270 212.3 515"/><path d="M240 25 Q236.8 270 242.5 515"/><path d="M270 25 Q266.0 270 272.1 515"/><path d="M300 25 Q297.6 270 302.2 515"/><path d="M330 25 Q327.8 270 332.6 515"/><path d="M360 25 Q357.1 270 362.7 515"/><path d="M390 25 Q385.8 270 391.1 515"/><path d="M420 25 Q417.2 270 421.5 515"/><path d="M450 25 Q447.4 270 451.9 515"/><path d="M480 25 Q476.2 270 482.3 515"/><path d="M510 25 Q505.9 270 511.2 515"/><path d="M540 25 Q535.9 270 542.3 515"/><path d="M570 25 Q566.3 270 573.2 515"/><path d="M600 25 Q596.0 270 601.3 515"/><path d="M630 25 Q626.6 270 632.4 515"/><path d="M660 25 Q656.7 270 662.1 515"/><path d="M690 25 Q687.7 270 693.0 515"/><path d="M20 30 Q360 33.8 700 27.9"/><path d="M20 60 Q360 63.5 700 57.5"/><path d="M20 90 Q360 93.3 700 87.5"/><path d="M20 120 Q360 122.2 700 118.4"/><path d="M20 150 Q360 153.1 700 147.1"/><path d="M20 180 Q360 184.0 700 177.9"/><path d="M20 210 Q360 214.1 700 207.1"/><path d="M20 240 Q360 243.0 700 238.4"/><path d="M20 270 Q360 273.6 700 268.2"/><path d="M20 300 Q360 303.5 700 298.3"/><path d="M20 330 Q360 333.7 700 327.9"/><path d="M20 360 Q360 362.7 700 358.9"/><path d="M20 390 Q360 393.4 700 386.9"/><path d="M20 420 Q360 423.2 700 417.5"/><path d="M20 450 Q360 453.2 700 449.0"/><path d="M20 480 Q360 483.9 700 478.0"/><path d="M20 510 Q360 514.4 700 507.5"/></g><g class="connections" fill="none" stroke="#466958" stroke-width="1.1" opacity=".85"></g><g class="marks" fill="none" stroke="#292925" stroke-linecap="round"><g class="mark" data-index="0" data-angle="123.7" style="--i:0;--md:89ms" stroke-width="1.78" transform="translate(360.0 60.0) rotate(123.7)"><path style="--j:0" pathLength="48" d="M-25.00 -25.06Q-30.52 0 -24.22 20.93"/><path style="--j:1" pathLength="48" d="M-20.00 -23.90Q-26.42 0 -19.02 21.67"/><path style="--j:2" pathLength="48" d="M-15.00 -21.75Q-21.89 0 -13.51 24.62"/><path style="--j:3" pathLength="48" d="M-10.00 -23.41Q-15.88 0 -9.26 19.92"/><path style="--j:4" pathLength="48" d="M-5.00 -23.79Q-10.69 0 -3.11 21.89"/><path style="--j:5" pathLength="48" d="M0.00 -22.00Q-4.78 0 1.09 23.97"/><path style="--j:6" pathLength="48" d="M5.00 -22.07Q0.41 0 6.15 21.51"/><path style="--j:7" pathLength="48" d="M10.00 -20.38Q3.47 0 11.39 22.65"/><path style="--j:8" pathLength="48" d="M15.00 -20.27Q8.25 0 15.70 21.91"/><path style="--j:9" pathLength="48" d="M20.00 -20.56Q15.50 0 20.97 19.88"/><path style="--j:10" pathLength="48" d="M25.00 -22.01Q19.33 0 26.03 21.53"/></g><g class="mark" data-index="1" data-angle="60.0" style="--i:1;--md:70ms" stroke-width="1.70" transform="translate(465.0 88.1) rotate(60.0)"><path style="--j:0" pathLength="48" d="M-20.10 -23.11Q-25.32 0 -17.89 20.01"/><path style="--j:1" pathLength="48" d="M-14.36 -24.96Q-20.72 0 -13.28 23.47"/><path style="--j:2" pathLength="48" d="M-8.61 -24.96Q-16.43 0 -6.70 21.70"/><path style="--j:3" pathLength="48" d="M-2.87 -22.27Q-9.50 0 -0.64 23.49"/><path style="--j:4" pathLength="48" d="M2.87 -20.92Q-4.04 0 3.95 21.37"/><path style="--j:5" pathLength="48" d="M8.61 -23.60Q2.91 0 9.30 24.36"/><path style="--j:6" pathLength="48" d="M14.36 -21.30Q6.85 0 15.80 24.65"/><path style="--j:7" pathLength="48" d="M20.10 -23.04Q13.12 0 20.87 22.14"/></g><g class="mark" data-index="2" data-angle="179.4" style="--i:2;--md:87ms" stroke-width="1.88" transform="translate(541.9 165.0) rotate(179.4)"><path style="--j:0" pathLength="48" d="M-16.52 -22.50Q-22.86 0 -15.19 21.83"/><path style="--j:1" pathLength="48" d="M-9.91 -26.01Q-16.98 0 -7.48 25.91"/><path style="--j:2" pathLength="48" d="M-3.30 -23.84Q-12.55 0 -1.71 24.41"/><path style="--j:3" pathLength="48" d="M3.30 -24.53Q-5.37 0 5.60 24.16"/><path style="--j:4" pathLength="48" d="M9.91 -23.41Q2.73 0 10.94 26.46"/><path style="--j:5" pathLength="48" d="M16.52 -26.42Q8.42 0 18.55 26.59"/></g><g class="mark" data-index="3" data-angle="234.2" style="--i:3;--md:79ms" stroke-width="2.12" transform="translate(570.0 270.0) rotate(234.2)"><path style="--j:0" pathLength="48" d="M-25.00 -24.10Q-32.83 0 -22.71 23.62"/><path style="--j:1" pathLength="48" d="M-18.75 -23.46Q-24.55 0 -17.78 22.60"/><path style="--j:2" pathLength="48" d="M-12.50 -20.15Q-19.46 0 -10.76 21.60"/><path style="--j:3" pathLength="48" d="M-6.25 -24.02Q-14.67 0 -4.41 23.04"/><path style="--j:4" pathLength="48" d="M0.00 -23.52Q-7.39 0 1.77 23.49"/><path style="--j:5" pathLength="48" d="M6.25 -24.17Q-1.39 0 7.90 22.83"/><path style="--j:6" pathLength="48" d="M12.50 -19.65Q5.40 0 14.26 23.78"/><path style="--j:7" pathLength="48" d="M18.75 -23.81Q12.06 0 20.06 20.43"/><path style="--j:8" pathLength="48" d="M25.00 -24.68Q19.15 0 27.14 20.68"/></g><g class="mark" data-index="4" data-angle="18.1" style="--i:4;--md:76ms" stroke-width="1.47" transform="translate(541.9 375.0) rotate(18.1)"><path style="--j:0" pathLength="48" d="M-22.67 -28.76Q-28.71 0 -21.97 29.94"/><path style="--j:1" pathLength="48" d="M-16.19 -31.06Q-22.30 0 -15.38 30.46"/><path style="--j:2" pathLength="48" d="M-9.71 -28.72Q-18.27 0 -7.35 29.70"/><path style="--j:3" pathLength="48" d="M-3.24 -28.50Q-11.85 0 -2.34 28.50"/><path style="--j:4" pathLength="48" d="M3.24 -33.08Q-2.72 0 5.49 31.57"/><path style="--j:5" pathLength="48" d="M9.71 -31.21Q2.96 0 10.44 31.19"/><path style="--j:6" pathLength="48" d="M16.19 -28.10Q7.63 0 17.43 31.53"/><path style="--j:7" pathLength="48" d="M22.67 -30.35Q15.55 0 23.72 31.17"/></g><g class="mark" data-index="5" data-angle="357.5" style="--i:5;--md:9ms" stroke-width="1.50" transform="translate(465.0 451.9) rotate(357.5)"><path style="--j:0" pathLength="48" d="M-23.49 -23.56Q-31.70 0 -21.64 26.74"/><path style="--j:1" pathLength="48" d="M-17.62 -23.23Q-23.22 0 -16.99 25.82"/><path style="--j:2" pathLength="48" d="M-11.75 -24.49Q-19.77 0 -10.07 24.54"/><path style="--j:3" pathLength="48" d="M-5.87 -25.80Q-12.93 0 -4.47 23.05"/><path style="--j:4" pathLength="48" d="M0.00 -24.36Q-5.69 0 1.65 26.53"/><path style="--j:5" pathLength="48" d="M5.87 -26.10Q-0.96 0 6.98 25.59"/><path style="--j:6" pathLength="48" d="M11.75 -26.38Q6.31 0 12.85 26.16"/><path style="--j:7" pathLength="48" d="M17.62 -22.32Q11.45 0 19.61 24.69"/><path style="--j:8" pathLength="48" d="M23.49 -23.05Q17.12 0 25.14 24.68"/></g><g class="mark" data-index="6" data-angle="174.2" style="--i:6;--md:85ms" stroke-width="2.02" transform="translate(360.0 480.0) rotate(174.2)"><path style="--j:0" pathLength="48" d="M-15.00 -24.65Q-21.69 0 -13.52 29.39"/><path style="--j:1" pathLength="48" d="M-9.00 -26.77Q-17.19 0 -8.11 26.85"/><path style="--j:2" pathLength="48" d="M-3.00 -27.30Q-8.94 0 -0.90 28.58"/><path style="--j:3" pathLength="48" d="M3.00 -29.04Q-2.61 0 5.39 24.55"/><path style="--j:4" pathLength="48" d="M9.00 -29.67Q2.78 0 10.63 26.94"/><path style="--j:5" pathLength="48" d="M15.00 -27.08Q8.08 0 16.03 25.18"/></g><g class="mark" data-index="7" data-angle="256.0" style="--i:7;--md:44ms" stroke-width="1.93" transform="translate(255.0 451.9) rotate(256.0)"><path style="--j:0" pathLength="48" d="M-15.00 -27.29Q-23.02 0 -12.26 26.01"/><path style="--j:1" pathLength="48" d="M-7.50 -25.02Q-16.91 0 -6.72 26.16"/><path style="--j:2" pathLength="48" d="M0.00 -30.75Q-7.19 0 1.88 30.51"/><path style="--j:3" pathLength="48" d="M7.50 -27.27Q-2.96 0 9.17 29.67"/><path style="--j:4" pathLength="48" d="M15.00 -27.73Q5.98 0 17.83 30.03"/></g><g class="mark" data-index="8" data-angle="118.6" style="--i:8;--md:115ms" stroke-width="1.68" transform="translate(178.1 375.0) rotate(118.6)"><path style="--j:0" pathLength="48" d="M-19.33 -23.38Q-25.66 0 -18.15 26.32"/><path style="--j:1" pathLength="48" d="M-12.89 -24.42Q-19.08 0 -10.89 28.30"/><path style="--j:2" pathLength="48" d="M-6.44 -28.57Q-13.57 0 -4.08 23.55"/><path style="--j:3" pathLength="48" d="M0.00 -26.87Q-7.06 0 1.22 24.66"/><path style="--j:4" pathLength="48" d="M6.44 -22.91Q-1.56 0 7.30 26.19"/><path style="--j:5" pathLength="48" d="M12.89 -25.70Q4.27 0 13.89 27.10"/><path style="--j:6" pathLength="48" d="M19.33 -22.95Q11.70 0 20.79 25.04"/></g><g class="mark" data-index="9" data-angle="322.4" style="--i:9;--md:50ms" stroke-width="1.37" transform="translate(150.0 270.0) rotate(322.4)"><path style="--j:0" pathLength="48" d="M-15.00 -23.29Q-25.31 0 -13.37 21.47"/><path style="--j:1" pathLength="48" d="M-7.50 -25.45Q-16.19 0 -6.47 24.93"/><path style="--j:2" pathLength="48" d="M0.00 -23.54Q-8.04 0 1.39 24.68"/><path style="--j:3" pathLength="48" d="M7.50 -21.83Q-2.78 0 8.51 21.98"/><path style="--j:4" pathLength="48" d="M15.00 -26.10Q4.50 0 16.69 23.22"/></g><g class="mark" data-index="10" data-angle="291.2" style="--i:10;--md:20ms" stroke-width="1.60" transform="translate(178.1 165.0) rotate(291.2)"><path style="--j:0" pathLength="48" d="M-25.00 -25.45Q-31.26 0 -23.50 28.30"/><path style="--j:1" pathLength="48" d="M-19.44 -26.43Q-25.26 0 -18.25 27.83"/><path style="--j:2" pathLength="48" d="M-13.89 -23.97Q-19.29 0 -12.11 28.69"/><path style="--j:3" pathLength="48" d="M-8.33 -24.32Q-15.96 0 -6.65 28.22"/><path style="--j:4" pathLength="48" d="M-2.78 -25.96Q-8.18 0 -2.06 24.10"/><path style="--j:5" pathLength="48" d="M2.78 -23.24Q-3.49 0 3.95 24.91"/><path style="--j:6" pathLength="48" d="M8.33 -24.30Q3.27 0 9.11 24.98"/><path style="--j:7" pathLength="48" d="M13.89 -28.41Q6.92 0 15.38 25.07"/><path style="--j:8" pathLength="48" d="M19.44 -28.79Q12.49 0 20.66 27.90"/><path style="--j:9" pathLength="48" d="M25.00 -22.94Q19.44 0 26.57 23.24"/></g><g class="mark" data-index="11" data-angle="262.4" style="--i:11;--md:81ms" stroke-width="1.65" transform="translate(255.0 88.1) rotate(262.4)"><path style="--j:0" pathLength="48" d="M-15.00 -26.51Q-24.75 0 -12.40 22.98"/><path style="--j:1" pathLength="48" d="M-7.50 -24.45Q-17.81 0 -4.80 27.21"/><path style="--j:2" pathLength="48" d="M0.00 -24.27Q-7.35 0 1.02 25.36"/><path style="--j:3" pathLength="48" d="M7.50 -23.70Q-2.44 0 8.41 24.20"/><path style="--j:4" pathLength="48" d="M15.00 -25.61Q7.11 0 17.62 22.38"/></g></g><circle class="center-ring" cx="360" cy="270" r="72" fill="none" stroke="#a33e36" stroke-width=".8" opacity="0"/><text class="center-label" x="360" y="270" font-size="22" dominant-baseline="central" text-anchor="middle" fill="#292925" opacity="0">Community</text></svg>
+<figcaption aria-hidden="true">12 imagined newsrooms, working independently</figcaption>
+<div class="stage-progress" aria-hidden="true"><i></i></div>
+</figure>
+<div class="print-figure"></div>
+<div class="steps">
+<article class="step" data-layout="scatter" data-highlight="" data-caption="12 imagined newsrooms, working independently">
+<div class="step-card"><span class="eyebrow">1 of 2</span><h3>Start with the people doing the work.</h3>
+<p>Each mark stands for one imagined newsroom. At first, the marks sit apart.</p>
+<p class="static-caption">12 imagined newsrooms, working independently</p>
+</div>
+</article>
+<article class="step" data-layout="orbit" data-highlight="" data-caption="Shared work returns to a common public purpose">
+<div class="step-card"><span class="eyebrow">2 of 2</span><h3>Keep the community at the center.</h3>
+<p>The shared work matters when people can find and use it.</p>
+<p class="static-caption">Shared work returns to a common public purpose</p>
+</div>
+</article>
+</div>
+</div>
+<p class="specimen-note">The live version pins the drawing while the reader scrolls past each step: see it in the <a href="index.html#connections">sample report</a>.</p>
+</section>
+</div>
+</article>
+<article class="specimen-block" id="specimen-waterfall">
+<h3><code>waterfall</code></h3>
+<p>Equal squares fall into place as the reader scrolls, from small groups to the whole population.</p>
+<p class="use-when">Use it for non-overlapping groups with a known total. Readers can edit the data and export their own chart.</p>
+<pre>{
+  &quot;type&quot;: &quot;waterfall&quot;,
+  &quot;id&quot;: &quot;waterfall-specimen&quot;,
+  &quot;label&quot;: &quot;A matter of scale&quot;,
+  &quot;title&quot;: &quot;See the whole audience.&quot;,
+  &quot;dataset&quot;: {
+    &quot;version&quot;: 1,
+    &quot;title&quot;: &quot;Program reach, in perspective&quot;,
+    &quot;unit&quot;: &quot;people&quot;,
+    &quot;totalSquares&quot;: 2500,
+    &quot;status&quot;: &quot;Fictional example · not a measured population&quot;,
+    &quot;source&quot;: &quot;Entirely invented figures for demonstrating the storytelling template. These are not results from a real program, organization, or community.&quot;,
+    &quot;caveat&quot;: &quot;The four example groups are mutually exclusive and total 50,000 people. Replace all figures and narration with your own validated data before publication. “Not yet reached” should only be used when the full target population is known.&quot;,
+    &quot;summaryHeadline&quot;: &quot;The audience you know\nis not the whole audience.&quot;,
+    &quot;groups&quot;: [
+      {
+        &quot;id&quot;: &quot;regular&quot;,
+        &quot;label&quot;: &quot;Regular participants&quot;,
+        &quot;shortLabel&quot;: &quot;Regular&quot;,
+        &quot;value&quot;: 420,
+        &quot;color&quot;: &quot;#ec3864&quot;,
+        &quot;headline&quot;: &quot;The people\nyou know best.&quot;,
+        &quot;description&quot;: &quot;The regulars: {value} {unit}. They are highly visible, but occupy only {tiles} squares in this fictional population.&quot;
+      },
+      {
+        &quot;id&quot;: &quot;occasional&quot;,
+        &quot;label&quot;: &quot;Occasional participants&quot;,
+        &quot;shortLabel&quot;: &quot;Occasional&quot;,
+        &quot;value&quot;: 1680,
+        &quot;color&quot;: &quot;#e7bb27&quot;,
+        &quot;headline&quot;: &quot;A wider\ncircle.&quot;,
+        &quot;description&quot;: &quot;Add the occasional participants. The picture grows, but the people actively involved are still a small group.&quot;
+      },
+      {
+        &quot;id&quot;: &quot;aware&quot;,
+        &quot;label&quot;: &quot;Reached, not participating&quot;,
+        &quot;shortLabel&quot;: &quot;Reached&quot;,
+        &quot;value&quot;: 7900,
+        &quot;color&quot;: &quot;#00b982&quot;,
+        &quot;headline&quot;: &quot;Awareness\nis not engagement.&quot;,
+        &quot;description&quot;: &quot;These people have been reached by the fictional program but do not participate. A different relationship, and a bigger band.&quot;
+      },
+      {
+        &quot;id&quot;: &quot;unreached&quot;,
+        &quot;label&quot;: &quot;Not yet reached&quot;,
+        &quot;shortLabel&quot;: &quot;Not reached&quot;,
+        &quot;value&quot;: 40000,
+        &quot;color&quot;: &quot;#3e4740&quot;,
+        &quot;headline&quot;: &quot;Beyond\nthe usual circle.&quot;,
+        &quot;description&quot;: &quot;The largest group: people the fictional program has not yet reached. This is what a participant-only view would leave out.&quot;
+      }
+    ]
+  }
+}</pre>
+<div class="specimen-render">
+<section id="waterfall-specimen" class="section section-waterfall">
+<div class="section-heading"><span class="eyebrow">A matter of scale</span><h2 id="waterfall-specimen--title"><a class="heading-anchor" href="#waterfall-specimen">See the whole audience.</a></h2></div><div class="waterfall-host"><div class="waterfall-fallback"><p>Fictional example · not a measured population</p><table><caption>Program reach, in perspective</caption><thead><tr><th>Group</th><th>Value</th></tr></thead><tbody><tr><td>Regular participants</td><td>420 people</td></tr><tr><td>Occasional participants</td><td>1,680 people</td></tr><tr><td>Reached, not participating</td><td>7,900 people</td></tr><tr><td>Not yet reached</td><td>40,000 people</td></tr></tbody></table><p>Entirely invented figures for demonstrating the storytelling template. These are not results from a real program, organization, or community.</p><p>The four example groups are mutually exclusive and total 50,000 people. Replace all figures and narration with your own validated data before publication. “Not yet reached” should only be used when the full target population is known.</p></div><template><style>
+:host{display:block;--paper:#f5f3ed;--ink:#262d29;--muted:#62675f;--line:#d5d7cc;--accent:#ec3864;--accent-ink:#aa2549;--vh:100svh;--max:1440px}
+*{box-sizing:border-box}
+
+.waterfall-body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,Helvetica,sans-serif;-webkit-font-smoothing:antialiased}
+button,input,textarea,select{font:inherit}
+button,a,input,select,textarea{-webkit-tap-highlight-color:transparent}
+button{cursor:pointer;color:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #2164b5;outline-offset:4px}
+button:disabled{cursor:not-allowed;opacity:.45}
+a{color:inherit}
+button{border:0;background:none}
+button,input,select{min-height:40px}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.skip-link{position:fixed;left:20px;top:-70px;z-index:30;padding:12px 18px;background:var(--ink);color:#fff}.skip-link:focus{top:calc(var(--waterfall-offset,0px) + 12px)}
+.story-track{position:relative;height:850svh}
+.story-stage{position:sticky;top:0;height:var(--vh);min-height:560px;overflow:hidden}
+.topbar{position:absolute;top:0;left:0;right:0;height:81px;border-bottom:1px solid var(--line);z-index:2}
+.topbar-inner{max-width:var(--max);height:100%;margin:auto;padding:0 42px;display:flex;align-items:center;gap:24px}
+.wordmark{display:flex;gap:11px;align-items:center;font-size:19px;font-weight:750;letter-spacing:-.055em;white-space:nowrap;text-decoration:none}
+.mark{display:grid;grid-template-columns:repeat(3,4px);gap:3px;transform:translateY(1px)}.mark i{display:block;width:4px;height:4px;background:var(--ink)}.mark i:first-child{background:var(--accent)}.mark i:nth-child(2){opacity:.35}.mark i:nth-child(3){opacity:.15}
+.topbar-context{font-size:12px;color:var(--muted);margin-left:10px;padding-left:24px;border-left:1px solid var(--line)}
+.topbar-actions{margin-left:auto;display:flex;align-items:center;gap:25px;font-size:13px}
+.text-button{padding:7px 0;border-bottom:1px solid transparent}.text-button:hover{border-bottom-color:currentColor}
+.edit-button{border:1px solid var(--ink);padding:9px 13px;background:transparent;font-size:13px;display:inline-flex;align-items:center;gap:14px;box-shadow:2px 2px 0 var(--ink);transition:transform .15s,box-shadow .15s}
+.edit-button:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--ink)}
+.main-layout{max-width:var(--max);height:100%;margin:auto;padding:105px 42px 117px;display:grid;grid-template-columns:minmax(300px,.83fr) minmax(420px,1.3fr);gap:clamp(36px,5vw,80px);align-items:center}
+.narrative{align-self:center;min-width:0;max-width:470px;position:relative;padding:4px 0}
+.dataset-note{color:var(--muted);font-size:11px;display:inline-flex;gap:7px;align-items:center;padding:0;min-height:30px;margin:0 0 22px;line-height:1.3;text-align:left}.dataset-note:before{content:"";height:5px;width:5px;border:1px solid currentColor;border-radius:50%;flex:none}.dataset-note:hover{text-decoration:underline;text-underline-offset:3px}
+.chapter-kicker{font-size:13px;line-height:1.4;margin:0 0 20px;display:flex;gap:10px;align-items:center;font-weight:600;color:var(--accent-ink)}
+.kicker-square{height:9px;width:9px;flex:none;background:var(--accent)}
+.chapter-index{font-variant-numeric:tabular-nums;font-weight:400;margin-right:2px;opacity:.8}
+h3{font-size:clamp(47px,5.25vw,76px);line-height:.99;letter-spacing:-.065em;font-weight:750;margin:0 0 25px;white-space:pre-line;text-wrap:balance}
+.metric-row{display:flex;align-items:baseline;gap:16px;margin:0 0 7px}
+.metric{font-size:clamp(56px,6.45vw,91px);line-height:1;letter-spacing:-.075em;font-weight:400;font-variant-numeric:tabular-nums;white-space:nowrap}
+.metric-symbol{font-size:.49em;letter-spacing:-.05em;margin-left:3px;vertical-align:baseline}
+.group-value{font-size:16px;font-weight:600;line-height:1.4;margin:0 0 21px;letter-spacing:-.015em}
+.chapter-description{font-size:15px;line-height:1.62;color:var(--muted);margin:0 0 27px;max-width:350px;min-height:72px}
+.next-button{display:inline-flex;gap:15px;align-items:center;border-bottom:1px solid var(--ink);padding:6px 0 8px;font-size:13px;font-weight:600;min-height:36px}.next-button .arrow{display:inline-block;transition:transform .2s}.next-button:hover .arrow{transform:translateY(3px)}
+.chart-region{position:relative;min-width:0;align-self:center;display:flex;flex-direction:column;gap:13px}
+.chart-topline{display:flex;justify-content:space-between;gap:15px;font-size:12px;color:var(--muted);line-height:1.5;padding-right:1px}.chart-topline strong{font-weight:600;color:var(--ink);font-size:13px}
+.chart-box{width:100%;height:min(calc(var(--vh) - 272px),640px);min-height:290px;position:relative}
+canvas{display:block;width:100%;height:100%}
+.chart-hint{position:absolute;left:0;right:100px;top:37%;text-align:center;pointer-events:none;transition:opacity .3s;color:#72786d;font-size:13px;line-height:1.55}
+.chart-hint .hint-arrow{display:block;font-size:27px;font-weight:400;margin-top:16px;color:#858b7f}
+.boundary-marker{position:absolute;left:0;top:0;width:91px;pointer-events:none;opacity:0;transition:opacity .2s;will-change:transform;color:var(--accent-ink);padding:0 0 0 10px;line-height:1.15}
+.boundary-percent{font-size:24px;font-weight:600;letter-spacing:-.045em;white-space:nowrap}
+.boundary-count{font-size:11px;white-space:nowrap;margin-top:5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.chart-bottomline{display:flex;justify-content:space-between;gap:10px;font-size:11px;color:var(--muted);line-height:1.5}
+.square-key{display:inline-block;width:7px;height:7px;background:var(--ink);margin-right:7px;box-shadow:0 1px 0 #bec2b7;vertical-align:1px}.tally{font-variant-numeric:tabular-nums;white-space:nowrap}.tally b{font-weight:500;color:var(--ink)}
+.story-footer{position:absolute;left:0;right:0;bottom:0;padding:0 42px 20px;max-width:var(--max);margin:auto}
+.chapter-nav{display:flex;gap:20px;width:100%;border-top:1px solid var(--line);padding-top:15px}
+.chapter-button{padding:0 0 2px;text-align:left;flex:1;min-width:0;position:relative;min-height:35px;font-size:12px;color:var(--muted)}
+.chapter-button:before{content:"";position:absolute;top:-16px;left:0;right:0;height:2px;background:var(--chapter-color);transform:scaleX(var(--chapter-progress,0));transform-origin:left;transition:transform .08s linear}
+.chapter-nav.many{overflow-x:auto;scrollbar-width:thin}.chapter-nav.many .chapter-button{min-width:110px}
+.chapter-button:hover{color:var(--ink)}
+.chapter-button[aria-current="step"]{color:var(--ink);font-weight:600}
+.nav-line{display:flex;gap:9px;align-items:center}.nav-num{font-size:10px;color:var(--muted);font-variant-numeric:tabular-nums}.nav-label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.footer-utility{margin-top:13px;display:flex;justify-content:space-between;align-items:center;gap:15px;font-size:10px;color:var(--muted)}
+.motion-control{display:flex;align-items:center;gap:6px;cursor:pointer}.motion-control input{appearance:none;width:24px;height:13px;min-height:0;border:1px solid #999f93;border-radius:20px;margin:0;background:transparent;position:relative;cursor:pointer}.motion-control input:before{content:"";position:absolute;top:2px;left:2px;width:7px;height:7px;background:#70776c;border-radius:50%}.motion-control input:checked{background:var(--ink);border-color:var(--ink)}.motion-control input:checked:before{left:13px;background:var(--paper)}
+.data-section{border-top:1px solid var(--ink);padding:79px 42px 55px;max-width:var(--max);margin:0 auto;position:relative}
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.section-label{font-size:13px;color:var(--muted);margin:0 0 22px;font-weight:400}
+h2{font-size:clamp(38px,4.2vw,62px);line-height:1.02;letter-spacing:-.055em;margin:0 0 25px;font-weight:650;text-wrap:balance}
+.summary-text{color:var(--muted);font-size:16px;line-height:1.7;max-width:410px;margin:0 0 27px}
+.summary-text strong{color:var(--ink);font-weight:600}
+.action-row{display:flex;gap:22px;flex-wrap:wrap;align-items:center}
+.data-table{border-collapse:collapse;width:100%;font-size:13px;margin:0 0 19px}
+.data-table th{text-align:left;font-size:11px;font-weight:400;color:var(--muted);padding:0 0 15px;border-bottom:1px solid var(--line)}
+.data-table th:not(:first-child),.data-table td:not(:first-child){text-align:right;font-variant-numeric:tabular-nums}
+.data-table td{padding:18px 0;border-bottom:1px solid var(--line);vertical-align:middle}
+.data-table td:first-child{font-weight:600;max-width:240px;padding-right:12px}
+.table-swatch{width:8px;height:8px;display:inline-block;margin-right:10px;vertical-align:1px}
+.data-table tfoot td{font-weight:600;border-bottom:1px solid var(--ink)}
+.table-note{font-size:11px;color:var(--muted);line-height:1.6;margin:0;max-width:480px}
+.methodology{margin-top:62px;padding:24px 0 0;border-top:1px solid var(--line)}
+.methodology summary{font-size:15px;font-weight:600;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:30px;min-height:34px}
+.methodology summary::-webkit-details-marker{display:none}.methodology summary:after{content:"+";font-size:25px;font-weight:400}.methodology[open] summary:after{content:"−"}
+.method-content{display:grid;grid-template-columns:1fr 1fr;gap:60px;font-size:13px;line-height:1.75;color:var(--muted);margin-top:18px}
+.method-content h3{font-size:13px;color:var(--ink);margin:0 0 6px}.method-content p{margin:0 0 15px}.method-content code{font-family:monospace;background:#e9e8df;padding:1px 4px;color:var(--ink)}
+.page-end{max-width:var(--max);margin:0 auto;padding:28px 42px 35px;display:flex;justify-content:space-between;gap:30px;border-top:1px solid var(--line);font-size:11px;color:var(--muted)}
+.no-js{margin:30px 42px;padding:20px;border:1px solid var(--ink);font-size:15px;line-height:1.6}
+/* The editor is a utility, not part of the story. Everything stays on this device. */
+.editor{width:min(820px,calc(100% - 32px));max-height:calc(100svh - 40px);border:1px solid var(--ink);padding:0;background:var(--paper);color:var(--ink);box-shadow:8px 8px 0 #262d2926;overflow:auto}
+.editor::backdrop{background:#17201db3}
+.editor-header{position:sticky;top:0;z-index:3;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:19px 26px;border-bottom:1px solid var(--line);background:var(--paper)}
+.editor-header h2{font-size:22px;letter-spacing:-.04em;margin:0;font-weight:600}.close-button{font-size:26px;line-height:1;padding:0 4px;min-width:40px}
+.editor-body{padding:22px 26px 28px}.editor-intro{font-size:13px;line-height:1.6;color:var(--muted);margin:0 0 19px;max-width:660px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}.form-grid .wide{grid-column:1/-1}
+.field{display:flex;flex-direction:column;gap:7px;font-size:12px;color:var(--muted)}
+.field input:not([type=color]),.field select,.field textarea{width:100%;border:1px solid #b6bdaf;padding:10px 11px;border-radius:0;background:#fffdf7;color:var(--ink);font-size:14px;box-shadow:none}
+.field textarea{resize:vertical;min-height:74px;line-height:1.5}.field small{font-size:10px;line-height:1.5}
+.editor-toolbar{display:flex;justify-content:space-between;align-items:center;gap:15px;border-top:1px solid var(--line);padding-top:19px;margin-bottom:15px;font-size:13px}
+.editor-toolbar h3{font-size:14px;margin:0;font-weight:600}.mini-button{border:1px solid #a6afa0;padding:6px 11px;font-size:12px;min-height:33px}.mini-button:hover{background:#e8ebe1}
+.edit-group{padding:15px 0;border-top:1px solid var(--line)}
+.edit-group-top{display:grid;grid-template-columns:34px 1fr 155px 30px;gap:12px;align-items:end}.color-field input{height:42px;width:34px;padding:0;background:none;border:0;cursor:pointer}.color-field{font-size:11px;color:var(--muted)}
+.remove-group{font-size:22px;padding:4px;align-self:end;min-width:30px;min-height:42px;color:var(--muted)}
+.group-narration{font-size:11px;color:var(--muted);margin:12px 0 0 46px}.group-narration summary{cursor:pointer;padding:4px 0;min-height:24px}.group-narration .form-grid{margin:12px 0 0;gap:10px}
+.editor-error{font-size:13px;padding:12px 14px;border-left:3px solid #b22647;background:#f4e3e3;color:#822037;margin:16px 0 0;line-height:1.5}.editor-error:empty{display:none}
+.editor-footer{padding:17px 26px 22px;border-top:1px solid var(--line);background:var(--paper);display:flex;align-items:center;gap:10px;flex-wrap:wrap;position:sticky;bottom:0;z-index:3}
+.primary-button{padding:10px 17px;background:var(--ink);border:1px solid var(--ink);color:var(--paper);font-size:13px;box-shadow:2px 2px 0 #a5ad9b}.primary-button:hover{background:#3e4b41}.editor-footer .export{margin-left:auto}
+.editor-local-note{font-size:10px;color:var(--muted);width:100%;margin:5px 0 0;line-height:1.5}
+.toast{position:fixed;left:50%;bottom:25px;transform:translate(-50%,20px);background:var(--ink);color:var(--paper);padding:13px 20px;font-size:12px;z-index:20;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;max-width:90vw;text-align:center;line-height:1.5}.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(min-width:1600px){.main-layout{gap:90px;grid-template-columns:450px 1fr}.chart-box{height:min(calc(var(--vh) - 290px),680px)}}
+@media(max-width:1100px){.topbar-inner{padding:0 28px}.main-layout{padding-left:28px;padding-right:28px;gap:35px;grid-template-columns:minmax(255px,.8fr) minmax(360px,1.2fr)}.story-footer{padding-left:28px;padding-right:28px}.topbar-context{display:none}.chapter-description{font-size:14px}.dataset-note{margin-bottom:14px}h3{font-size:clamp(45px,5.4vw,62px)}.metric{font-size:70px}.chart-box{height:min(calc(var(--vh) - 267px),550px)}.summary-grid{gap:45px}.data-section{padding-left:28px;padding-right:28px}.page-end{padding-left:28px;padding-right:28px}}
+@media(max-width:760px){
+.story-stage{min-height:580px}.topbar{height:64px}.topbar-inner{padding:0 20px;gap:12px}.wordmark{font-size:17px}.topbar-actions{gap:16px}.topbar-actions .text-button{font-size:12px}.edit-button{font-size:12px;gap:9px;padding:7px 10px;min-height:34px}.edit-button .button-arrow{display:none}
+.main-layout{padding:79px 20px 103px;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:12px;max-width:600px}
+.narrative{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:15px;align-items:start;align-self:stretch;max-width:none;padding:0}
+.dataset-note{grid-column:1/-1;font-size:10px;min-height:20px;margin-bottom:10px}
+.chapter-kicker{grid-column:1/-1;font-size:11px;margin:0 0 10px;gap:7px}.kicker-square{width:7px;height:7px}.chapter-index{font-size:10px}
+h3{grid-column:1;grid-row:3;font-size:37px;line-height:1.01;letter-spacing:-.065em;margin:0 0 11px;max-width:270px;min-height:74px}
+.metric-row{grid-column:2;grid-row:3;align-self:end;justify-content:flex-end;margin:0 0 11px}.metric{font-size:54px;letter-spacing:-.07em}
+.group-value{grid-column:1/-1;grid-row:4;font-size:12px;margin:0 0 9px;font-weight:600}
+.chapter-description{grid-column:1/-1;grid-row:5;font-size:12px;line-height:1.55;max-width:490px;min-height:37px;margin:0}
+.next-button{display:none}
+.chart-region{flex:1;min-height:0;gap:7px;align-self:stretch;justify-content:center}
+.chart-topline{font-size:10px;gap:10px;line-height:1.3}.chart-topline strong{font-size:11px}
+.chart-box{height:auto;min-height:0;flex:1;max-height:430px;width:100%}
+.chart-hint{font-size:11px;right:76px;top:34%}.chart-hint .hint-arrow{font-size:24px;margin-top:10px}
+.boundary-marker{width:76px;padding-left:8px}.boundary-percent{font-size:21px}.boundary-count{font-size:10px;margin-top:4px}
+.chart-bottomline{font-size:9px;gap:4px}.square-key{width:5px;height:5px;margin-right:4px}
+.story-footer{padding:0 20px 15px;max-width:600px}.chapter-nav{gap:12px;padding-top:10px}.chapter-button{font-size:10px;min-height:28px}.chapter-button:before{top:-11px}.nav-line{gap:5px}.nav-num{display:none}.footer-utility{margin-top:10px;font-size:9px}
+.data-section{padding:43px 20px 35px}.summary-grid{grid-template-columns:1fr;gap:38px}h2{font-size:43px}.section-label{font-size:12px;margin-bottom:17px}.summary-text{font-size:14px;max-width:500px}.data-table{font-size:12px}.data-table td{padding:15px 0}.data-table th{font-size:10px}.table-note{font-size:10px}.methodology{margin-top:35px;padding-top:19px}.method-content{grid-template-columns:1fr;gap:10px;font-size:12px}.page-end{padding:22px 20px 30px;font-size:10px;flex-direction:column;gap:8px}
+.editor{width:calc(100% - 20px);max-height:calc(100svh - 20px)}.editor-header{padding:12px 16px}.editor-header h2{font-size:20px}.editor-body{padding:18px 16px}.form-grid{gap:12px}.edit-group-top{grid-template-columns:28px 1fr 108px 24px;gap:8px}.color-field input{width:28px}.group-narration{margin-left:36px}.group-narration .form-grid{grid-template-columns:1fr}.field{font-size:11px}.field input:not([type=color]),.field select,.field textarea{font-size:13px;padding:9px}.editor-footer{padding:13px 16px}.editor-footer .export{margin-left:0}.mini-button{font-size:11px}.editor-intro{font-size:12px}
+}
+@media(max-width:400px){.topbar-inner{padding:0 16px}.wordmark{font-size:16px;gap:8px}.mark{grid-template-columns:repeat(3,3px);gap:2px}.mark i{width:3px;height:3px}.topbar-actions{gap:12px}.main-layout{padding-left:16px;padding-right:16px}.story-footer{padding-left:16px;padding-right:16px}.metric{font-size:47px}h3{font-size:33px;min-height:66px}.chapter-nav{gap:8px}.chapter-button{font-size:9px}.topbar-actions .text-button{font-size:11px}.edit-button{font-size:11px}}
+@media(max-height:730px) and (min-width:761px){.topbar{height:64px}.main-layout{padding-top:86px;padding-bottom:102px}.dataset-note{margin-bottom:8px}.chapter-kicker{margin-bottom:12px}h3{font-size:50px;margin-bottom:18px}.metric{font-size:64px}.group-value{font-size:14px;margin-bottom:12px}.chapter-description{font-size:13px;min-height:60px;margin-bottom:15px}.chart-box{height:calc(var(--vh) - 224px)}.story-footer{padding-bottom:14px}.footer-utility{margin-top:8px}}
+@media(max-height:760px) and (max-width:760px){.main-layout{padding-top:74px;padding-bottom:92px;gap:9px}.dataset-note{margin-bottom:5px}.chapter-kicker{margin-bottom:7px}h3{font-size:31px;min-height:61px;margin-bottom:8px}.metric-row{margin-bottom:7px}.metric{font-size:47px}.group-value{margin-bottom:6px;font-size:11px}.chapter-description{font-size:11px;min-height:34px}.story-footer{padding-bottom:12px}.footer-utility{margin-top:7px}.chart-hint{font-size:10px}.chart-topline{font-size:9px}.chart-topline strong{font-size:10px}}
+@media(max-height:560px) and (min-width:580px){.story-stage{min-height:360px}.topbar{height:51px}.main-layout{padding:65px 24px 83px;display:grid;grid-template-columns:.9fr 1.1fr;gap:35px}.narrative{display:block}.dataset-note{font-size:9px;margin-bottom:4px}.chapter-kicker{font-size:10px;margin-bottom:6px}h3{font-size:33px;min-height:0;margin-bottom:9px}.metric-row{margin:0 0 3px;justify-content:flex-start}.metric{font-size:43px}.group-value{font-size:11px;margin-bottom:7px}.chapter-description{font-size:11px;min-height:0;margin-bottom:0}.next-button{display:none}.chart-region{display:flex;height:100%;min-height:0;gap:5px}.chart-box{height:auto;flex:1;min-height:0}.chart-hint{font-size:10px}.chart-topline{font-size:9px}.chart-topline strong{font-size:10px}.chart-bottomline{font-size:9px}.story-footer{max-width:none;padding:0 24px 9px}.chapter-nav{padding-top:9px;gap:20px}.chapter-button{font-size:10px;min-height:20px}.chapter-button:before{top:-10px}.footer-utility{margin-top:8px}.boundary-percent{font-size:19px}.boundary-marker{width:75px}.boundary-count{font-size:9px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+@media print{.story-track,.editor,.page-end,.action-row,.toast{display:none!important}.data-section{border:0;padding:20px;max-width:none}.summary-grid{display:block}.summary-grid>div+div{margin-top:25px}.method-content{display:block}.methodology{margin-top:20px}.waterfall-body{background:#fff}.methodology:not([open])>.method-content{display:block}h2{font-size:32px}.data-table{font-size:12px}}
+
+.story-stage{top:var(--waterfall-offset,0px);min-height:0}
+@media(max-width:350px){.topbar-actions #show-all{display:none}}
+@media(max-height:560px) and (min-width:480px){
+  .topbar{height:40px}.topbar-inner{padding-inline:16px}
+  .main-layout{padding:50px 16px 72px;display:grid;grid-template-columns:1fr 1.1fr;gap:16px}
+  .narrative{display:block}.dataset-note,.metric-row{display:none}
+  .chapter-kicker{font-size:10px;margin-bottom:4px}
+  #chapter-headline{font-size:22px;min-height:0;line-height:1.05;margin-bottom:6px}
+  .group-value{font-size:10px;margin-bottom:4px}.chapter-description{font-size:10px;line-height:1.3;min-height:0;margin:0}
+  .chart-region{height:100%;min-height:0;gap:4px}.chart-box{height:auto;flex:1;min-height:0}
+  .chart-topline,.chart-bottomline{font-size:9px}.chart-topline strong{font-size:9px}
+  .chart-hint{font-size:9px}.chart-hint .hint-arrow{display:none}
+  .story-footer{padding:0 16px 8px}.chapter-nav{padding-top:8px}.chapter-button{min-height:20px}
+  .footer-utility{margin-top:6px}
+}
+@media print{.story-track{height:0!important}}
+</style><div class="waterfall-body">
+<a href="#numbers" class="skip-link">Skip animation and read the data</a>
+
+<div>
+<section class="story-track" id="story" aria-label="Scroll-driven population story">
+<div class="story-stage" id="stage">
+<header class="topbar"><div class="topbar-inner">
+<a class="wordmark" href="#story" id="brand-link"><span class="mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>A matter of scale.</a>
+<span class="topbar-context" id="story-title">AI use, in perspective</span>
+<div class="topbar-actions"><button class="text-button" id="show-all">Show all <span aria-hidden="true">↘</span></button><button class="edit-button" data-open-editor>Use your data <span class="button-arrow" aria-hidden="true">↗</span></button></div>
+</div></header>
+<div class="main-layout">
+<div class="narrative" id="narrative">
+<button class="dataset-note" id="data-note" title="Read the data and methodology notes">Illustrative data · not independently verified</button>
+<p class="chapter-kicker"><span class="kicker-square" aria-hidden="true"></span><span class="chapter-index" id="chapter-index">01</span><span id="chapter-label">AI coding agents</span></p>
+<h3 id="chapter-headline">Millions.\nA few squares.</h3>
+<div class="metric-row"><div class="metric"><span id="metric-number">0.14</span><span class="metric-symbol">%</span></div></div>
+<p class="group-value" id="group-value">~12 million people</p>
+<p class="chapter-description" id="chapter-description">A few squares in a field of 2,500. Start here, then keep scrolling.</p>
+<button class="next-button" id="next-group"><span id="next-label">Scroll to add the next group</span><span class="arrow" aria-hidden="true">↓</span></button>
+</div>
+<div class="chart-region" role="figure" aria-labelledby="chart-heading" aria-describedby="chart-description">
+<div class="chart-topline"><strong id="chart-heading">One world. 2,500 squares.</strong><span id="chart-total">~8.3B people</span></div>
+<div class="chart-box" id="chart-box">
+<canvas id="unit-chart" aria-hidden="true"></canvas>
+<div class="chart-hint" id="chart-hint">Every square has the same weight.<br>The scale never changes.<span class="hint-arrow" aria-hidden="true">↓</span></div>
+<div class="boundary-marker" id="boundary-marker" aria-hidden="true"><div class="boundary-percent" id="boundary-percent">0.14%</div><div class="boundary-count" id="boundary-count">12M people</div></div>
+</div>
+<div class="chart-bottomline"><span><span class="square-key" aria-hidden="true"></span><span id="square-key-text">1 square ≈ 3.3M people</span></span><span class="tally"><b id="visible-tally">4</b> / <span id="total-tally">2,500</span> squares</span></div>
+<p class="sr-only" id="chart-description"></p>
+</div>
+</div>
+<footer class="story-footer">
+<nav class="chapter-nav" id="chapter-nav" aria-label="Jump to a group"></nav>
+<div class="footer-utility"><span id="scroll-status">Scroll down. The next group is bigger.</span><label class="motion-control"><input type="checkbox" id="reduce-motion"><span>Less motion</span></label></div>
+</footer>
+</div>
+</section>
+<section class="data-section" id="numbers" aria-labelledby="summary-title">
+<div class="summary-grid">
+<div><p class="section-label">The full picture</p><h2 id="summary-title">Most of the picture<br>was still missing.</h2><p class="summary-text" id="summary-text"></p><div class="action-row"><button class="edit-button" data-open-editor>Make this your own <span aria-hidden="true">↗</span></button><button class="text-button" id="replay">Replay the story ↑</button></div></div>
+<div><table class="data-table"><caption class="sr-only" id="table-caption">Data used in this illustration</caption><thead><tr><th scope="col">Group</th><th scope="col" id="value-column">People</th><th scope="col">Share</th><th scope="col">Squares</th></tr></thead><tbody id="data-table-body"></tbody><tfoot id="data-table-foot"></tfoot></table><p class="table-note" id="table-note"></p></div>
+</div>
+<details class="methodology" id="methodology"><summary>About the numbers and the animation</summary><div class="method-content"><div><h3>Source and limitations</h3><p id="source-note"></p><p id="caveat-note"></p></div><div><h3>What the squares mean</h3><p id="rounding-note"></p><p>The labels use the input values; the drawing uses whole squares. Categories must be mutually exclusive and cover the intended population. A person, dollar, or other unit cannot belong to two groups at once.</p><h3>How the reveal works</h3><p>Scroll position controls the cascade. Each group has a filling interval followed by a reading interval: the squares stop at the color boundary while its label remains visible. The final group gets more scrolling room. There is no forced scrolling, snapping, or autoplay. Reverse scrolling reverses the reveal. “Less motion” places new squares directly in the grid.</p></div></div></details>
+</section>
+</div>
+<footer class="page-end"><span>Small groups first. The full scale last.</span><span>No tracking. No external libraries. Your data stays in this browser.</span></footer>
+<dialog class="editor" id="editor" aria-labelledby="editor-title">
+<div class="editor-header"><h2 id="editor-title">Keep the effect. Change the story.</h2><button class="close-button" id="close-editor" aria-label="Close data editor">×</button></div>
+<form id="editor-form">
+<div class="editor-body">
+<p class="editor-intro">Give each group a value, a color, and a line of narration. The grid, proportions, boundary labels, and scrolling sequence rebuild together. Use non-overlapping groups; the population total is their sum.</p>
+<div class="form-grid">
+<label class="field wide">Start with an example<select id="preset-select"><option value="ai">Embedded dataset</option><option value="reach">Program reach · entirely fictional example</option><option value="custom">Your current dataset</option></select></label>
+<label class="field">Story title<input id="edit-title" required maxlength="120"></label>
+<label class="field">Unit label, plural<input id="edit-unit" required maxlength="35" placeholder="people, households, dollars"></label>
+<label class="field">Number of squares<select id="edit-tiles"><option value="1000">1,000</option><option value="2500">2,500</option><option value="5000">5,000</option></select></label>
+<label class="field">Data status<input id="edit-status" required maxlength="120"></label>
+<label class="field wide">Source / attribution<textarea id="edit-source" rows="2" maxlength="2000"></textarea></label>
+<label class="field wide">Important caveats<textarea id="edit-caveat" rows="2" maxlength="2000"></textarea></label>
+</div>
+<div class="editor-toolbar"><h3>Groups, in reveal order</h3><button type="button" class="mini-button" id="sort-groups">Sort small → large</button></div>
+<div id="edit-groups"></div>
+<button type="button" class="mini-button" id="add-group">+ Add a group</button>
+<div class="editor-error" id="editor-error" role="alert"></div>
+</div>
+<div class="editor-footer"><button class="primary-button" type="submit">Apply & restart</button><button type="button" class="mini-button" id="import-json">Import JSON</button><button type="button" class="mini-button" id="export-json">Export JSON</button><button type="button" class="mini-button export" id="export-html">Download this page</button><input type="file" id="json-file" accept=".json,application/json" hidden><p class="editor-local-note">Downloads use the values currently in this editor. “Download this page” creates a complete offline HTML file with your data embedded. No account or build tools needed.</p></div>
+</form>
+</dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div id="chapter-announcement" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+</div><script type="application/json" id="scale-data">{"version": 1, "title": "Program reach, in perspective", "unit": "people", "totalSquares": 2500, "status": "Fictional example · not a measured population", "source": "Entirely invented figures for demonstrating the storytelling template. These are not results from a real program, organization, or community.", "caveat": "The four example groups are mutually exclusive and total 50,000 people. Replace all figures and narration with your own validated data before publication. “Not yet reached” should only be used when the full target population is known.", "summaryHeadline": "The audience you know\nis not the whole audience.", "groups": [{"id": "group-0", "label": "Regular participants", "shortLabel": "Regular", "value": 420, "color": "#ec3864", "headline": "The people\nyou know best.", "description": "The regulars: {value} {unit}. They are highly visible, but occupy only {tiles} squares in this fictional population."}, {"id": "group-1", "label": "Occasional participants", "shortLabel": "Occasional", "value": 1680, "color": "#e7bb27", "headline": "A wider\ncircle.", "description": "Add the occasional participants. The picture grows, but the people actively involved are still a small group."}, {"id": "group-2", "label": "Reached, not participating", "shortLabel": "Reached", "value": 7900, "color": "#00b982", "headline": "Awareness\nis not engagement.", "description": "These people have been reached by the fictional program but do not participate. A different relationship, and a bigger band."}, {"id": "group-3", "label": "Not yet reached", "shortLabel": "Not reached", "value": 40000, "color": "#3e4740", "headline": "Beyond\nthe usual circle.", "description": "The largest group: people the fictional program has not yet reached. This is what a participant-only view would leave out."}]}</script></template></div>
+</section>
+</div>
+</article>
+<article class="specimen-block" id="specimen-findings">
+<h3><code>findings</code></h3>
+<p>A row of statistics, each with a numeral, a heading and a sentence.</p>
+<p class="use-when">Use it when three or four numbers carry the result.</p>
+<pre>{
+  &quot;type&quot;: &quot;findings&quot;,
+  &quot;id&quot;: &quot;findings-specimen&quot;,
+  &quot;label&quot;: &quot;Example findings&quot;,
+  &quot;title&quot;: &quot;Give the evidence space.&quot;,
+  &quot;items&quot;: [
+    {
+      &quot;value&quot;: &quot;12&quot;,
+      &quot;title&quot;: &quot;Participating newsrooms&quot;,
+      &quot;text&quot;: &quot;An illustrative count. Replace this with a verified result and its source.&quot;,
+      &quot;unit&quot;: &quot;newsrooms&quot;,
+      &quot;note&quot;: &quot;Illustrative count for 2024 to 2026.&quot;,
+      &quot;trend&quot;: [
+        4,
+        6,
+        9,
+        11,
+        12
+      ]
+    },
+    {
+      &quot;value&quot;: &quot;3&quot;,
+      &quot;title&quot;: &quot;Shared reporting groups&quot;,
+      &quot;text&quot;: &quot;Explain what this number measures and the period it covers.&quot;,
+      &quot;unit&quot;: &quot;groups&quot;
+    }
+  ]
+}</pre>
+<div class="specimen-render">
+<section id="findings-specimen" class="section section-findings">
+<div class="section-heading"><span class="eyebrow">Example findings</span><h2 id="findings-specimen--title"><a class="heading-anchor" href="#findings-specimen">Give the evidence space.</a></h2>
+</div>
+<div class="findings" data-count="2">
+<article data-count="12" data-before="" data-after=""><span class="finding-value">12</span><span class="finding-trend"><svg class="sparkline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><polyline points="0.00,100.00 25.00,75.00 50.00,37.50 75.00,12.50 100.00,0.00" pathLength="1" vector-effect="non-scaling-stroke"/></svg><span class="sparkline-dot" style="--y:0.00%"></span><span class="hidden-text">From 4 to 12 over 5 points.</span></span><span class="finding-unit">newsrooms</span><h3>Participating newsrooms</h3>
+<p>An illustrative count. Replace this with a verified result and its source.</p>
+<p class="finding-note">Illustrative count for 2024 to 2026.</p>
+</article>
+<article data-count="3" data-before="" data-after=""><span class="finding-value">3</span><span class="finding-unit">groups</span><h3>Shared reporting groups</h3>
+<p>Explain what this number measures and the period it covers.</p>
+</article>
+</div>
+</section>
+</div>
+</article>
+<article class="specimen-block" id="specimen-figure">
+<h3><code>figure</code></h3>
+<p>A chart with direct labels, a one-sentence trend, and its values in a table.</p>
+<p class="use-when">Use it when the shape of the numbers carries the point.</p>
+<pre>{
+  &quot;type&quot;: &quot;figure&quot;,
+  &quot;id&quot;: &quot;figure-specimen&quot;,
+  &quot;label&quot;: &quot;Example figure&quot;,
+  &quot;title&quot;: &quot;Partner newsrooms grew in every year of the example set.&quot;,
+  &quot;chart&quot;: {
+    &quot;kind&quot;: &quot;bar&quot;,
+    &quot;unit&quot;: &quot;newsrooms&quot;,
+    &quot;value_format&quot;: &quot;integer&quot;,
+    &quot;sort&quot;: false,
+    &quot;bars&quot;: [
+      {
+        &quot;label&quot;: &quot;2022&quot;,
+        &quot;value&quot;: 210
+      },
+      {
+        &quot;label&quot;: &quot;2023&quot;,
+        &quot;value&quot;: 268
+      },
+      {
+        &quot;label&quot;: &quot;2024&quot;,
+        &quot;value&quot;: 305
+      },
+      {
+        &quot;label&quot;: &quot;2025&quot;,
+        &quot;value&quot;: 330
+      }
+    ]
+  },
+  &quot;caption&quot;: &quot;The count rose by 120 newsrooms across the four years. These numbers are invented for the guide.&quot;,
+  &quot;source&quot;: {
+    &quot;label&quot;: &quot;Invented for this specimen&quot;,
+    &quot;url&quot;: &quot;https://centerforcooperativemedia.org/&quot;
+  }
+}</pre>
+<div class="specimen-render">
+<section id="figure-specimen" class="section section-figure">
+<div class="section-heading"><span class="eyebrow">Example figure</span><h2 id="figure-specimen--title"><a class="heading-anchor" href="#figure-specimen">Partner newsrooms grew in every year of the example set.</a></h2>
+</div>
+<figure class="figure" aria-labelledby="figure-specimen--title">
+<p class="figure-unit">Measured in newsrooms.</p>
+<div class="chart-view" aria-hidden="true"><div class="chart chart-bar" style="--rows:4;--per-row:2"><div class="chart-cats"><span class="chart-cat">2022</span><span class="chart-cat">2023</span><span class="chart-cat">2024</span><span class="chart-cat">2025</span></div><div class="chart-plot"><svg class="chart-marks" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><g class="chart-grow" style="--row:0"><rect class="chart-mark" x="0" y="4.75" width="63.64" height="15.50" fill="var(--series-1)"/></g><g class="chart-grow" style="--row:1"><rect class="chart-mark" x="0" y="29.75" width="81.21" height="15.50" fill="var(--series-1)"/></g><g class="chart-grow" style="--row:2"><rect class="chart-mark" x="0" y="54.75" width="92.42" height="15.50" fill="var(--series-1)"/></g><g class="chart-grow" style="--row:3"><rect class="chart-mark" x="0" y="79.75" width="100.00" height="15.50" fill="var(--series-1)"/></g></svg><span class="chart-value" style="--x:63.64%;--y:12.50%">210</span><span class="chart-value inside" style="--x:81.21%;--y:37.50%">268</span><span class="chart-value inside" style="--x:92.42%;--y:62.50%">305</span><span class="chart-value inside" style="--x:100.00%;--y:87.50%">330</span></div></div></div>
+<figcaption>
+<p class="figure-caption">The count rose by 120 newsrooms across the four years. These numbers are invented for the guide.</p>
+<p class="figure-source"><a href="https://centerforcooperativemedia.org/">Invented for this specimen</a><span class="source-host">centerforcooperativemedia.org</span></p>
+</figcaption>
+</figure>
+<details class="figure-data">
+<summary>Show the data<svg class="accordion-chevron" viewBox="0 0 12 12" width="12" height="12" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5 6 7.5 9 4.5"/></svg></summary>
+<div class="table-wrap scroll-edge" tabindex="0" role="region" aria-labelledby="figure-specimen--title"><table class="data-table"><thead><tr><th scope="col">Category</th><th scope="col" class="numeric">Value</th></tr></thead><tbody><tr><th scope="row">2022</th><td class="numeric">210</td></tr><tr><th scope="row">2023</th><td class="numeric">268</td></tr><tr><th scope="row">2024</th><td class="numeric">305</td></tr><tr><th scope="row">2025</th><td class="numeric">330</td></tr></tbody></table></div>
+</details>
+</section>
+</div>
+</article>
+<article class="specimen-block" id="specimen-table">
+<h3><code>table</code></h3>
+<p>A sortable table with right-aligned numerals and a sticky head.</p>
+<p class="use-when">Use it when the reader needs every value, not the shape of them.</p>
+<pre>{
+  &quot;type&quot;: &quot;table&quot;,
+  &quot;id&quot;: &quot;table-specimen&quot;,
+  &quot;title&quot;: &quot;Grants by program and year&quot;,
+  &quot;caption&quot;: &quot;Every value here is invented for the guide. Replace them with verified figures.&quot;,
+  &quot;columns&quot;: [
+    {
+      &quot;label&quot;: &quot;Program&quot;,
+      &quot;type&quot;: &quot;text&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Grants&quot;,
+      &quot;type&quot;: &quot;number&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Newsrooms&quot;,
+      &quot;type&quot;: &quot;number&quot;
+    }
+  ],
+  &quot;rows&quot;: [
+    [
+      &quot;Local reporting&quot;,
+      12,
+      34
+    ],
+    [
+      &quot;Civic technology&quot;,
+      5,
+      11
+    ],
+    [
+      &quot;Language access&quot;,
+      8,
+      19
+    ]
+  ]
+}</pre>
+<div class="specimen-render">
+<section id="table-specimen" class="section section-table">
+<div class="section-heading"><h2 id="table-specimen--title"><a class="heading-anchor" href="#table-specimen">Grants by program and year</a></h2>
+</div>
+<div class="table-wrap scroll-edge" tabindex="0" role="region" aria-labelledby="table-specimen--title">
+<table class="data-table">
+<caption>Every value here is invented for the guide. Replace them with verified figures.</caption>
+<thead><tr><th scope="col" aria-sort="none"><button type="button" class="column-sort" data-column="0" data-type="text" aria-label="Sort by Program"><span class="column-head"><span class="column-name">Program</span></span><span class="sort-mark" aria-hidden="true"></span></button></th><th scope="col" class="numeric" aria-sort="none"><button type="button" class="column-sort" data-column="1" data-type="number" aria-label="Sort by Grants"><span class="column-head"><span class="column-name">Grants</span></span><span class="sort-mark" aria-hidden="true"></span></button></th><th scope="col" class="numeric" aria-sort="none"><button type="button" class="column-sort" data-column="2" data-type="number" aria-label="Sort by Newsrooms"><span class="column-head"><span class="column-name">Newsrooms</span></span><span class="sort-mark" aria-hidden="true"></span></button></th></tr></thead>
+<tbody>
+<tr><th scope="row">Local reporting</th><td class="numeric" data-value="12">12</td><td class="numeric" data-value="34">34</td></tr>
+<tr><th scope="row">Civic technology</th><td class="numeric" data-value="5">5</td><td class="numeric" data-value="11">11</td></tr>
+<tr><th scope="row">Language access</th><td class="numeric" data-value="8">8</td><td class="numeric" data-value="19">19</td></tr>
+</tbody>
+</table>
+</div>
+<p class="table-status hidden-text" role="status"></p>
+
+</section>
+</div>
+</article>
+<article class="specimen-block" id="specimen-quote">
+<h3><code>quote</code></h3>
+<p>One sentence at display size, opened by a short accent rule.</p>
+<p class="use-when">Use it when one voice states the point better than the report can.</p>
+<pre>{
+  &quot;type&quot;: &quot;quote&quot;,
+  &quot;id&quot;: &quot;quote-specimen&quot;,
+  &quot;text&quot;: &quot;A useful report lets the reader see the evidence, follow the reasoning, and ask a better question.&quot;,
+  &quot;attribution&quot;: &quot;Template editorial principle&quot;
+}</pre>
+<div class="specimen-render">
+<section id="quote-specimen" class="section section-quote">
+<blockquote>
+<p>A useful report lets the reader see the evidence, follow the reasoning, and ask a better question.</p>
+<p class="quote-attribution"><cite>Template editorial principle</cite></p>
+</blockquote>
+</section>
+</div>
+</article>
+<article class="specimen-block" id="specimen-tabs">
+<h3><code>tabs</code></h3>
+<p>Two to five panels of prose under a row of text tabs.</p>
+<p class="use-when">Use it when a reader compares parallel views instead of reading them in order.</p>
+<pre>{
+  &quot;type&quot;: &quot;tabs&quot;,
+  &quot;id&quot;: &quot;tabs-specimen&quot;,
+  &quot;label&quot;: &quot;Example views&quot;,
+  &quot;title&quot;: &quot;One question, three answers.&quot;,
+  &quot;panels&quot;: [
+    {
+      &quot;label&quot;: &quot;Reporters&quot;,
+      &quot;paragraphs&quot;: [
+        &quot;An invented view for the template. State what this group gains and what it gives up.&quot;,
+        &quot;Keep each panel about the same length, so no view reads as the important one.&quot;
+      ]
+    },
+    {
+      &quot;label&quot;: &quot;Editors&quot;,
+      &quot;paragraphs&quot;: [
+        &quot;An invented view for the template. Replace it with the second position and its evidence.&quot;
+      ]
+    },
+    {
+      &quot;label&quot;: &quot;Readers&quot;,
+      &quot;paragraphs&quot;: [
+        &quot;An invented view for the template. Replace it with the third position and its evidence.&quot;
+      ]
+    }
+  ]
+}</pre>
+<div class="specimen-render">
+<section id="tabs-specimen" class="section section-tabs">
+<div class="section-heading"><span class="eyebrow">Example views</span><h2 id="tabs-specimen--title"><a class="heading-anchor" href="#tabs-specimen">One question, three answers.</a></h2>
+</div>
+<div class="tabs reading">
+<div class="tablist" role="tablist" aria-label="One question, three answers.">
+<button type="button" role="tab" class="tab" id="tabs-specimen--tab-1" aria-controls="tabs-specimen--panel-1" aria-selected="true" tabindex="0">Reporters</button>
+<button type="button" role="tab" class="tab" id="tabs-specimen--tab-2" aria-controls="tabs-specimen--panel-2" aria-selected="false" tabindex="-1">Editors</button>
+<button type="button" role="tab" class="tab" id="tabs-specimen--tab-3" aria-controls="tabs-specimen--panel-3" aria-selected="false" tabindex="-1">Readers</button>
+</div>
+<div class="tab-panel" role="tabpanel" id="tabs-specimen--panel-1" aria-labelledby="tabs-specimen--tab-1" tabindex="0">
+<h3 class="tab-heading">Reporters</h3>
+<p>An invented view for the template. State what this group gains and what it gives up.</p>
+<p>Keep each panel about the same length, so no view reads as the important one.</p>
+</div>
+<div class="tab-panel" role="tabpanel" id="tabs-specimen--panel-2" aria-labelledby="tabs-specimen--tab-2" tabindex="0">
+<h3 class="tab-heading">Editors</h3>
+<p>An invented view for the template. Replace it with the second position and its evidence.</p>
+</div>
+<div class="tab-panel" role="tabpanel" id="tabs-specimen--panel-3" aria-labelledby="tabs-specimen--tab-3" tabindex="0">
+<h3 class="tab-heading">Readers</h3>
+<p>An invented view for the template. Replace it with the third position and its evidence.</p>
+</div>
+</div>
+</section>
+</div>
+</article>
+<article class="specimen-block" id="specimen-accordion">
+<h3><code>accordion</code></h3>
+<p>Summaries a reader opens for the detail under each one.</p>
+<p class="use-when">Use it when most readers skip the detail and a few readers need all of it.</p>
+<pre>{
+  &quot;type&quot;: &quot;accordion&quot;,
+  &quot;id&quot;: &quot;accordion-specimen&quot;,
+  &quot;label&quot;: &quot;Example questions&quot;,
+  &quot;title&quot;: &quot;The questions readers ask most.&quot;,
+  &quot;exclusive&quot;: true,
+  &quot;items&quot;: [
+    {
+      &quot;summary&quot;: &quot;How were the newsrooms selected?&quot;,
+      &quot;paragraphs&quot;: [
+        &quot;An invented answer for the template. State the sampling frame and who it leaves out.&quot;
+      ]
+    },
+    {
+      &quot;summary&quot;: &quot;What does the count measure?&quot;,
+      &quot;paragraphs&quot;: [
+        &quot;An invented answer for the template. State the unit, the period, and the source.&quot;,
+        &quot;Keep the summary above useful on its own, because many readers never open it.&quot;
+      ]
+    }
+  ]
+}</pre>
+<div class="specimen-render">
+<section id="accordion-specimen" class="section section-accordion">
+<div class="section-heading"><span class="eyebrow">Example questions</span><h2 id="accordion-specimen--title"><a class="heading-anchor" href="#accordion-specimen">The questions readers ask most.</a></h2>
+</div>
+<div class="accordion reading">
+<details class="accordion-item" name="accordion-specimen">
+<summary><span class="accordion-label">How were the newsrooms selected?</span><svg class="accordion-chevron" viewBox="0 0 12 12" width="12" height="12" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5 6 7.5 9 4.5"/></svg></summary>
+<div class="accordion-panel">
+<p>An invented answer for the template. State the sampling frame and who it leaves out.</p>
+</div>
+</details>
+<details class="accordion-item" name="accordion-specimen">
+<summary><span class="accordion-label">What does the count measure?</span><svg class="accordion-chevron" viewBox="0 0 12 12" width="12" height="12" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5 6 7.5 9 4.5"/></svg></summary>
+<div class="accordion-panel">
+<p>An invented answer for the template. State the unit, the period, and the source.</p>
+<p>Keep the summary above useful on its own, because many readers never open it.</p>
+</div>
+</details>
+</div>
+</section>
+</div>
+</article>
+<article class="specimen-block" id="specimen-timeline">
+<h3><code>timeline</code></h3>
+<p>Dated events in one column, with the date beside each one.</p>
+<p class="use-when">Use it when the order of the events is the argument.</p>
+<pre>{
+  &quot;type&quot;: &quot;timeline&quot;,
+  &quot;id&quot;: &quot;timeline-specimen&quot;,
+  &quot;label&quot;: &quot;Example chronology&quot;,
+  &quot;title&quot;: &quot;How the work moved.&quot;,
+  &quot;events&quot;: [
+    {
+      &quot;date&quot;: &quot;March 2024&quot;,
+      &quot;title&quot;: &quot;The partners agree on one question&quot;,
+      &quot;text&quot;: &quot;An invented event. Replace it with a dated step of your own work.&quot;
+    },
+    {
+      &quot;date&quot;: &quot;September 2024&quot;,
+      &quot;title&quot;: &quot;The first shared story runs&quot;,
+      &quot;text&quot;: &quot;State what happened and why the date matters. Keep each event to one or two sentences.&quot;
+    },
+    {
+      &quot;date&quot;: &quot;Spring 2025&quot;,
+      &quot;title&quot;: &quot;The group reports on the result&quot;,
+      &quot;text&quot;: &quot;A date is text, so \&quot;Spring 2025\&quot; and \&quot;12 May 2025\&quot; both hold their own form.&quot;
+    }
+  ]
+}</pre>
+<div class="specimen-render">
+<section id="timeline-specimen" class="section section-timeline">
+<div class="section-heading"><span class="eyebrow">Example chronology</span><h2 id="timeline-specimen--title"><a class="heading-anchor" href="#timeline-specimen">How the work moved.</a></h2>
+</div>
+<ol class="timeline" role="list">
+<li>
+<span class="timeline-date">March 2024</span>
+<div class="timeline-event">
+<h3>The partners agree on one question</h3>
+<p>An invented event. Replace it with a dated step of your own work.</p>
+</div>
+</li>
+<li>
+<span class="timeline-date">September 2024</span>
+<div class="timeline-event">
+<h3>The first shared story runs</h3>
+<p>State what happened and why the date matters. Keep each event to one or two sentences.</p>
+</div>
+</li>
+<li>
+<span class="timeline-date">Spring 2025</span>
+<div class="timeline-event">
+<h3>The group reports on the result</h3>
+<p>A date is text, so &quot;Spring 2025&quot; and &quot;12 May 2025&quot; both hold their own form.</p>
+</div>
+</li>
+</ol>
+</section>
+</div>
+</article>
+<article class="specimen-block" id="specimen-image">
+<h3><code>image</code></h3>
+<p>One picture on the reading column, the figure column or the full page.</p>
+<p class="use-when">Use it when a picture carries evidence a sentence cannot.</p>
+<pre>{
+  &quot;type&quot;: &quot;image&quot;,
+  &quot;id&quot;: &quot;image-specimen&quot;,
+  &quot;src&quot;: &quot;data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%22560%22%20height=%22315%22%20viewBox=%220%200%20560%20315%22%3E%3Crect%20width=%22560%22%20height=%22315%22%20fill=%22%23e7e4d9%22/%3E%3Cpath%20fill=%22none%22%20stroke-linecap=%22round%22%20stroke-width=%222%22%20stroke=%22%23292925%22%20d=%22M46%20107Q33%20170%2054%20233M85%20124Q72%20167%2093%20210M124%20141Q111%20164%20132%20187M163%20104Q150%20165%20171%20226M202%20121Q189%20162%20210%20203M241%20138Q228%20190%20249%20242M280%20101Q267%20160%20288%20219M319%20118Q306%20157%20327%20196M358%20135Q345%20185%20366%20235M397%2098Q384%20155%20405%20212M436%20115Q423%20152%20444%20189M475%20132Q462%20180%20483%20228M514%20149Q501%20177%20522%20205%22/%3E%3C/svg%3E&quot;,
+  &quot;alt&quot;: &quot;A field of bowed ink strokes of different heights on a tinted ground.&quot;,
+  &quot;caption&quot;: &quot;This picture is a placeholder. Point src at your own file.&quot;,
+  &quot;credit&quot;: &quot;Drawn by the template&quot;,
+  &quot;width&quot;: &quot;figure&quot;,
+  &quot;lightbox&quot;: true
+}</pre>
+<div class="specimen-render">
+<section id="image-specimen" class="section section-image">
+<figure class="media-figure media-on-figure has-lightbox">
+<img src="data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%22560%22%20height=%22315%22%20viewBox=%220%200%20560%20315%22%3E%3Crect%20width=%22560%22%20height=%22315%22%20fill=%22%23e7e4d9%22/%3E%3Cpath%20fill=%22none%22%20stroke-linecap=%22round%22%20stroke-width=%222%22%20stroke=%22%23292925%22%20d=%22M46%20107Q33%20170%2054%20233M85%20124Q72%20167%2093%20210M124%20141Q111%20164%20132%20187M163%20104Q150%20165%20171%20226M202%20121Q189%20162%20210%20203M241%20138Q228%20190%20249%20242M280%20101Q267%20160%20288%20219M319%20118Q306%20157%20327%20196M358%20135Q345%20185%20366%20235M397%2098Q384%20155%20405%20212M436%20115Q423%20152%20444%20189M475%20132Q462%20180%20483%20228M514%20149Q501%20177%20522%20205%22/%3E%3C/svg%3E" alt="A field of bowed ink strokes of different heights on a tinted ground." loading="lazy" decoding="async">
+<figcaption class="media-caption">This picture is a placeholder. Point src at your own file.<span class="media-credit">Drawn by the template</span></figcaption>
+<dialog class="lightbox screen-only" id="image-specimen--lightbox" aria-label="The picture at full size">
+<button type="button" class="control lightbox-close">Close</button>
+<img class="lightbox-image" src="data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%22560%22%20height=%22315%22%20viewBox=%220%200%20560%20315%22%3E%3Crect%20width=%22560%22%20height=%22315%22%20fill=%22%23e7e4d9%22/%3E%3Cpath%20fill=%22none%22%20stroke-linecap=%22round%22%20stroke-width=%222%22%20stroke=%22%23292925%22%20d=%22M46%20107Q33%20170%2054%20233M85%20124Q72%20167%2093%20210M124%20141Q111%20164%20132%20187M163%20104Q150%20165%20171%20226M202%20121Q189%20162%20210%20203M241%20138Q228%20190%20249%20242M280%20101Q267%20160%20288%20219M319%20118Q306%20157%20327%20196M358%20135Q345%20185%20366%20235M397%2098Q384%20155%20405%20212M436%20115Q423%20152%20444%20189M475%20132Q462%20180%20483%20228M514%20149Q501%20177%20522%20205%22/%3E%3C/svg%3E" alt="A field of bowed ink strokes of different heights on a tinted ground." loading="lazy" decoding="async">
+</dialog>
+</figure>
+</section>
+</div>
+</article>
+<article class="specimen-block" id="specimen-compare">
+<h3><code>compare</code></h3>
+<p>Two pictures side by side, with a divider a reader can move.</p>
+<p class="use-when">Use it when one picture changes and the change is the point.</p>
+<pre>{
+  &quot;type&quot;: &quot;compare&quot;,
+  &quot;id&quot;: &quot;compare-specimen&quot;,
+  &quot;label&quot;: &quot;Example comparison&quot;,
+  &quot;title&quot;: &quot;Show the change, do not describe it.&quot;,
+  &quot;before&quot;: {
+    &quot;src&quot;: &quot;data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%22560%22%20height=%22315%22%20viewBox=%220%200%20560%20315%22%3E%3Crect%20width=%22560%22%20height=%22315%22%20fill=%22%23e7e4d9%22/%3E%3Cpath%20fill=%22none%22%20stroke-linecap=%22round%22%20stroke-width=%222%22%20stroke=%22%23292925%22%20d=%22M46%20118Q33%20169%2054%20220M85%20135Q72%20166%2093%20197M124%2098Q111%20167%20132%20236M163%20115Q150%20164%20171%20213M202%20132Q189%20161%20210%20190M241%20149Q228%20189%20249%20229M280%20112Q267%20159%20288%20206M319%20129Q306%20187%20327%20245M358%20146Q345%20184%20366%20222M397%20109Q384%20154%20405%20199M436%20126Q423%20182%20444%20238M475%20143Q462%20179%20483%20215M514%20106Q501%20149%20522%20192%22/%3E%3C/svg%3E&quot;,
+    &quot;alt&quot;: &quot;A field of bowed ink strokes on a tinted ground.&quot;,
+    &quot;label&quot;: &quot;Before&quot;
+  },
+  &quot;after&quot;: {
+    &quot;src&quot;: &quot;data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%22560%22%20height=%22315%22%20viewBox=%220%200%20560%20315%22%3E%3Crect%20width=%22560%22%20height=%22315%22%20fill=%22%23e7e4d9%22/%3E%3Cpath%20fill=%22none%22%20stroke-linecap=%22round%22%20stroke-width=%222%22%20stroke=%22%23a33e36%22%20d=%22M46%20118Q33%20169%2054%20220M85%20135Q72%20166%2093%20197M124%2098Q111%20167%20132%20236M163%20115Q150%20164%20171%20213M202%20132Q189%20161%20210%20190M241%20149Q228%20189%20249%20229M280%20112Q267%20159%20288%20206M319%20129Q306%20187%20327%20245M358%20146Q345%20184%20366%20222M397%20109Q384%20154%20405%20199M436%20126Q423%20182%20444%20238M475%20143Q462%20179%20483%20215M514%20106Q501%20149%20522%20192%22/%3E%3C/svg%3E&quot;,
+    &quot;alt&quot;: &quot;The same field of strokes, drawn in the accent color.&quot;,
+    &quot;label&quot;: &quot;After&quot;
+  },
+  &quot;caption&quot;: &quot;Both pictures are placeholders. Point src at your own two files, cropped to one size.&quot;
+}</pre>
+<div class="specimen-render">
+<section id="compare-specimen" class="section section-compare">
+<div class="section-heading"><span class="eyebrow">Example comparison</span><h2 id="compare-specimen--title"><a class="heading-anchor" href="#compare-specimen">Show the change, do not describe it.</a></h2>
+</div>
+<figure class="compare">
+<div class="compare-pair">
+<figure class="compare-side compare-before">
+<figcaption class="compare-label">Before</figcaption>
+<img src="data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%22560%22%20height=%22315%22%20viewBox=%220%200%20560%20315%22%3E%3Crect%20width=%22560%22%20height=%22315%22%20fill=%22%23e7e4d9%22/%3E%3Cpath%20fill=%22none%22%20stroke-linecap=%22round%22%20stroke-width=%222%22%20stroke=%22%23292925%22%20d=%22M46%20118Q33%20169%2054%20220M85%20135Q72%20166%2093%20197M124%2098Q111%20167%20132%20236M163%20115Q150%20164%20171%20213M202%20132Q189%20161%20210%20190M241%20149Q228%20189%20249%20229M280%20112Q267%20159%20288%20206M319%20129Q306%20187%20327%20245M358%20146Q345%20184%20366%20222M397%20109Q384%20154%20405%20199M436%20126Q423%20182%20444%20238M475%20143Q462%20179%20483%20215M514%20106Q501%20149%20522%20192%22/%3E%3C/svg%3E" alt="A field of bowed ink strokes on a tinted ground." loading="lazy" decoding="async">
+</figure>
+<figure class="compare-side compare-after">
+<figcaption class="compare-label">After</figcaption>
+<img src="data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%22560%22%20height=%22315%22%20viewBox=%220%200%20560%20315%22%3E%3Crect%20width=%22560%22%20height=%22315%22%20fill=%22%23e7e4d9%22/%3E%3Cpath%20fill=%22none%22%20stroke-linecap=%22round%22%20stroke-width=%222%22%20stroke=%22%23a33e36%22%20d=%22M46%20118Q33%20169%2054%20220M85%20135Q72%20166%2093%20197M124%2098Q111%20167%20132%20236M163%20115Q150%20164%20171%20213M202%20132Q189%20161%20210%20190M241%20149Q228%20189%20249%20229M280%20112Q267%20159%20288%20206M319%20129Q306%20187%20327%20245M358%20146Q345%20184%20366%20222M397%20109Q384%20154%20405%20199M436%20126Q423%20182%20444%20238M475%20143Q462%20179%20483%20215M514%20106Q501%20149%20522%20192%22/%3E%3C/svg%3E" alt="The same field of strokes, drawn in the accent color." loading="lazy" decoding="async">
+</figure>
+</div>
+<div class="compare-control screen-only" hidden>
+<label for="compare-specimen--compare">Move the divider</label>
+<input type="range" id="compare-specimen--compare" min="0" max="100" step="2" value="50" aria-valuetext="50 percent">
+</div>
+<figcaption class="media-caption">Both pictures are placeholders. Point src at your own two files, cropped to one size.</figcaption>
+</figure>
+</section>
+</div>
+</article>
+<article class="specimen-block" id="specimen-gallery">
+<h3><code>gallery</code></h3>
+<p>Pictures in one strip, with a caption on each and buttons that step through them.</p>
+<p class="use-when">Use it when a report holds more pictures than the column can carry.</p>
+<pre>{
+  &quot;type&quot;: &quot;gallery&quot;,
+  &quot;id&quot;: &quot;gallery-specimen&quot;,
+  &quot;label&quot;: &quot;Example gallery&quot;,
+  &quot;title&quot;: &quot;Let the reader set the pace.&quot;,
+  &quot;items&quot;: [
+    {
+      &quot;src&quot;: &quot;data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%22560%22%20height=%22315%22%20viewBox=%220%200%20560%20315%22%3E%3Crect%20width=%22560%22%20height=%22315%22%20fill=%22%23e7e4d9%22/%3E%3Cpath%20fill=%22none%22%20stroke-linecap=%22round%22%20stroke-width=%222%22%20stroke=%22%23292925%22%20d=%22M46%20129Q33%20168%2054%20207M85%20146Q72%20196%2093%20246M124%20109Q111%20166%20132%20223M163%20126Q150%20163%20171%20200M202%20143Q189%20191%20210%20239M241%20106Q228%20161%20249%20216M280%20123Q267%20158%20288%20193M319%20140Q306%20186%20327%20232M358%20103Q345%20156%20366%20209M397%20120Q384%20153%20405%20186M436%20137Q423%20181%20444%20225M475%20100Q462%20151%20483%20202M514%20117Q501%20179%20522%20241%22/%3E%3C/svg%3E&quot;,
+      &quot;alt&quot;: &quot;A field of bowed ink strokes, the tallest on the left.&quot;,
+      &quot;caption&quot;: &quot;This picture is a placeholder. Give every picture its own caption.&quot;
+    },
+    {
+      &quot;src&quot;: &quot;data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%22560%22%20height=%22315%22%20viewBox=%220%200%20560%20315%22%3E%3Crect%20width=%22560%22%20height=%22315%22%20fill=%22%23e7e4d9%22/%3E%3Cpath%20fill=%22none%22%20stroke-linecap=%22round%22%20stroke-width=%222%22%20stroke=%22%23292925%22%20d=%22M46%20119Q33%20168%2054%20217M85%20136Q72%20165%2093%20194M124%2099Q111%20166%20132%20233M163%20116Q150%20163%20171%20210M202%20133Q189%20160%20210%20187M241%2096Q228%20161%20249%20226M280%20113Q267%20158%20288%20203M319%20130Q306%20186%20327%20242M358%20147Q345%20183%20366%20219M397%20110Q384%20153%20405%20196M436%20127Q423%20181%20444%20235M475%20144Q462%20178%20483%20212M514%20107Q501%20148%20522%20189%22/%3E%3C/svg%3E&quot;,
+      &quot;alt&quot;: &quot;A field of bowed ink strokes at even heights.&quot;,
+      &quot;caption&quot;: &quot;A caption says what the reader is looking at, not what the set is about.&quot;
+    },
+    {
+      &quot;src&quot;: &quot;data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%22560%22%20height=%22315%22%20viewBox=%220%200%20560%20315%22%3E%3Crect%20width=%22560%22%20height=%22315%22%20fill=%22%23e7e4d9%22/%3E%3Cpath%20fill=%22none%22%20stroke-linecap=%22round%22%20stroke-width=%222%22%20stroke=%22%23a33e36%22%20d=%22M46%20109Q33%20168%2054%20227M85%20126Q72%20165%2093%20204M124%20143Q111%20193%20132%20243M163%20106Q150%20163%20171%20220M202%20123Q189%20160%20210%20197M241%20140Q228%20188%20249%20236M280%20103Q267%20158%20288%20213M319%20120Q306%20155%20327%20190M358%20137Q345%20183%20366%20229M397%20100Q384%20153%20405%20206M436%20117Q423%20181%20444%20245M475%20134Q462%20178%20483%20222M514%2097Q501%20148%20522%20199%22/%3E%3C/svg%3E&quot;,
+      &quot;alt&quot;: &quot;A field of bowed ink strokes in the accent color.&quot;,
+      &quot;caption&quot;: &quot;Nothing here moves on its own. The reader steps through the strip.&quot;
+    }
+  ]
+}</pre>
+<div class="specimen-render">
+<section id="gallery-specimen" class="section section-gallery">
+<div class="section-heading"><span class="eyebrow">Example gallery</span><h2 id="gallery-specimen--title"><a class="heading-anchor" href="#gallery-specimen">Let the reader set the pace.</a></h2>
+</div>
+<div class="gallery" data-total="3">
+<ol class="gallery-strip" role="list">
+<li class="gallery-item">
+<figure>
+<img src="data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%22560%22%20height=%22315%22%20viewBox=%220%200%20560%20315%22%3E%3Crect%20width=%22560%22%20height=%22315%22%20fill=%22%23e7e4d9%22/%3E%3Cpath%20fill=%22none%22%20stroke-linecap=%22round%22%20stroke-width=%222%22%20stroke=%22%23292925%22%20d=%22M46%20129Q33%20168%2054%20207M85%20146Q72%20196%2093%20246M124%20109Q111%20166%20132%20223M163%20126Q150%20163%20171%20200M202%20143Q189%20191%20210%20239M241%20106Q228%20161%20249%20216M280%20123Q267%20158%20288%20193M319%20140Q306%20186%20327%20232M358%20103Q345%20156%20366%20209M397%20120Q384%20153%20405%20186M436%20137Q423%20181%20444%20225M475%20100Q462%20151%20483%20202M514%20117Q501%20179%20522%20241%22/%3E%3C/svg%3E" alt="A field of bowed ink strokes, the tallest on the left." loading="lazy" decoding="async">
+<figcaption class="media-caption">This picture is a placeholder. Give every picture its own caption.</figcaption>
+</figure>
+</li>
+<li class="gallery-item">
+<figure>
+<img src="data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%22560%22%20height=%22315%22%20viewBox=%220%200%20560%20315%22%3E%3Crect%20width=%22560%22%20height=%22315%22%20fill=%22%23e7e4d9%22/%3E%3Cpath%20fill=%22none%22%20stroke-linecap=%22round%22%20stroke-width=%222%22%20stroke=%22%23292925%22%20d=%22M46%20119Q33%20168%2054%20217M85%20136Q72%20165%2093%20194M124%2099Q111%20166%20132%20233M163%20116Q150%20163%20171%20210M202%20133Q189%20160%20210%20187M241%2096Q228%20161%20249%20226M280%20113Q267%20158%20288%20203M319%20130Q306%20186%20327%20242M358%20147Q345%20183%20366%20219M397%20110Q384%20153%20405%20196M436%20127Q423%20181%20444%20235M475%20144Q462%20178%20483%20212M514%20107Q501%20148%20522%20189%22/%3E%3C/svg%3E" alt="A field of bowed ink strokes at even heights." loading="lazy" decoding="async">
+<figcaption class="media-caption">A caption says what the reader is looking at, not what the set is about.</figcaption>
+</figure>
+</li>
+<li class="gallery-item">
+<figure>
+<img src="data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%22560%22%20height=%22315%22%20viewBox=%220%200%20560%20315%22%3E%3Crect%20width=%22560%22%20height=%22315%22%20fill=%22%23e7e4d9%22/%3E%3Cpath%20fill=%22none%22%20stroke-linecap=%22round%22%20stroke-width=%222%22%20stroke=%22%23a33e36%22%20d=%22M46%20109Q33%20168%2054%20227M85%20126Q72%20165%2093%20204M124%20143Q111%20193%20132%20243M163%20106Q150%20163%20171%20220M202%20123Q189%20160%20210%20197M241%20140Q228%20188%20249%20236M280%20103Q267%20158%20288%20213M319%20120Q306%20155%20327%20190M358%20137Q345%20183%20366%20229M397%20100Q384%20153%20405%20206M436%20117Q423%20181%20444%20245M475%20134Q462%20178%20483%20222M514%2097Q501%20148%20522%20199%22/%3E%3C/svg%3E" alt="A field of bowed ink strokes in the accent color." loading="lazy" decoding="async">
+<figcaption class="media-caption">Nothing here moves on its own. The reader steps through the strip.</figcaption>
+</figure>
+</li>
+</ol>
+<div class="gallery-bar screen-only" hidden>
+<button type="button" class="control gallery-step" data-step="-1">Show previous picture</button>
+<p class="gallery-count" role="status">1 of 3</p>
+<button type="button" class="control gallery-step" data-step="1">Show next picture</button>
+</div>
+</div>
+</section>
+</div>
+</article>
+<article class="specimen-block" id="specimen-diagram">
+<h3><code>diagram</code></h3>
+<p>A few labeled parts, the lines between them, and the same thing in sentences.</p>
+<p class="use-when">Use it when one drawing explains a flow that a sequence of steps would not.</p>
+<pre>{
+  &quot;type&quot;: &quot;diagram&quot;,
+  &quot;id&quot;: &quot;diagram-specimen&quot;,
+  &quot;label&quot;: &quot;Example diagram&quot;,
+  &quot;title&quot;: &quot;How one story reaches three newsrooms.&quot;,
+  &quot;layout&quot;: &quot;ring&quot;,
+  &quot;nodes&quot;: [
+    {
+      &quot;id&quot;: &quot;desk&quot;,
+      &quot;label&quot;: &quot;Shared desk&quot;
+    },
+    {
+      &quot;id&quot;: &quot;county&quot;,
+      &quot;label&quot;: &quot;County partner&quot;
+    },
+    {
+      &quot;id&quot;: &quot;readers&quot;,
+      &quot;label&quot;: &quot;Readers&quot;
+    },
+    {
+      &quot;id&quot;: &quot;city&quot;,
+      &quot;label&quot;: &quot;City partner&quot;
+    }
+  ],
+  &quot;edges&quot;: [
+    {
+      &quot;from&quot;: &quot;desk&quot;,
+      &quot;to&quot;: &quot;county&quot;,
+      &quot;label&quot;: &quot;sends the draft to&quot;
+    },
+    {
+      &quot;from&quot;: &quot;desk&quot;,
+      &quot;to&quot;: &quot;city&quot;,
+      &quot;label&quot;: &quot;sends the draft to&quot;
+    },
+    {
+      &quot;from&quot;: &quot;county&quot;,
+      &quot;to&quot;: &quot;readers&quot;,
+      &quot;label&quot;: &quot;publishes for&quot;
+    },
+    {
+      &quot;from&quot;: &quot;city&quot;,
+      &quot;to&quot;: &quot;readers&quot;,
+      &quot;label&quot;: &quot;publishes for&quot;
+    }
+  ],
+  &quot;caption&quot;: &quot;An invented flow. Replace the nodes and the edges with your own.&quot;
+}</pre>
+<div class="specimen-render">
+<section id="diagram-specimen" class="section section-diagram">
+<div class="section-heading"><span class="eyebrow">Example diagram</span><h2 id="diagram-specimen--title"><a class="heading-anchor" href="#diagram-specimen">How one story reaches three newsrooms.</a></h2>
+</div>
+<figure class="diagram">
+<div class="diagram-frame scroll-edge"><svg class="diagram-art" viewBox="0 0 1092 575" aria-hidden="true" fill="none"><g class="diagram-lines" stroke="#466958" stroke-width="1.1" opacity=".85"><path d="M609.2 114.0Q761.6 146.2 882.8 244.0"/><path d="M482.8 114.0Q361.6 211.8 209.2 244.0"/><path d="M882.8 304.0Q761.6 401.8 609.2 434.0"/><path d="M209.2 304.0Q361.6 336.2 482.8 434.0"/></g><g class="diagram-marks" stroke="#292925" stroke-linecap="round"><g class="mark" stroke-width="1.78" transform="translate(546.0 84.0) rotate(123.7) scale(1.35)"><path d="M-25.00 -25.06Q-30.52 0 -24.22 20.93"/><path d="M-20.00 -23.90Q-26.42 0 -19.02 21.67"/><path d="M-15.00 -21.75Q-21.89 0 -13.51 24.62"/><path d="M-10.00 -23.41Q-15.88 0 -9.26 19.92"/><path d="M-5.00 -23.79Q-10.69 0 -3.11 21.89"/><path d="M0.00 -22.00Q-4.78 0 1.09 23.97"/><path d="M5.00 -22.07Q0.41 0 6.15 21.51"/><path d="M10.00 -20.38Q3.47 0 11.39 22.65"/><path d="M15.00 -20.27Q8.25 0 15.70 21.91"/><path d="M20.00 -20.56Q15.50 0 20.97 19.88"/><path d="M25.00 -22.01Q19.33 0 26.03 21.53"/></g><g class="mark" stroke-width="1.70" transform="translate(946.0 274.0) rotate(60.0) scale(1.35)"><path d="M-20.10 -23.11Q-25.32 0 -17.89 20.01"/><path d="M-14.36 -24.96Q-20.72 0 -13.28 23.47"/><path d="M-8.61 -24.96Q-16.43 0 -6.70 21.70"/><path d="M-2.87 -22.27Q-9.50 0 -0.64 23.49"/><path d="M2.87 -20.92Q-4.04 0 3.95 21.37"/><path d="M8.61 -23.60Q2.91 0 9.30 24.36"/><path d="M14.36 -21.30Q6.85 0 15.80 24.65"/><path d="M20.10 -23.04Q13.12 0 20.87 22.14"/></g><g class="mark" stroke-width="1.88" transform="translate(546.0 464.0) rotate(179.4) scale(1.35)"><path d="M-16.52 -22.50Q-22.86 0 -15.19 21.83"/><path d="M-9.91 -26.01Q-16.98 0 -7.48 25.91"/><path d="M-3.30 -23.84Q-12.55 0 -1.71 24.41"/><path d="M3.30 -24.53Q-5.37 0 5.60 24.16"/><path d="M9.91 -23.41Q2.73 0 10.94 26.46"/><path d="M16.52 -26.42Q8.42 0 18.55 26.59"/></g><g class="mark" stroke-width="2.12" transform="translate(146.0 274.0) rotate(234.2) scale(1.35)"><path d="M-25.00 -24.10Q-32.83 0 -22.71 23.62"/><path d="M-18.75 -23.46Q-24.55 0 -17.78 22.60"/><path d="M-12.50 -20.15Q-19.46 0 -10.76 21.60"/><path d="M-6.25 -24.02Q-14.67 0 -4.41 23.04"/><path d="M0.00 -23.52Q-7.39 0 1.77 23.49"/><path d="M6.25 -24.17Q-1.39 0 7.90 22.83"/><path d="M12.50 -19.65Q5.40 0 14.26 23.78"/><path d="M18.75 -23.81Q12.06 0 20.06 20.43"/><path d="M25.00 -24.68Q19.15 0 27.14 20.68"/></g></g><text class="diagram-label" text-anchor="middle" font-size="16" fill="#292925"><tspan x="546.0" y="162.0">Shared desk</tspan></text><text class="diagram-label" text-anchor="middle" font-size="16" fill="#292925"><tspan x="946.0" y="352.0">County partner</tspan></text><text class="diagram-label" text-anchor="middle" font-size="16" fill="#292925"><tspan x="546.0" y="542.0">Readers</tspan></text><text class="diagram-label" text-anchor="middle" font-size="16" fill="#292925"><tspan x="146.0" y="352.0">City partner</tspan></text><text class="diagram-edge-label" x="753.8" y="162.6" text-anchor="middle" font-size="13" paint-order="stroke" stroke="#f6f3eb" stroke-width="4" fill="#292925">sends the draft to</text><text class="diagram-edge-label" x="353.8" y="195.4" text-anchor="middle" font-size="13" paint-order="stroke" stroke="#f6f3eb" stroke-width="4" fill="#292925">sends the draft to</text><text class="diagram-edge-label" x="753.8" y="385.4" text-anchor="middle" font-size="13" paint-order="stroke" stroke="#f6f3eb" stroke-width="4" fill="#292925">publishes for</text><text class="diagram-edge-label" x="353.8" y="352.6" text-anchor="middle" font-size="13" paint-order="stroke" stroke="#f6f3eb" stroke-width="4" fill="#292925">publishes for</text></svg></div>
+<ol class="diagram-edges">
+<li>Shared desk sends the draft to County partner.</li>
+<li>Shared desk sends the draft to City partner.</li>
+<li>County partner publishes for Readers.</li>
+<li>City partner publishes for Readers.</li>
+</ol>
+<figcaption class="media-caption">An invented flow. Replace the nodes and the edges with your own.</figcaption>
+</figure>
+</section>
+</div>
+</article>
+<article class="specimen-block" id="specimen-part">
+<h3><code>part</code></h3>
+<p>A part number and a part title, with space above and below.</p>
+<p class="use-when">Use it when a report is long enough to read as chapters.</p>
+<pre>{
+  &quot;type&quot;: &quot;part&quot;,
+  &quot;id&quot;: &quot;part-specimen&quot;,
+  &quot;number&quot;: 2,
+  &quot;title&quot;: &quot;What the partners found&quot;,
+  &quot;deck&quot;: &quot;An invented deck. Say in one sentence what this part of the report covers.&quot;
+}</pre>
+<div class="specimen-render">
+<section id="part-specimen" class="section section-part">
+<div class="part">
+<p class="part-number"><span class="part-kicker">Part </span>2</p>
+<h2 id="part-specimen--title"><a class="heading-anchor" href="#part-specimen">What the partners found</a></h2>
+<p class="part-deck">An invented deck. Say in one sentence what this part of the report covers.</p>
+</div>
+</section>
+</div>
+</article>
+<article class="specimen-block" id="specimen-methods">
+<h3><code>methods</code></h3>
+<p>A tinted band that carries the method note and the citation list.</p>
+<p class="use-when">Use it at the end, when the reader needs the method and the sources.</p>
+<pre>{
+  &quot;type&quot;: &quot;methods&quot;,
+  &quot;id&quot;: &quot;methods-specimen&quot;,
+  &quot;title&quot;: &quot;Methods and sources&quot;,
+  &quot;brief&quot;: &quot;Replace this lead with two plain sentences on what you counted and how you counted it. The note under it carries the detail.&quot;,
+  &quot;paragraphs&quot;: [
+    &quot;Replace this note with the study period, the sample, the method, the limits, the funding, and the disclosures.&quot;
+  ],
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Center for Cooperative Media&quot;,
+      &quot;url&quot;: &quot;https://centerforcooperativemedia.org/&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Montclair State University&quot;,
+      &quot;url&quot;: &quot;https://www.montclair.edu/&quot;
+    }
+  ]
+}</pre>
+<div class="specimen-render">
+<section id="methods-specimen" class="section section-methods" data-sources="2">
+<div class="methods" data-aside="2">
+<div class="reading"><h2 id="methods-specimen--title"><a class="heading-anchor" href="#methods-specimen">Methods and sources</a></h2>
+<div class="methods-brief">
+<h3>How we did this</h3>
+<p>Replace this lead with two plain sentences on what you counted and how you counted it. The note under it carries the detail.</p>
+</div>
+<p>Replace this note with the study period, the sample, the method, the limits, the funding, and the disclosures.</p>
+</div>
+<div class="methods-aside">
+<ol>
+<li><a href="https://centerforcooperativemedia.org/">Center for Cooperative Media</a><span class="source-host">centerforcooperativemedia.org</span></li>
+<li><a href="https://www.montclair.edu/">Montclair State University</a><span class="source-host">www.montclair.edu</span></li>
+</ol>
+</div>
+</div>
+</section>
+</div>
+</article>
+<article class="specimen-block" id="specimen-authors">
+<h3><code>authors</code></h3>
+<p>A row for each author with the role, the bio and a link.</p>
+<p class="use-when">Use it when the reader needs to know who did the work.</p>
+<pre>{
+  &quot;authors&quot;: [
+    {
+      &quot;name&quot;: &quot;Robin Vega&quot;,
+      &quot;role&quot;: &quot;Lead researcher&quot;,
+      &quot;bio&quot;: &quot;An invented author for this specimen. Replace the name, the role and the bio with your own.&quot;,
+      &quot;url&quot;: &quot;https://example.org/people/robin-vega&quot;
+    },
+    {
+      &quot;name&quot;: &quot;Sam Okafor&quot;,
+      &quot;role&quot;: &quot;Data reporter&quot;,
+      &quot;bio&quot;: &quot;A second invented author. The cover byline joins the two names.&quot;
+    }
+  ]
+}</pre>
+<div class="specimen-render">
+<section class="endmatter endmatter-authors">
+<div class="endmatter-inner">
+<h2 class="endmatter-label">About the authors</h2>
+<div class="authors">
+<div class="author">
+<h3 class="author-name">Robin Vega</h3>
+<p class="author-role">Lead researcher</p>
+<p class="author-bio">An invented author for this specimen. Replace the name, the role and the bio with your own.</p>
+<p class="author-link"><a href="https://example.org/people/robin-vega" rel="noopener">example.org</a></p>
+</div>
+<div class="author">
+<h3 class="author-name">Sam Okafor</h3>
+<p class="author-role">Data reporter</p>
+<p class="author-bio">A second invented author. The cover byline joins the two names.</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+</article>
+<article class="specimen-block" id="specimen-contributors">
+<h3><code>contributors</code></h3>
+<p>A credits list that states the role before the name.</p>
+<p class="use-when">Use it when more hands did the work than the byline shows.</p>
+<pre>{
+  &quot;contributors&quot;: [
+    {
+      &quot;role&quot;: &quot;Editing&quot;,
+      &quot;name&quot;: &quot;Dana Whitfield&quot;
+    },
+    {
+      &quot;role&quot;: &quot;Illustration&quot;,
+      &quot;name&quot;: &quot;Ola Brandt&quot;
+    },
+    {
+      &quot;role&quot;: &quot;Fact checking&quot;,
+      &quot;name&quot;: &quot;Priya Raman&quot;
+    }
+  ]
+}</pre>
+<div class="specimen-render">
+<section class="endmatter endmatter-contributors">
+<div class="endmatter-inner">
+<h2 class="endmatter-label">Credits</h2>
+<dl class="contributors">
+<div><dt>Editing</dt><dd>Dana Whitfield</dd></div>
+<div><dt>Illustration</dt><dd>Ola Brandt</dd></div>
+<div><dt>Fact checking</dt><dd>Priya Raman</dd></div>
+</dl>
+</div>
+</section>
+</div>
+</article>
+<article class="specimen-block" id="specimen-related">
+<h3><code>related</code></h3>
+<p>A &quot;Read next&quot; row of one to three reports with a line each.</p>
+<p class="use-when">Use it when the site holds other reports on the same subject.</p>
+<pre>{
+  &quot;related&quot;: [
+    {
+      &quot;title&quot;: &quot;What the network counted in 2025&quot;,
+      &quot;url&quot;: &quot;https://example.org/reports/2025&quot;,
+      &quot;description&quot;: &quot;An invented earlier report. Say what the reader gets from it.&quot;
+    },
+    {
+      &quot;title&quot;: &quot;How the partners share a story&quot;,
+      &quot;url&quot;: &quot;https://example.org/reports/sharing&quot;,
+      &quot;description&quot;: &quot;A second invented report, to show the row with two items.&quot;
+    }
+  ]
+}</pre>
+<div class="specimen-render">
+<section class="endmatter endmatter-related">
+<div class="endmatter-inner">
+<h2 class="endmatter-label">Read next</h2>
+<ul class="read-next" data-count="2">
+<li><a href="https://example.org/reports/2025" rel="noopener">What the network counted in 2025</a>
+<p>An invented earlier report. Say what the reader gets from it.</p></li>
+<li><a href="https://example.org/reports/sharing" rel="noopener">How the partners share a story</a>
+<p>A second invented report, to show the row with two items.</p></li>
+</ul>
+</div>
+</section>
+</div>
+</article>
+<article class="specimen-block" id="specimen-series_links">
+<h3><code>series_links</code></h3>
+<p>The report before this one and the report after it, by title.</p>
+<p class="use-when">Use it when the report is one part of a numbered series.</p>
+<pre>{
+  &quot;series_links&quot;: {
+    &quot;previous&quot;: {
+      &quot;title&quot;: &quot;Part one: what the partners asked for&quot;,
+      &quot;url&quot;: &quot;https://example.org/reports/part-one&quot;
+    },
+    &quot;next&quot;: {
+      &quot;title&quot;: &quot;Part three: what the network does next&quot;,
+      &quot;url&quot;: &quot;https://example.org/reports/part-three&quot;
+    }
+  }
+}</pre>
+<div class="specimen-render">
+<section class="endmatter endmatter-series-links">
+<div class="endmatter-inner">
+<h2 class="endmatter-label" id="series-links--label">More in this series</h2>
+<nav class="series-links" aria-labelledby="series-links--label">
+<a class="series-link series-previous" href="https://example.org/reports/part-one" rel="noopener"><span class="series-direction">Previous</span><span class="series-title">Part one: what the partners asked for</span></a>
+<a class="series-link series-next" href="https://example.org/reports/part-three" rel="noopener"><span class="series-direction">Next</span><span class="series-title">Part three: what the network does next</span></a>
+</nav>
+</div>
+</section>
+</div>
+</article>
+<article class="specimen-block" id="specimen-form">
+<h3><code>form</code></h3>
+<p>A one-column form that posts to your endpoint and states what the reader gets.</p>
+<p class="use-when">Use it when a real list is behind it and you can name what it sends.</p>
+<pre>{
+  &quot;form&quot;: {
+    &quot;endpoint&quot;: &quot;https://example.org/subscribe&quot;,
+    &quot;heading&quot;: &quot;Get the next report&quot;,
+    &quot;reason&quot;: &quot;One email a month with the next report and what it found. This specimen sends inline, and the endpoint is a placeholder: a real deployment needs an endpoint that answers with CORS headers, so a send from this page fails.&quot;,
+    &quot;button&quot;: &quot;Subscribe&quot;,
+    &quot;inline&quot;: true
+  }
+}</pre>
+<div class="specimen-render">
+<section class="endmatter endmatter-form screen-only">
+<div class="endmatter-inner">
+<h2 class="endmatter-label">Get the next report</h2>
+<form class="signup" method="post" action="https://example.org/subscribe" data-inline="true" data-success="Thank you. We have your {field}: {value}." data-success-empty="Thank you. We have your reply.">
+<div class="form-summary" tabindex="-1" hidden>
+<p class="form-summary-title">Error: the form is not ready to send.</p>
+<ul></ul>
+</div>
+<p class="form-send-error" role="alert" hidden>Error: the form did not send. Check your connection and try again.</p>
+<div class="form-field">
+<label for="form--email">Email address</label>
+<p class="field-error" id="form--email-error" hidden><span class="error-word">Error:</span> <span class="error-text"></span></p>
+<input class="form-input" id="form--email" name="email" type="email" autocomplete="email" aria-describedby="form--email-error" required data-required-error="enter your email address." data-format-error="enter an email address in the correct format, like name@example.com.">
+</div>
+<div class="form-trap" aria-hidden="true">
+<label for="form--website">Leave this field empty</label>
+<input id="form--website" name="website" type="text" tabindex="-1" autocomplete="off">
+</div>
+<div class="form-actions">
+<button class="button primary" type="submit" data-sending="Sending">Subscribe</button>
+<p class="form-reason">One email a month with the next report and what it found. This specimen sends inline, and the endpoint is a placeholder: a real deployment needs an endpoint that answers with CORS headers, so a send from this page fails.</p>
+</div>
+</form>
+<p class="form-status" role="status" tabindex="-1" hidden></p>
+</div>
+</section>
+</div>
+</article>
+<article class="specimen-block" id="specimen-corrections">
+<h3><code>corrections</code></h3>
+<p>A dated log of what changed after publication.</p>
+<p class="use-when">Use it as soon as you change a published number or a name.</p>
+<pre>{
+  &quot;corrections&quot;: [
+    {
+      &quot;date&quot;: &quot;4 March 2026&quot;,
+      &quot;text&quot;: &quot;An invented entry. Corrected the partner count in the findings from 320 to 330.&quot;
+    },
+    {
+      &quot;date&quot;: &quot;19 March 2026&quot;,
+      &quot;text&quot;: &quot;A second invented entry. Named the county the sample was drawn from.&quot;
+    }
+  ]
+}</pre>
+<div class="specimen-render">
+<section class="endmatter endmatter-corrections">
+<div class="endmatter-inner">
+<h2 class="endmatter-label">Corrections</h2>
+<ul class="corrections">
+<li><span class="correction-date">4 March 2026</span>
+<p class="correction-text">An invented entry. Corrected the partner count in the findings from 320 to 330.</p></li>
+<li><span class="correction-date">19 March 2026</span>
+<p class="correction-text">A second invented entry. Named the county the sample was drawn from.</p></li>
+</ul>
+</div>
+</section>
+</div>
+</article>
+<article class="specimen-block" id="specimen-downloads">
+<h3><code>downloads</code></h3>
+<p>A file list inside the methods band that states the format and the size.</p>
+<p class="use-when">Use it when the reader can check your work against the data.</p>
+<pre>{
+  &quot;downloads&quot;: [
+    {
+      &quot;label&quot;: &quot;Survey responses&quot;,
+      &quot;url&quot;: &quot;https://example.org/data/responses-2026-03.csv&quot;,
+      &quot;format&quot;: &quot;CSV&quot;,
+      &quot;size&quot;: &quot;412 KB&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Method note&quot;,
+      &quot;url&quot;: &quot;https://example.org/data/method-note-2026-03.pdf&quot;,
+      &quot;format&quot;: &quot;PDF&quot;,
+      &quot;size&quot;: &quot;1.2 MB&quot;
+    }
+  ]
+}</pre>
+<div class="specimen-render">
+<div class="downloads">
+<h3>Downloads</h3>
+<ul>
+<li><a href="https://example.org/data/responses-2026-03.csv"><span class="download-label">Survey responses</span><span class="download-meta">CSV, 412 KB</span></a></li>
+<li><a href="https://example.org/data/method-note-2026-03.pdf"><span class="download-label">Method note</span><span class="download-meta">PDF, 1.2 MB</span></a></li>
+</ul>
+</div>
+</div>
+</article>
+</div>
+</section>
+
+<section class="section guide-section" id="wild">
+<div class="section-heading"><span class="eyebrow">In the wild</span><h2><a class="heading-anchor" href="#wild">Six examples built with the kit.</a></h2></div>
+<div class="reading">
+<p>Each page is built by <code>build.py</code> from the JSON file beside it, in one of the four themes, and each one opens from disk. Every sentence, name, number and result on all six is invented for a design showcase. The six links below go to the hosted copies, because the ZIP does not carry the folder.</p>
+<ul class="wild-list">
+<li><a href="https://jamditis.com/ccm-report-template/examples/report.html"><span class="wild-name">Who covers the town?</span><span class="wild-line">A full research report: a county-by-county count of the paid people who cover local government in New Jersey.</span></a></li>
+<li><a href="https://jamditis.com/ccm-report-template/examples/paper.html"><span class="wild-name">Saying so</span><span class="wild-line">A research paper: how 60 invented newsrooms wrote their AI disclosures, and where on the page each notice sat.</span></a></li>
+<li><a href="https://jamditis.com/ccm-report-template/examples/story.html"><span class="wild-name">Ninety days for one record</span><span class="wild-line">A multimedia feature: one public records request from the first email to the last of 212 pages.</span></a></li>
+<li><a href="https://jamditis.com/ccm-report-template/examples/waterfall.html"><span class="wild-name">A matter of scale</span><span class="wild-line">A scrolling waterfall chart with a built-in data editor and JSON and HTML downloads.</span></a></li>
+<li><a href="https://jamditis.com/ccm-report-template/examples/brief.html"><span class="wild-name">Five things the 2026 partner survey found</span><span class="wild-line">A one-page brief: what 214 invented partner newsrooms said they need next.</span></a></li>
+<li><a href="https://jamditis.com/ccm-report-template/examples/explainer.html"><span class="wild-name">How a collaborative reporting project runs</span><span class="wild-line">An explainer: the eight months from the first phone call to publication day.</span></a></li>
+</ul>
+<p><a href="https://jamditis.com/ccm-report-template/examples/">The examples index</a> holds the same six links and the description of each one.</p>
+</div>
+</section>
+
+<section class="section guide-section" id="download">
+<div class="section-heading"><span class="eyebrow">Download</span><h2><a class="heading-anchor" href="#download">Take the kit.</a></h2></div>
+<div class="reading">
+<div class="button-row">
+<a class="button primary" href="template.zip" download>Download template.zip</a>
+<a class="button" href="index.html">Read the sample report</a>
+</div>
+<p>The ZIP holds the whole kit: <code>build.py</code>, <code>package.py</code>, <code>report.json</code>, <code>report.css</code>, <code>report.js</code>, <code>favicon.svg</code>, the <code>fonts/</code> folder with the five faces and their licences, the built <code>index.html</code>, the hosted-asset <code>starter.html</code>, this guide and the template it is built from, <code>README.md</code>, and <code>DESIGN.md</code>. It leaves out the social image, because every published report needs its own.</p>
+<p>Four of those files open from here:</p>
+<ul class="file-list">
+<li><a href="report.json"><code>report.json</code></a> holds the content of the sample report, including the waterfall chart, its data editor, and the end matter.</li>
+<li><a href="starter.html"><code>starter.html</code></a> loads the stylesheet and the script from this folder.</li>
+<li><a href="README.md"><code>README.md</code></a> lists every field and what it accepts.</li>
+<li><a href="DESIGN.md"><code>DESIGN.md</code></a> states the design system and the rules it holds to.</li>
+</ul>
+<p>Every number, name and quotation in the sample report is invented. Replace the content, the notice, the header links and the template link with your own verified work before you publish.</p>
+</div>
+</section>
+
+</main>
+<footer class="site-footer">
+<div class="colophon"><span class="colophon-org">Center for Cooperative Media</span><span>Report template kit</span><span>September 2026</span></div>
+<div class="colophon-links"><a class="footer-url" href="https://jamditis.com/ccm-report-template/guide.html">https://jamditis.com/ccm-report-template/guide.html</a><a class="back-to-top" href="#top">Back to top ↑</a></div>
+</footer>
+<script defer src="report.js"></script>
+<script>
+/* The theme presets, and nothing else. A report carries its five colors in its
+   own JSON file, so no report ships this script: it is here to let a reader of
+   the guide try a theme on the page before they copy it. The button holds the
+   five colors and the color scheme the build read from the paper. */
+(function () {
+  var root = document.documentElement;
+  var keys = ['paper', 'ink', 'accent', 'secondary', 'wash'];
+  var buttons = Array.prototype.slice.call(
+    document.querySelectorAll('.theme-preset'));
+  buttons.forEach(function (button) {
+    button.addEventListener('click', function () {
+      keys.forEach(function (key) {
+        root.style.setProperty('--' + key, button.dataset[key]);
+      });
+      root.style.colorScheme = button.dataset.scheme;
+      buttons.forEach(function (other) {
+        other.setAttribute('aria-pressed', String(other === button));
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>

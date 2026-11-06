@@ -1,0 +1,157 @@
+/* responsive. The stage gives up its column first, at 1000px, because below
+   that the drawing and a readable card cannot share a row. The rest of the
+   page stacks at 760px. */
+
+@media(max-width:1000px) {
+
+  .scrolly {
+    display:block;
+  }
+
+  .stage {
+    top:var(--header);
+    height:var(--band);
+    padding-top:0;
+    background:var(--paper);
+    z-index:var(--z-stage);
+    box-shadow:0 1px 0 var(--rule);
+    margin-inline:calc(var(--gutter) * -1);
+    padding-inline:var(--gutter);
+  }
+
+  /* Card text passes under the band instead of being sliced by it. The edge
+     starts as solid paper so a heading crossing it dims for less of its own
+     height. */
+
+  .stage:after {
+    content:'';
+    position:absolute;
+    top:100%;
+    left:0;
+    right:0;
+    height:var(--band-skirt);
+    background:linear-gradient(var(--paper) 25%,transparent);
+    pointer-events:none;
+  }
+
+  .stage .ink-art,.stage-progress {
+    width:100%;
+  }
+
+  .stage .ink-art {
+    height:calc(100% - var(--s9));
+  }
+
+  .stage figcaption,.stage-progress {
+    margin-top:var(--s3);
+  }
+
+  /* The band sits at the top of the section, so the column needs no lead-in
+     and no tail. One slot is one screen: the card is alone in the frame and
+     the trigger still fires as it appears. */
+
+  .steps {
+    padding-top:0;
+    margin-top:0;
+  }
+
+  /* The card rests in the middle of what the band leaves, not in the middle
+     of the slot, so it is never half under the band. It clears the soft edge
+     as well as the band, so a card at rest is never dimmed by it. */
+
+  .step {
+    min-height:100vh;
+    min-height:100svh;
+    padding-top:calc(var(--header) + var(--band) + var(--band-skirt));
+  }
+
+  /* The card keeps its own width and centers under the band, so a card is one
+     width everywhere and the band above it always overhangs it. */
+
+  .step-card {
+    margin-inline:auto;
+  }
+
+  .methods {
+    grid-template-columns:minmax(0,1fr);
+  }
+
+}
+
+@media(max-width:760px) {
+
+  .hero-top {
+    flex-direction:column;
+    align-items:flex-start;
+    gap:var(--s2);
+  }
+
+  .byline {
+    justify-content:flex-start;
+    text-align:left;
+  }
+
+  .hero-main {
+    grid-template-columns:1fr;
+    gap:var(--s6);
+  }
+
+  .hero-copy {
+    grid-row:1;
+  }
+
+  .step-card {
+    --card-pad:var(--s4);
+  }
+
+  .findings {
+    grid-template-columns:1fr;
+    gap:var(--s6);
+  }
+
+  .site-footer {
+    grid-template-columns:1fr;
+  }
+
+  .colophon-links {
+    align-items:start;
+    text-align:left;
+    margin-top:0;
+  }
+
+}
+
+@media(max-width:420px) {
+
+  /* The report's header drops the name at 760px and the motion label at
+     1000px, where its own links and its section title need the room. This is
+     the guide and the examples index, which carry no links past two, no
+     controls and no title, so they keep the name until the phone band. */
+
+  .brand-name {
+    display:none;
+  }
+
+  .contents nav {
+    left:var(--gutter);
+    right:var(--gutter);
+    width:auto;
+  }
+
+}
+
+/* The reader's own setting is the default, and the motion control is the
+   reader overruling it. Without the .motion-on gate the control would report
+   a state the page does not have. */
+
+@media(prefers-reduced-motion:reduce) {
+
+  :root:not(.motion-on) *,:root:not(.motion-on) *:before,:root:not(.motion-on) *:after {
+    transition-duration:.01ms!important;
+    transition-delay:0s!important;
+    animation-duration:.01ms!important;
+    animation-delay:0s!important;
+  }
+
+}
+

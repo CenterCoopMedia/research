@@ -1,0 +1,112 @@
+/* findings */
+
+.section-findings {
+  border-top:1px solid var(--rule);
+  border-bottom:1px solid var(--rule);
+}
+
+/* Three across, or two when a pair or a set of four would leave a hole. */
+
+.findings {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:var(--s7);
+  width:min(var(--figure),100%);
+  margin-inline:var(--role-inline);
+}
+
+.findings[data-count="1"] {
+  grid-template-columns:1fr;
+}
+
+.findings[data-count="2"],.findings[data-count="4"] {
+  grid-template-columns:repeat(2,1fr);
+}
+
+.findings article {
+  border-top:1px solid var(--rule);
+  padding-top:var(--s4);
+}
+
+/* Every numeral is one line in a box of one height, so a row of statistics
+   sits on a single baseline. */
+
+.finding-value {
+  display:inline-block;
+  font-family:var(--font-display);
+  font-variation-settings:var(--vs-display);
+  font-weight:var(--w-display);
+  font-variant-numeric:var(--num-display);
+  font-size:var(--t4);
+  line-height:var(--lh-numeral);
+  letter-spacing:-.02em;
+  color:var(--accent);
+}
+
+.finding-unit {
+  display:block;
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+  margin-top:var(--s2);
+}
+
+.findings h3 {
+  font-family:var(--font-label);
+  font-weight:600;
+  font-size:var(--t1);
+  line-height:var(--lh-body);
+  margin-top:var(--s5);
+}
+
+.findings p {
+  color:var(--muted);
+  margin-bottom:0;
+}
+
+.finding-note {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  margin-top:var(--s3);
+}
+
+/* The trend beside the numeral. One line, no axis and no frame: the numeral
+   is the value and the line is only its shape. The sentence beside it states
+   the first value, the last value and the count of points, so a reader who
+   cannot see the line still reads the trend. */
+
+.finding-trend {
+  position:relative;
+  display:inline-block;
+  width:var(--s8);
+  height:var(--s5);
+  margin-left:var(--s3);
+}
+
+.sparkline {
+  display:block;
+  width:100%;
+  height:100%;
+  overflow:visible;
+  fill:none;
+  stroke:var(--line);
+  stroke-width:var(--progress-h);
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.sparkline-dot {
+  position:absolute;
+  left:100%;
+  top:var(--y);
+  width:var(--s2);
+  height:var(--s2);
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+  background:var(--accent);
+}
+

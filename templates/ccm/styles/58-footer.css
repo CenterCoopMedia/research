@@ -1,0 +1,66 @@
+/* footer */
+
+/* A colophon: who published it and when on the left, where it lives and what
+   the reader can do with it on the right. */
+
+.site-footer {
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:var(--s5) var(--s7);
+  align-items:start;
+  border-top:1px solid var(--rule);
+  padding-block:var(--bookend);
+  padding-inline:var(--pad-wrapper);
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+}
+
+.colophon,.colophon-links {
+  display:flex;
+  flex-direction:column;
+  gap:var(--s2);
+  min-width:0;
+}
+
+/* Each link carries a 44px hit box, so the column starts high enough to put
+   its first line on the colophon's first line. */
+
+.colophon-links {
+  align-items:end;
+  text-align:right;
+  margin-top:calc(var(--s3) * -1);
+}
+
+.colophon-org {
+  color:var(--ink);
+}
+
+.colophon-links a {
+  display:inline-flex;
+  align-items:center;
+  min-height:var(--tap);
+  max-width:100%;
+  overflow-wrap:anywhere;
+}
+
+
+/* Copy link, Cite and Print sit together under the address, because all three
+   act on the whole report rather than on any one part of it. */
+
+.footer-controls {
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+  gap:var(--s2);
+}
+
+@media(max-width:760px) {
+
+  .footer-controls {
+    justify-content:flex-start;
+  }
+
+}

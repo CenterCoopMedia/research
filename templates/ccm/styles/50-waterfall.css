@@ -1,0 +1,4 @@
+.section-waterfall { padding-inline: 0; }
+.section-waterfall > .section-heading { padding-inline: var(--gutter); }
+.waterfall-host { display: block; }
+.waterfall-fallback { max-width: var(--reading); margin: auto; padding: var(--gutter); }

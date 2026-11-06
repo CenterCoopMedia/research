@@ -1,0 +1,361 @@
+{
+  "title": "What connects a community?",
+  "subtitle": "Local news starts with people. This sample report follows the connections that turn one newsroom's reporting into shared public knowledge.",
+  "organization": "Center for Cooperative Media",
+  "series": "CCM research",
+  "date": "September 2026",
+  "notice": "Design sample. Every number, name and quotation on this page is invented. Nothing here is a research finding.",
+  "url": "https://jamditis.com/ccm-report-template/",
+  "image_url": "https://jamditis.com/ccm-report-template/og-image.png",
+  "template_url": "https://jamditis.com/ccm-report-template/guide.html",
+  "header_links": [
+    {"label": "Guide", "url": "guide.html"},
+    {"label": "Examples", "url": "examples/index.html"}
+  ],
+  "fonts": {
+    "preset": "field"
+  },
+  "layout": "wide",
+  "theme": {
+    "paper": "#f6f3eb",
+    "ink": "#292925",
+    "accent": "#a33e36",
+    "secondary": "#466958",
+    "wash": "#e7e4d9"
+  },
+  "hero_caption": "Individual voices. Shared public knowledge.",
+  "scroll_cue": "Scroll to follow the story ↓",
+  "authors": [
+    {
+      "name": "Rosa Delacroix",
+      "role": "Report editor",
+      "bio": "Invented author. She writes the sample copy that shows what each section of this kit holds.",
+      "url": "https://centerforcooperativemedia.org/"
+    },
+    {
+      "name": "Amos Whitfield",
+      "role": "Data editor",
+      "bio": "Invented author. He made the invented table and the invented figure on this page.",
+      "url": "https://centerforcooperativemedia.org/"
+    }
+  ],
+  "related": [
+    {
+      "title": "Collaborative journalism resources",
+      "url": "https://collaborativejournalism.org/",
+      "description": "The Center's databases, guides and research on newsrooms that report together."
+    },
+    {
+      "title": "The State of Local News project",
+      "url": "https://localnewsinitiative.northwestern.edu/projects/state-of-local-news/",
+      "description": "Medill counts the closures, the mergers and the new outlets across the United States."
+    },
+    {
+      "title": "U.S. Democracy Day",
+      "url": "https://collaborativejournalism.org/democracyday/about/",
+      "description": "A reporting collaboration that runs every year on September 15."
+    }
+  ],
+  "corrections": [
+    {
+      "date": "14 September 2026",
+      "text": "An earlier version of this sample gave the invented table five towns. It gives five counties. The invented total is unchanged."
+    }
+  ],
+  "downloads": [
+    {
+      "label": "Example data table (placeholder file)",
+      "url": "https://jamditis.com/ccm-report-template/examples/placeholder.csv",
+      "format": "CSV",
+      "size": "1 KB"
+    }
+  ],
+  "sections": [
+    {
+      "type": "takeaways",
+      "id": "takeaways",
+      "label": "What to keep",
+      "title": "Keep these three points.",
+      "items": [
+        "One newsroom reaches the people it already serves. Two newsrooms that ask one question reach more of them.",
+        "A shared question needs one editor who holds the schedule and one place to put the work.",
+        "Every number in this sample is invented. Replace each one with a result you can source."
+      ]
+    },
+    {
+      "type": "summary",
+      "id": "brief",
+      "title": "In brief",
+      "text": "This page is the sample report of the CCM report template. It shows each part of a report in the order a reader meets it: the points to keep, the argument, a stage that changes as you scroll, a figure, a table, the results, a chronology, the terms, the method and the sources. The subject is invented. Use the page to judge the shape of a report, not the evidence in it."
+    },
+    {
+      "type": "prose",
+      "id": "introduction",
+      "label": "The question",
+      "title": "A story is only the beginning.",
+      "paragraphs": [
+        "A reporter asks a question. A resident shares what they know. An editor connects the account to a wider story. Each exchange gives information a place to go.",
+        "A newsroom that works alone answers the question for its own readers. A newsroom that shares the question answers it for a region. That is {collaborative reporting}, and it is the subject of this sample.[^1]",
+        {
+          "pullquote": "A newsroom that shares the question answers it for a region."
+        },
+        "This sample follows a small set of imagined newsrooms. Scroll to see the drawing change with the story. The marks are a picture of an idea. They do not measure reach."
+      ],
+      "notes": [
+        "Invented example. The drawing holds the same twelve marks in every layout. The count is a decision about the picture, not a result."
+      ]
+    },
+    {
+      "type": "scrolly",
+      "id": "connections",
+      "label": "Follow the connections",
+      "title": "From one newsroom to a shared network.",
+      "steps": [
+        {
+          "title": "Start with the people doing the work.",
+          "text": "Each mark stands for one imagined newsroom. At first, the marks sit apart. Each newsroom has its own sources, routines, and readers.",
+          "caption": "12 imagined newsrooms, working independently",
+          "layout": "scatter",
+          "highlight": 0
+        },
+        {
+          "title": "Make room for a shared question.",
+          "text": "A common reporting question brings newsrooms into small groups. Partners can compare records, share translation, and identify gaps in coverage.",
+          "caption": "Three groups, each convened by one newsroom",
+          "layout": "groups",
+          "highlight": [0, 4, 8]
+        },
+        {
+          "title": "Build connections that last.",
+          "text": "As partners exchange work, individual projects can become a network. The lines show possible relationships, not measured information flows.",
+          "caption": "A connected network of 12 imagined newsrooms",
+          "layout": "network",
+          "highlight": [0, 4, 8]
+        },
+        {
+          "title": "Keep the community at the center.",
+          "text": "The shared work matters when people can find and use it. A report should explain who benefits, what changes, and what the evidence cannot tell us.",
+          "caption": "Shared work returns to a common public purpose",
+          "layout": "orbit",
+          "highlight": 0
+        }
+      ]
+    },
+    {
+      "type": "waterfall",
+      "id": "audience-scale",
+      "label": "A matter of scale",
+      "title": "The audience beyond the usual circle.",
+      "dataset": {
+        "version": 1,
+        "title": "Program reach, in perspective",
+        "unit": "people",
+        "totalSquares": 2500,
+        "status": "Fictional example · not a measured population",
+        "source": "Entirely invented figures for demonstrating the storytelling template. These are not results from a real program, organization, or community.",
+        "caveat": "The four example groups are mutually exclusive and total 50,000 people. Replace all figures and narration with your own validated data before publication. “Not yet reached” should only be used when the full target population is known.",
+        "summaryHeadline": "The audience you know\nis not the whole audience.",
+        "groups": [
+          {
+            "id": "regular",
+            "label": "Regular participants",
+            "shortLabel": "Regular",
+            "value": 420,
+            "color": "#ec3864",
+            "headline": "The people\nyou know best.",
+            "description": "The regulars: {value} {unit}. They are highly visible, but occupy only {tiles} squares in this fictional population."
+          },
+          {
+            "id": "occasional",
+            "label": "Occasional participants",
+            "shortLabel": "Occasional",
+            "value": 1680,
+            "color": "#e7bb27",
+            "headline": "A wider\ncircle.",
+            "description": "Add the occasional participants. The picture grows, but the people actively involved are still a small group."
+          },
+          {
+            "id": "aware",
+            "label": "Reached, not participating",
+            "shortLabel": "Reached",
+            "value": 7900,
+            "color": "#00b982",
+            "headline": "Awareness\nis not engagement.",
+            "description": "These people have been reached by the fictional program but do not participate. A different relationship, and a bigger band."
+          },
+          {
+            "id": "unreached",
+            "label": "Not yet reached",
+            "shortLabel": "Not reached",
+            "value": 40000,
+            "color": "#3e4740",
+            "headline": "Beyond\nthe usual circle.",
+            "description": "The largest group: people the fictional program has not yet reached. This is what a participant-only view would leave out."
+          }
+        ]
+      }
+    },
+    {
+      "type": "figure",
+      "id": "figure-partners",
+      "label": "Example figure",
+      "title": "The invented partner count rose in each year of the set.",
+      "chart": {
+        "kind": "bar",
+        "unit": "newsrooms",
+        "value_format": "integer",
+        "sort": false,
+        "bars": [
+          {"label": "2023", "value": 18},
+          {"label": "2024", "value": 24},
+          {"label": "2025", "value": 31},
+          {"label": "2026", "value": 42}
+        ]
+      },
+      "caption": "The invented count rose by 24 newsrooms across the four years. Every value here is invented for this sample.",
+      "source": {
+        "label": "Invented for this sample",
+        "url": "https://centerforcooperativemedia.org/"
+      }
+    },
+    {
+      "type": "table",
+      "id": "table-counties",
+      "label": "Example table",
+      "title": "Invented partners and shared stories, by county",
+      "caption": "Every value in this table is invented. Select a column head to sort the table.",
+      "columns": [
+        {"label": "County", "type": "text"},
+        {"label": "Partner newsrooms", "type": "number"},
+        {"label": "Shared stories", "type": "number"}
+      ],
+      "rows": [
+        ["Essex", 11, 34],
+        ["Hudson", 8, 27],
+        ["Passaic", 6, 19],
+        ["Bergen", 9, 22],
+        ["Union", 8, 15]
+      ]
+    },
+    {
+      "type": "findings",
+      "id": "findings",
+      "label": "Example findings",
+      "title": "Give the evidence space.",
+      "items": [
+        {
+          "value": "42",
+          "title": "Partner newsrooms",
+          "text": "An invented count. Replace it with a verified result and name the source beside it.",
+          "unit": "newsrooms",
+          "note": "Invented count for 2023 to 2026.",
+          "trend": [18, 24, 31, 42]
+        },
+        {
+          "value": "117",
+          "title": "Shared stories",
+          "text": "State what the number counts and the period it covers. A story counts once, whatever the number of newsrooms that ran it.",
+          "unit": "stories",
+          "note": "Invented count for the same four years.",
+          "trend": [21, 34, 45, 117]
+        },
+        {
+          "value": "5",
+          "title": "Counties reached",
+          "text": "Use one short sentence to connect the number to the question the report asks.",
+          "unit": "counties",
+          "note": "Invented count, from the table above.",
+          "trend": [2, 3, 4, 5]
+        }
+      ]
+    },
+    {
+      "type": "timeline",
+      "id": "chronology",
+      "label": "Example chronology",
+      "title": "How the invented work moved.",
+      "events": [
+        {
+          "date": "March 2023",
+          "title": "Four newsrooms agree on one question",
+          "text": "Invented event. The partners write the question down and name one editor to hold the schedule."
+        },
+        {
+          "date": "November 2023",
+          "title": "The first shared story runs",
+          "text": "Invented event. Each partner publishes the story on the same day, in its own voice."
+        },
+        {
+          "date": "June 2025",
+          "title": "The group adds a translation desk",
+          "text": "Invented event. Two partners share the cost of one translator, so the reporting reaches readers in three languages."
+        },
+        {
+          "date": "September 2026",
+          "title": "The partners report on the result",
+          "text": "Invented event. The group publishes what changed, what did not, and what the evidence cannot show."
+        }
+      ]
+    },
+    {
+      "type": "prose",
+      "id": "implications",
+      "label": "What comes next",
+      "title": "Leave the reader with a clear next step.",
+      "paragraphs": [
+        "Explain what the results mean for the people who can act on them. Connect each recommendation to evidence in the report, and say who has to do the work.",
+        "A group that shares a question can also share the parts that cost the most. A {shared beat} spreads the cost of one reporter. A {news commons} gives the group one place to plan. An agreement for {content sharing} puts the finished work in front of more readers.",
+        "Use the method note to say how you gathered the evidence. Name the limits, so a reader can judge what the report supports and what it does not."
+      ]
+    },
+    {
+      "type": "glossary",
+      "id": "terms",
+      "title": "Terms used in this report",
+      "terms": [
+        {
+          "term": "collaborative reporting",
+          "definition": "Two or more newsrooms that report one story together. Each one publishes the work in its own voice."
+        },
+        {
+          "term": "shared beat",
+          "definition": "One reporter who covers a subject for several newsrooms at once. The newsrooms share the cost and publish the same reporting."
+        },
+        {
+          "term": "news commons",
+          "definition": "A network that gives the newsrooms of one region a place to plan, to train and to share what they make."
+        },
+        {
+          "term": "content sharing",
+          "definition": "An agreement that lets a partner republish another partner's story, with credit, at no cost."
+        }
+      ]
+    },
+    {
+      "type": "quote",
+      "id": "perspective",
+      "text": "A useful report lets the reader see the evidence, follow the reasoning, and ask a better question.",
+      "attribution": "Template editorial principle"
+    },
+    {
+      "type": "methods",
+      "id": "methods",
+      "title": "Methods and sources",
+      "brief": "Nothing on this page was measured. The numbers, the names and the marks show the shape of a report. Replace this lead with two sentences on what you counted and how you counted it.",
+      "paragraphs": [
+        "This page is a sample of the report template. It holds no survey results, no interview evidence and no measured network data. The counties are real, and every value beside them is invented.",
+        "Replace this note with the study period, the sample, the method, the limits, the funding and the disclosures. Say what the evidence cannot show, in the same plain words as the rest of the report."
+      ],
+      "sources": [
+        {
+          "label": "Center for Cooperative Media",
+          "url": "https://centerforcooperativemedia.org/"
+        },
+        {
+          "label": "Montclair State University",
+          "url": "https://www.montclair.edu/"
+        }
+      ]
+    }
+  ]
+}

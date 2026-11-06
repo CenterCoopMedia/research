@@ -1,0 +1,52 @@
+/* takeaways */
+
+/* A hairline opens the block and the wash holds it. No border on the other
+   three sides, no radius and no shadow: a card here would compete with the
+   findings grid, which is the one block on the page that carries a numeral. */
+
+.takeaways {
+  margin:0;
+  padding:var(--s5);
+  padding-inline-start:calc(var(--s5) + var(--s5));
+  background:var(--wash);
+  border-top:1px solid var(--rule);
+  --muted:color-mix(in oklab,var(--ink) 66%,var(--wash));
+}
+
+.takeaways li {
+  margin-bottom:var(--s4);
+}
+
+.takeaways li:last-child {
+  margin-bottom:0;
+}
+
+/* The marker is the theme's accent, which is where every other small numeral
+   and rule on the page comes from. It is a list marker and not an icon. */
+
+.takeaways li::marker {
+  color:var(--accent);
+}
+
+@media(max-width:760px) {
+
+  .takeaways {
+    padding:var(--s4);
+    padding-inline-start:var(--s6);
+  }
+
+}
+
+/* Paper has no tint, so the block keeps its shape from the rules alone and
+   starts at the page margin like every other block. */
+
+@media print {
+
+  .takeaways {
+    padding:var(--s3) 0 var(--s3) var(--s5);
+    background:none;
+    border-bottom:1px solid var(--rule);
+    break-inside:avoid;
+  }
+
+}

@@ -1,0 +1,275 @@
+/* print. Paper is white, ink is black, and everything that only makes sense on
+   a screen goes away: the grain, the sticky frames, the shadows, the card
+   fills and the controls. The scrolly cannot scroll on paper, so it prints as
+   small multiples with the captions under the states. */
+
+@media print {
+
+  :root {
+    /* Paper is white here whatever the theme is, so the sheet asks for a light
+       scheme as well. A dark theme keeps the dark scheme its own theme block
+       states, and a printer with background graphics on then paints the canvas
+       black around a white content box. */
+    color-scheme:light;
+    /* Every band on paper starts at the page margin, so the role widths take a
+       start margin of zero rather than the auto that centres them on a screen.
+       A sheet is normally narrower than the widest role, which made the two
+       values look the same; a landscape or an oversize sheet is not, and the
+       wide layout only printed at the margin because its own screen band set
+       this token. The paper states it for both layouts now. */
+    --role-inline:0;
+    --paper:#fff;
+    --ink:#000;
+    --wash:#fff;
+    --rule:color-mix(in oklab,var(--ink) 30%,var(--paper));
+    --shadow-card:none;
+    --shadow-header:none;
+    --shadow-panel:none;
+  }
+
+  body {
+    background:var(--paper);
+    color:var(--ink);
+    font-size:11pt;
+    line-height:1.5;
+  }
+
+  /* The stage goes whole: the print figure carries the drawing and the
+     captions, so nothing prints twice. Everything else that makes sense on a
+     screen only carries the screen-only class, so a component states what it
+     hides on its own markup and no selector list grows here. */
+
+  body:before,.steps:after,.screen-only {
+    display:none!important;
+  }
+
+  /* report.js marks a scrolly section print-ready once its small multiples
+     exist. Scripts off, or a section whose copies could not be built, keeps
+     this rule from matching, so the fallback stage and its static captions
+     stay on the printed page instead of both being lost. */
+
+  .print-ready .stage,.print-ready .step-card .static-caption {
+    display:none!important;
+  }
+
+  p {
+    orphans:2;
+    widows:2;
+  }
+
+  .eyebrow,h2,h3 {
+    break-after:avoid;
+  }
+
+  /* The header keeps the brand and hands the title to the cover under it. */
+
+  .site-header {
+    position:static;
+    min-height:0;
+    padding:0 0 var(--s3);
+    border-bottom:1px solid var(--rule);
+  }
+
+  /* A label and the heading it belongs to never land on separate sheets. */
+
+  .section-heading {
+    break-inside:avoid;
+    break-after:avoid;
+  }
+
+  .hero {
+    min-height:0;
+    padding:var(--s5) 0;
+    gap:var(--s5);
+  }
+
+  .hero h1 {
+    font-size:24pt;
+  }
+
+  .hero .ink-art {
+    max-height:60mm;
+  }
+
+  /* A printed page is narrower than the browser window that laid the cover
+     out, so the deck needs the same measure the body has. */
+
+  .standfirst {
+    max-width:var(--reading-print);
+  }
+
+  .section {
+    padding:var(--s5) 0;
+    break-inside:auto;
+  }
+
+  /* The wide layout is a screen layout and its own band states so, with the
+     screen media type in front of the width, so no rule of the rail reaches
+     paper at any sheet size and nothing here has to undo one. The three rules
+     that stood here for a wide sheet said the same thing the rules above and
+     in 50-endmatter.css already say: every band starts at the page margin. */
+
+  .section h2 {
+    font-size:17pt;
+  }
+
+  .section h3 {
+    font-size:12pt;
+  }
+
+  /* Measure on paper. The column is set in em so it follows the printed body
+     size, and 27em is what holds this serif under 68 characters a line. */
+
+  .reading,.section-heading {
+    max-width:var(--reading-print);
+    width:auto;
+    margin-inline:0;
+  }
+
+  /* On paper every section starts at the page margin. A centered column would
+     leave a third of the sheet empty down the left side. */
+
+  blockquote,.step-card {
+    margin-inline:0;
+  }
+
+  .methods {
+    display:block;
+  }
+
+  .section-methods ol {
+    margin-top:var(--s5);
+  }
+
+  .scrolly {
+    display:block;
+  }
+
+  .steps {
+    padding-top:0;
+    margin-top:0;
+  }
+
+  .step {
+    min-height:0;
+    padding:0 0 var(--s4);
+    break-inside:avoid;
+  }
+
+  /* A step opens with a hairline, like a finding does, and starts at the
+     page margin. An indent would make these four blocks the only content on
+     the sheet with a left edge of their own. */
+
+  .step-card {
+    width:auto;
+    max-width:var(--reading-print);
+    margin:0;
+    padding:var(--s3) 0 0;
+    background:none;
+    border:0;
+    border-top:1px solid var(--rule);
+    border-radius:0;
+    box-shadow:none;
+  }
+
+  /* The four states sit in a row above the four step texts. Their animation
+     never runs inside a hidden container, so the lines are drawn outright. */
+
+  /* Two by two, not four across: at a quarter of the text block a state is
+     too small to read and the word inside the ring disappears. */
+
+  .print-figure {
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:var(--s5) var(--s6);
+    margin-bottom:var(--s6);
+  }
+
+  /* The grid itself no longer avoids a break: a long report's small
+     multiples have to split across pages. Each figure still avoids one, so
+     a state and its caption are never cut in half. */
+
+  .print-figure figure {
+    margin:0;
+    break-inside:avoid;
+  }
+
+  .print-figure .ink-art {
+    width:100%;
+  }
+
+  /* State colors must stay legible on white paper in every preset. */
+  .scrolly .ink-art[data-state] .mark,
+  .scrolly .ink-art[data-state] .connections,
+  .scrolly .ink-art .center-ring {
+    stroke:var(--ink);
+  }
+
+  .scrolly .ink-art .center-label {
+    fill:var(--ink);
+  }
+
+  .print-figure .connections path {
+    animation:none;
+    stroke-dasharray:none;
+  }
+
+  .print-figure figcaption {
+    font-family:var(--font-label);
+    font-size:8pt;
+    line-height:var(--lh-label);
+    color:var(--muted);
+    margin-top:var(--s2);
+  }
+
+  /* Paper is narrower than the screen the grid was written for, so the row
+     packs itself from the space it has instead of collapsing to one column. */
+
+  .findings {
+    grid-template-columns:repeat(auto-fit,minmax(38mm,1fr));
+    gap:var(--s5);
+    break-inside:avoid;
+  }
+
+  .findings article {
+    break-inside:avoid;
+  }
+
+  .finding-value {
+    font-size:30pt;
+  }
+
+  .section-quote {
+    break-inside:avoid;
+  }
+
+  blockquote p {
+    font-size:16pt;
+  }
+
+  .notice {
+    padding-inline:0;
+    background:none;
+  }
+
+  .site-footer {
+    padding:var(--s5) 0 0;
+    grid-template-columns:1fr;
+    gap:var(--s2);
+  }
+
+  .colophon-links {
+    align-items:start;
+    text-align:left;
+    margin-top:0;
+  }
+
+  .colophon-links a {
+    min-height:0;
+  }
+
+  @page {
+    margin:18mm 26mm;
+  }
+
+}

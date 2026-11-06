@@ -1,0 +1,174 @@
+/* image, and the caption every media component shares */
+
+/* One figure carries every picture in the kit: the image, the two pictures a
+   comparison holds, the strip of a gallery and the drawing of a diagram. The
+   caption rules below are shared for the same reason a caption reads the same
+   wherever it sits. */
+
+.media-figure {
+  margin:0;
+}
+
+.media-on-reading {
+  width:var(--col);
+  margin-inline:var(--role-inline);
+}
+
+.media-on-figure {
+  width:min(var(--figure),100%);
+  margin-inline:var(--role-inline);
+}
+
+/* A bleed picture reaches the paper's own edge, so it gives back the gutter
+   the section pads it by. Its caption keeps the gutter, because a caption is
+   text and text stays on the grid. */
+
+.media-on-bleed {
+  margin-inline:calc(var(--gutter) * -1);
+}
+
+.media-on-bleed .media-caption {
+  padding-inline:var(--gutter);
+}
+
+.media-figure img {
+  display:block;
+  width:100%;
+  height:auto;
+}
+
+.media-caption {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+  margin-top:var(--s3);
+  margin-bottom:0;
+}
+
+/* The credit is last and on a line of its own: the reader wants the picture
+   explained before they are told who made it. */
+
+.media-credit {
+  display:block;
+  margin-top:var(--s1);
+}
+
+/* The trigger is the picture. Scripts off it is a link to the file; with
+   scripting the script makes it a button that opens the dialog. It carries
+   no chrome but the one edge that says it is a control, and the cursor,
+   which is the whole hover state: the two hover patterns the system has are
+   an underline and a wash fill, and a picture can show neither. */
+
+.lightbox-open {
+  display:block;
+  width:100%;
+  padding:0;
+  border:1px solid var(--rule-strong);
+  background:none;
+  cursor:zoom-in;
+}
+
+/* The dialog is native, so the browser holds focus inside it, closes it on
+   Escape and paints the backdrop. It is the one thing in this family that
+   moves: it rises by --rise-enter as it arrives. */
+
+.lightbox {
+  gap:var(--s3);
+  justify-items:end;
+  max-width:min(var(--overlay-w),var(--wrapper));
+  max-height:var(--overlay-h);
+  padding:var(--s4);
+  border:1px solid var(--card-border);
+  border-radius:var(--radius-card);
+  background:var(--paper);
+  color:var(--ink);
+  box-shadow:var(--shadow-panel);
+  opacity:0;
+  transform:translateY(var(--rise-enter));
+  transition:opacity var(--dur-enter) var(--ease),transform var(--dur-enter) var(--ease),overlay var(--dur-enter) allow-discrete,display var(--dur-enter) allow-discrete;
+}
+
+/* The grid is on the open dialog alone. On the dialog itself it would beat
+   the browser's own rule for a closed dialog, and a shut lightbox would stay
+   on the page as an invisible box that takes every click meant for the text
+   under it. */
+
+/* The dialog states its own width. A <dialog> is shrink to fit, so without one
+   it takes the picture's intrinsic size: a drawing authored at 560px opened at
+   560px in the overlay after filling 1090px on the page, which is a lightbox
+   that makes the picture smaller. */
+
+.lightbox[open] {
+  display:grid;
+  width:min(var(--overlay-w),var(--wrapper));
+  opacity:1;
+  transform:none;
+}
+
+@starting-style {
+
+  .lightbox[open] {
+    opacity:0;
+    transform:translateY(var(--rise-enter));
+  }
+
+}
+
+.lightbox::backdrop {
+  background:var(--scrim);
+}
+
+/* The picture fills the width the dialog has and keeps its shape. object-fit
+   holds the aspect ratio when the height is what runs out first, so a tall
+   picture sits in the middle of the row rather than being stretched across it.
+   --s10 is the room the close button and the dialog's own padding take. */
+
+.lightbox-image {
+  justify-self:center;
+  width:100%;
+  height:auto;
+  max-height:calc(var(--overlay-h) - var(--s10));
+  object-fit:contain;
+}
+
+@media(max-width:760px) {
+
+  .lightbox {
+    padding:var(--s3);
+  }
+
+}
+
+@media print {
+
+  /* A picture on the reading column keeps the printed measure. A picture on
+     the figure column fills the text block, the way the findings row does.
+     A bleed picture comes back to the page margin, because paper has no
+     bleed to reach. */
+
+  .media-on-reading {
+    max-width:var(--reading-print);
+    width:auto;
+    margin-inline:0;
+  }
+
+  .media-on-figure,.media-on-bleed {
+    width:auto;
+    margin-inline:0;
+  }
+
+  .media-on-bleed .media-caption {
+    padding-inline:0;
+  }
+
+  .media-figure {
+    break-inside:avoid;
+  }
+
+  .lightbox-open {
+    border:0;
+  }
+
+}

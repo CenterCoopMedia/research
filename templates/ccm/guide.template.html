@@ -1,0 +1,854 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CCM report template | {{organization}}</title>
+<meta name="description" content="Build a scrolling report from one JSON file. Download the kit, read the sample report, and see the section types, the palette, and the type it ships with.">
+<link rel="canonical" href="{{guide_url}}">
+<meta property="og:title" content="CCM report template | {{organization}}">
+<meta property="og:description" content="Build a scrolling report from one JSON file. Download the kit, read the sample report, and see the section types, the palette, and the type it ships with.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="{{guide_url}}">
+<meta property="og:image" content="{{image_url}}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CCM report template | {{organization}}">
+<meta name="twitter:description" content="Build a scrolling report from one JSON file. Download the kit, read the sample report, and see the section types, the palette, and the type it ships with.">
+<meta name="twitter:image" content="{{image_url}}">
+<meta name="theme-color" content="{{theme_color}}">
+{{icon}}
+{{theme_block}}
+<link rel="stylesheet" href="report.css">
+{{font_block}}
+<style>
+/* Guide-only layout. Everything else is report.css and report.js, linked
+   beside this page, and the five theme colors are set above that link the way
+   build.py sets them for a hosted export. */
+
+.guide-head {
+  padding-inline:var(--pad-wrapper);
+  padding-block:var(--bookend) var(--s7);
+}
+
+.guide-head h1 {
+  margin-bottom:var(--s5);
+}
+
+.guide-head .standfirst {
+  margin-bottom:0;
+}
+
+/* Theme presets. Four of the kit's own controls, each holding a theme's five
+   colors as five stripes and the name of the theme. The one the page is
+   showing takes the same --rule-mark accent rule the open tab and the current
+   contents row take, and it takes full ink while the rest step back, so the
+   state is a weight and a rule rather than a color alone. */
+
+.theme-presets {
+  display:flex;
+  flex-wrap:wrap;
+  gap:var(--s3);
+  margin-top:var(--s5);
+}
+
+.theme-preset {
+  color:var(--muted);
+}
+
+.theme-preset[aria-pressed="true"] {
+  color:var(--ink);
+  box-shadow:inset var(--rule-mark) 0 0 var(--accent);
+}
+
+.preset-stripes {
+  display:flex;
+  flex:none;
+  width:var(--s6);
+  height:var(--s5);
+  border:1px solid var(--rule-strong);
+  border-radius:var(--radius-control);
+  overflow:hidden;
+}
+
+.preset-stripe {
+  flex:1;
+}
+
+.preset-note {
+  margin-top:var(--s4);
+  margin-bottom:0;
+  width:min(var(--reading),100%);
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+}
+
+/* The mark specimen carries its ink as an attribute, so that it is still
+   right in a file opened on its own. The rule is what follows the token when
+   a preset changes it. */
+
+.mark-art .marks {
+  stroke:var(--ink);
+}
+
+/* The cover drawing at figure width, uncapped: on the report it has a cover
+   to share, here it is the specimen. */
+
+.guide-art {
+  width:min(var(--figure),100%);
+  margin-inline:auto;
+}
+
+.guide-art .ink-art {
+  width:100%;
+  max-height:none;
+}
+
+.guide-section > .reading + .reading {
+  margin-top:var(--s7);
+}
+
+/* steps */
+
+.guide-steps {
+  list-style:none;
+  margin:0;
+  padding:0;
+  counter-reset:guide-step;
+}
+
+.guide-steps li {
+  counter-increment:guide-step;
+  display:grid;
+  grid-template-columns:var(--s6) 1fr;
+  gap:0 var(--s3);
+  padding-block:var(--s5);
+  border-top:1px solid var(--rule);
+}
+
+/* Every child of a step goes in the text column; only the numeral sits in
+   the first one. */
+
+.guide-steps li > * {
+  grid-column:2;
+}
+
+.guide-steps li:before {
+  grid-column:1;
+  content:counter(guide-step,decimal);
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-body);
+  letter-spacing:var(--track-label);
+  font-variant-numeric:tabular-nums;
+  color:var(--accent);
+}
+
+.guide-steps p {
+  margin-bottom:0;
+}
+
+.guide-steps p + pre {
+  margin-top:var(--s3);
+}
+
+pre + p {
+  margin-top:var(--s5);
+}
+
+/* code. Long commands wrap instead of scrolling, so nothing runs off a
+   narrow screen. */
+
+pre {
+  margin:0;
+  padding:var(--s4);
+  background:var(--wash);
+  border:1px solid var(--rule);
+  border-radius:var(--radius-card);
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
+
+/* A command has to be transcribed exactly, so code is the one place the kit
+   sets a third face. Nothing in a report uses it. */
+
+pre,code {
+  font-family:var(--font-code);
+  font-size:var(--t0);
+  line-height:var(--lh-label);
+}
+
+code {
+  font-size:.9em;
+}
+
+/* specimens. Each block states what the type does, the JSON it is built
+   from, and the section that JSON makes. A heading takes the width of the
+   block it opens, so the two sections whose block is --figure wide take that
+   width for their heading as well. */
+
+#kit .section-heading,#specimens .section-heading {
+  width:min(var(--figure),100%);
+}
+
+.specimen-list {
+  width:min(var(--figure),100%);
+  margin-inline:auto;
+}
+
+/* The index. One entry for each specimen, in columns, so a long list is a few
+   lines of the page rather than a screen of it. */
+
+.specimen-nav {
+  border-top:1px solid var(--rule);
+  padding-top:var(--s5);
+  margin-bottom:var(--s8);
+}
+
+.specimen-nav p {
+  color:var(--muted);
+}
+
+.specimen-index {
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:0 var(--s5);
+}
+
+/* The row is --tap tall, so the hit box behind each link fills its own row and
+   never reaches the row above or the row below it. */
+
+.specimen-index a,.file-list a {
+  display:flex;
+  align-items:center;
+  min-height:var(--tap);
+  text-decoration:none;
+}
+
+/* The name is the link, so the name carries the kit's own link treatment. */
+
+.specimen-index a code,.file-list a code {
+  text-decoration:underline;
+  text-decoration-color:var(--rule-strong);
+  transition:text-decoration-color var(--dur-hover) var(--ease);
+}
+
+.specimen-index a:hover code,.file-list a:hover code {
+  text-decoration-color:var(--accent);
+}
+
+/* The type and the layout specimens. Both read like the component specimens
+   under them: the name, the sentence that says when to use it, the JSON a
+   reader copies, and what that JSON makes. The type specimen carries the
+   preset's tokens in its own style attribute, so four presets show on one page
+   without four pages; the layout specimen carries the layout name on a wrapper
+   rather than on <body>, for the same reason. */
+
+.type-block,.layout-block {
+  border-top:1px solid var(--rule);
+  padding-top:var(--s5);
+  margin-bottom:var(--s8);
+  width:min(var(--figure),100%);
+  margin-inline:var(--role-inline);
+}
+
+.type-block > h3,.layout-block > h3 {
+  margin-bottom:var(--s2);
+}
+
+.type-block > .use-when,.layout-block > .use-when {
+  color:var(--muted);
+}
+
+.type-block pre,.layout-block pre {
+  margin-top:var(--s4);
+}
+
+.type-render {
+  font-family:var(--font-body);
+  font-variation-settings:var(--vs-body);
+  border-top:1px solid var(--rule);
+  padding-top:var(--s5);
+  margin-top:var(--s5);
+  width:var(--col);
+}
+
+.type-title {
+  font-family:var(--font-display);
+  font-variation-settings:var(--vs-display);
+  font-weight:var(--w-display);
+  font-size:var(--t3);
+  line-height:var(--lh-display);
+  margin-bottom:var(--s4);
+}
+
+.type-numerals {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:baseline;
+  gap:var(--s6);
+  margin-bottom:0;
+}
+
+/* The page inside the page. The border is the paper's edge, so a reader can
+   see where the gutter, the column and the rail sit inside it. */
+
+.layout-render {
+  border:1px solid var(--rule);
+  margin-top:var(--s5);
+  overflow:hidden;
+}
+
+.layout-render .section:first-child {
+  padding-block-start:var(--s6);
+}
+
+.specimen-block {
+  border-top:1px solid var(--rule);
+  padding-top:var(--s5);
+  margin-bottom:var(--s8);
+}
+
+.specimen-block > h3 {
+  margin-bottom:var(--s2);
+}
+
+.specimen-block > .use-when {
+  color:var(--muted);
+}
+
+.specimen-block pre {
+  margin-top:var(--s4);
+}
+
+/* A specimen sits inside a section that already holds the gutter, so the
+   section it renders gives its own back. */
+
+.specimen-render .section {
+  padding-inline:0;
+  padding-block:var(--s5) 0;
+}
+
+/* The scrolly specimen. Its live pinned mechanic needs four screens of
+   scroll room to read, which the sample report earns with the argument
+   around it and this list of 26 specimens cannot spare: dropped in whole it
+   is a long stretch of blank paper with one small card in it. report.js
+   already clones the stage once per step for print, laid out by the same
+   function the live stage uses; the guide shows those same clones on screen
+   instead of only on paper, as a row, and hides the pinned stage and the
+   step column behind them. */
+
+#specimen-scrolly .scrolly {
+  display:block;
+}
+
+/* report.js marks a scrolly section print-ready once its small multiples
+   exist, the same class 99-print.css keys its own fallback rule on. Scripts
+   off, or a scene whose copies could not be built, leaves this rule from
+   matching, so the server-rendered stage and step cards stay the specimen
+   instead of both being hidden behind an empty .print-figure. */
+
+#specimen-scrolly .scrolly.print-ready .stage,#specimen-scrolly .scrolly.print-ready .steps {
+  display:none;
+}
+
+#specimen-scrolly .print-figure {
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:var(--s5) var(--s6);
+}
+
+#specimen-scrolly .print-figure figure {
+  flex:1 1 200px;
+  max-width:280px;
+  min-width:0;
+  margin:0;
+}
+
+#specimen-scrolly .print-figure .ink-art {
+  width:100%;
+}
+
+#specimen-scrolly .print-figure figcaption {
+  margin-top:var(--s2);
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  color:var(--muted);
+}
+
+#specimen-scrolly .specimen-note {
+  margin-top:var(--s5);
+  color:var(--muted);
+}
+
+/* specimens */
+
+.specimens {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));
+  gap:var(--s7);
+  width:min(var(--figure),100%);
+  margin-inline:auto;
+}
+
+.specimen {
+  border-top:1px solid var(--rule);
+  padding-top:var(--s4);
+}
+
+.specimen p {
+  color:var(--muted);
+  margin-bottom:0;
+}
+
+/* Three marks to a row at every width: the caption wraps under its own
+   mark instead of setting the figure's width. */
+
+.mark-row {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:var(--s4);
+  margin-bottom:var(--s5);
+}
+
+.mark-row figure {
+  margin:0;
+  min-width:0;
+}
+
+.mark-art {
+  display:block;
+  width:100%;
+  max-width:80px;
+  height:auto;
+}
+
+.mark-row figcaption,.swatch-role,.type-note {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+}
+
+.mark-row figcaption {
+  margin-top:var(--s2);
+}
+
+.palette {
+  list-style:none;
+  margin:0 0 var(--s5);
+  padding:0;
+}
+
+.palette li {
+  display:grid;
+  grid-template-columns:auto 1fr;
+  column-gap:var(--s3);
+  row-gap:var(--s1);
+  padding-block:var(--s3);
+  border-top:1px solid var(--rule);
+}
+
+.palette li:first-child {
+  border-top:0;
+  padding-top:0;
+}
+
+/* The edge is the stronger rule, not the card border: a paper swatch on paper
+   showed as almost nothing at 1.85:1, and the edge is what makes it a swatch. */
+
+.swatch {
+  grid-row:1 / 3;
+  width:var(--s6);
+  height:var(--s6);
+  border:1px solid var(--rule-strong);
+  border-radius:var(--radius-control);
+}
+
+.swatch-name {
+  font-family:var(--font-label);
+  font-size:var(--t0);
+  line-height:var(--lh-label);
+  align-self:end;
+}
+
+.type-line {
+  margin-bottom:var(--s3);
+  font-size:var(--t2);
+  line-height:var(--lh-subhead);
+}
+
+.type-display {
+  font-family:var(--font-display);
+  font-variation-settings:var(--vs-display);
+  font-weight:var(--w-display);
+}
+
+.type-body {
+  font-family:var(--font-body);
+  font-variation-settings:var(--vs-body);
+}
+
+.type-note {
+  display:block;
+  margin-bottom:var(--s5);
+}
+
+/* table */
+
+.table-wrap {
+  overflow-x:auto;
+  margin-block:var(--s6);
+}
+
+table {
+  width:100%;
+  border-collapse:collapse;
+  text-align:left;
+}
+
+th,td {
+  border-top:1px solid var(--rule);
+  padding:var(--s3) var(--s4) var(--s3) 0;
+  vertical-align:top;
+}
+
+th {
+  font-family:var(--font-label);
+  font-weight:400;
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+  border-top:0;
+}
+
+td:first-child {
+  font-family:var(--font-label);
+  font-size:var(--t0);
+  white-space:nowrap;
+}
+
+td:last-child {
+  padding-right:0;
+}
+
+tbody tr:last-child td {
+  border-bottom:1px solid var(--rule);
+}
+
+/* downloads */
+
+.button-row {
+  display:flex;
+  flex-wrap:wrap;
+  gap:var(--s3);
+  margin-bottom:var(--s5);
+}
+
+/* The showcase rows are the same shape as a file row, with the report's own
+   title in place of a file name and its line under it. The whole row is the
+   link, so no hit box reaches into the row above or below. */
+
+.wild-list {
+  list-style:none;
+  margin:0 0 var(--s5);
+  padding:0;
+}
+
+.wild-list li {
+  border-top:1px solid var(--rule);
+}
+
+.wild-list li:last-child {
+  border-bottom:1px solid var(--rule);
+}
+
+.wild-list a {
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:var(--s1);
+  min-height:var(--tap);
+  padding-block:var(--s3);
+  text-decoration:none;
+}
+
+.wild-name {
+  text-decoration:underline;
+  text-decoration-color:var(--rule-strong);
+  transition:text-decoration-color var(--dur-hover) var(--ease);
+}
+
+.wild-list a:hover .wild-name {
+  text-decoration-color:var(--accent);
+}
+
+.wild-line {
+  font-family:var(--font-label);
+  font-size:var(--t-1);
+  line-height:var(--lh-label);
+  letter-spacing:var(--track-label);
+  color:var(--muted);
+}
+
+/* A file link is a row of its own, so the whole row is the target and no hit
+   box reaches into the line above or the line below it. An inline link in a
+   paragraph gets no such box: it would take clicks from the prose around it. */
+
+.file-list {
+  list-style:none;
+  margin:0 0 var(--s5);
+  padding:0;
+}
+
+.file-list li {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:0 var(--s2);
+  min-height:var(--tap);
+  border-top:1px solid var(--rule);
+}
+
+.file-list li:last-child {
+  border-bottom:1px solid var(--rule);
+}
+
+/* Text links take the report's own link treatment. Buttons are not text
+   links and keep theirs. */
+
+.guide-section p a {
+  text-decoration:underline;
+  text-decoration-color:var(--rule-strong);
+  transition:text-decoration-color var(--dur-hover) var(--ease);
+}
+
+.guide-section p a:hover {
+  text-decoration-color:var(--accent);
+}
+
+@media(max-width:760px) {
+
+  .guide-head {
+    padding-block:var(--s7);
+  }
+
+}
+
+@media print {
+
+  .site-header,.button-row,.skip-link,.back-to-top {
+    display:none!important;
+  }
+
+}
+</style>
+</head>
+<body data-layout="reading">
+<a class="skip-link" href="#main">Skip to the guide</a>
+<header class="site-header">
+<a class="brand" href="#top"><span class="brand-mark" aria-hidden="true">ccm</span><span class="brand-name">{{organization}}</span></a>
+<div class="header-actions"><a class="header-link" href="index.html">Sample report</a><a class="header-link" href="{{examples_url}}">Examples</a></div>
+</header>
+<main id="main">
+
+<section class="guide-head" id="top">
+<span class="eyebrow">Report template kit</span>
+<h1>CCM report template</h1>
+<p class="standfirst">One JSON file and one Python script build a standalone report with paper texture, ink drawings, and a stage that changes as the reader scrolls.</p>
+<div class="theme-presets" role="group" aria-label="Theme presets">
+{{presets}}
+</div>
+<p class="preset-note">A swatch repaints this page, so you can read a theme before you take it. It changes nothing in the kit: the <code>theme</code> block of <code>report.json</code> holds the five colors, and that block is what you copy into your own report.</p>
+</section>
+
+<section class="section">
+<figure class="hero-art guide-art">
+{{hero_art}}
+<figcaption>{{hero_caption}}</figcaption>
+</figure>
+</section>
+
+<section class="section guide-section" id="make">
+<div class="section-heading"><span class="eyebrow">Make a report</span><h2><a class="heading-anchor" href="#make">Four steps from a download to a page.</a></h2></div>
+<div class="reading">
+<ol class="guide-steps">
+<li>
+<p>Copy the folder for your new report. The download unpacks to a folder that already builds.</p>
+<pre>unzip template.zip
+cd CCM-report-template</pre>
+</li>
+<li>
+<p>Edit <code>report.json</code> with a text editor. Every heading, paragraph, statistic, link, and color on the page comes from that one file.</p>
+</li>
+<li>
+<p>Run the build from the copied folder. Python 3.11 or later works with no packages to install.</p>
+<pre>python3 build.py</pre>
+</li>
+<li>
+<p>Open <code>index.html</code> in a browser. The export is one file and it opens from disk.</p>
+</li>
+</ol>
+</div>
+<div class="reading">
+<p>Build a second report beside the template by naming its content file and its output.</p>
+<pre>python3 build.py my-report.json --output ../my-report/index.html</pre>
+<p>To load the stylesheet and the script from this folder instead of embedding them, pass the base URL. That export needs the network; the default one does not.</p>
+<pre>python3 build.py report.json --output starter.html \
+  --assets-url https://jamditis.com/ccm-report-template</pre>
+<p>Rebuild after each edit. Changes typed into the exported HTML disappear on the next build.</p>
+</div>
+</section>
+
+<section class="section guide-section" id="kit">
+<div class="section-heading"><span class="eyebrow">What you get</span><h2><a class="heading-anchor" href="#kit">{{mark_count}} marks, five colors, four type presets.</a></h2></div>
+<div class="specimens">
+
+<div class="specimen">
+<span class="eyebrow">The marks</span>
+<div class="mark-row">
+{{mark_specimens}}
+</div>
+<p>Every drawing holds {{mark_count}} marks. Stroke count, size, weight, and jitter come from the mark's own index, so each one is a sibling of the others and none is a copy. They are an illustration, not a chart.</p>
+</div>
+
+<div class="specimen">
+<span class="eyebrow">The palette</span>
+<ul class="palette">
+{{palette}}
+</ul>
+<p>Every other color on the page is mixed from these five, so a new theme moves the whole report and leaves no stranded gray behind.</p>
+</div>
+
+<div class="specimen">
+<span class="eyebrow">The type</span>
+<p class="type-line type-display">A story is only the beginning.</p>
+<span class="type-note">Display: the cover, the headings, the large numerals.</span>
+<p class="type-line type-body">Follow the connections.</p>
+<span class="type-note">Body: the sentences, and the labels beside them.</span>
+<p>Three roles carry the page, and a preset fills all three. <a href="#type">Four presets</a> ship with the kit. A report that names none of them sets in the reader's own faces and asks no font server for anything.</p>
+</div>
+
+</div>
+</section>
+
+<section class="section guide-section" id="type">
+<div class="section-heading"><span class="eyebrow">Type</span><h2><a class="heading-anchor" href="#type">Four presets, one line of JSON.</a></h2></div>
+<div class="reading">
+<p>A preset names the display face, the body face and the label face at once, and every one of them carries a display weight of 800 or more. The files are latin subsets under <code>fonts/</code>, each with its OFL licence beside it, and the build writes the ones your preset needs into the page as data, so an export still opens from a disk with no network. The <code>system</code> preset embeds nothing.</p>
+</div>
+{{type_specimens}}
+</section>
+
+<section class="section guide-section" id="layout">
+<div class="section-heading"><span class="eyebrow">Layout</span><h2><a class="heading-anchor" href="#layout">Two layouts for the same measure.</a></h2></div>
+<div class="reading">
+<p>Both layouts set the reading column at 34em, so a line holds 62 to 66 characters in every preset. The <code>wide</code> layout moves that column to the left gutter and opens a rail beside it for the notes, the pull quotes and any figure or table you mark with <code>"rail": true</code>. Below 1000 pixels the rail folds into the column at the place you wrote each block, so a phone reads one column in both layouts.</p>
+</div>
+{{layout_specimens}}
+</section>
+
+<section class="section guide-section" id="types">
+<div class="section-heading"><span class="eyebrow">Section types</span><h2><a class="heading-anchor" href="#types">{{section_count}} kinds of section, in any order.</a></h2></div>
+<div class="reading">
+<p>Give every section a unique <code>id</code> that starts with a lowercase letter, such as <code>key-findings</code>. Use letters, digits, and hyphens. The ids <code>main</code> and <code>top</code> are reserved. The contents menu follows the order of the sections, and quote sections are left out of it because they carry no title.</p>
+<div class="table-wrap scroll-edge">
+<table>
+<thead><tr><th scope="col">Type</th><th scope="col">Fields beyond type and id</th></tr></thead>
+<tbody>
+{{section_table}}
+</tbody>
+</table>
+</div>
+<p>A scrolly section needs at least one step, and each step names a <code>layout</code> of {{layouts}}, a <code>caption</code> describing the state in plain text, and a <code>highlight</code>. The <code>README.md</code> in the download lists every field and what it accepts.</p>
+</div>
+</section>
+
+<section class="section guide-section" id="specimens">
+<div class="section-heading"><span class="eyebrow">Specimens</span><h2><a class="heading-anchor" href="#specimens">One of every component.</a></h2></div>
+<div class="specimen-list">
+<nav class="specimen-nav" aria-label="Specimen index">
+<p>{{section_type_count}} section types plus {{endmatter_count}} end-matter blocks ({{specimen_count}} components). Each one shows what it does, when to use it, the JSON it is built from, and what that JSON makes.</p>
+{{specimen_index}}
+</nav>
+{{specimens}}
+</div>
+</section>
+
+<section class="section guide-section" id="wild">
+<div class="section-heading"><span class="eyebrow">In the wild</span><h2><a class="heading-anchor" href="#wild">Six examples built with the kit.</a></h2></div>
+<div class="reading">
+<p>Each page is built by <code>build.py</code> from the JSON file beside it, in one of the four themes, and each one opens from disk. Every sentence, name, number and result on all six is invented for a design showcase. The six links below go to the hosted copies, because the ZIP does not carry the folder.</p>
+<ul class="wild-list">
+<li><a href="https://jamditis.com/ccm-report-template/examples/report.html"><span class="wild-name">Who covers the town?</span><span class="wild-line">A full research report: a county-by-county count of the paid people who cover local government in New Jersey.</span></a></li>
+<li><a href="https://jamditis.com/ccm-report-template/examples/paper.html"><span class="wild-name">Saying so</span><span class="wild-line">A research paper: how 60 invented newsrooms wrote their AI disclosures, and where on the page each notice sat.</span></a></li>
+<li><a href="https://jamditis.com/ccm-report-template/examples/story.html"><span class="wild-name">Ninety days for one record</span><span class="wild-line">A multimedia feature: one public records request from the first email to the last of 212 pages.</span></a></li>
+<li><a href="https://jamditis.com/ccm-report-template/examples/waterfall.html"><span class="wild-name">A matter of scale</span><span class="wild-line">A scrolling waterfall chart with a built-in data editor and JSON and HTML downloads.</span></a></li>
+<li><a href="https://jamditis.com/ccm-report-template/examples/brief.html"><span class="wild-name">Five things the 2026 partner survey found</span><span class="wild-line">A one-page brief: what 214 invented partner newsrooms said they need next.</span></a></li>
+<li><a href="https://jamditis.com/ccm-report-template/examples/explainer.html"><span class="wild-name">How a collaborative reporting project runs</span><span class="wild-line">An explainer: the eight months from the first phone call to publication day.</span></a></li>
+</ul>
+<p><a href="https://jamditis.com/ccm-report-template/examples/">The examples index</a> holds the same six links and the description of each one.</p>
+</div>
+</section>
+
+<section class="section guide-section" id="download">
+<div class="section-heading"><span class="eyebrow">Download</span><h2><a class="heading-anchor" href="#download">Take the kit.</a></h2></div>
+<div class="reading">
+<div class="button-row">
+<a class="button primary" href="template.zip" download>Download template.zip</a>
+<a class="button" href="index.html">Read the sample report</a>
+</div>
+<p>The ZIP holds the whole kit: <code>build.py</code>, <code>package.py</code>, <code>report.json</code>, <code>report.css</code>, <code>report.js</code>, <code>favicon.svg</code>, the <code>fonts/</code> folder with the five faces and their licences, the built <code>index.html</code>, the hosted-asset <code>starter.html</code>, this guide and the template it is built from, <code>README.md</code>, and <code>DESIGN.md</code>. It leaves out the social image, because every published report needs its own.</p>
+<p>Four of those files open from here:</p>
+<ul class="file-list">
+<li><a href="report.json"><code>report.json</code></a> holds the content of the sample report, including the waterfall chart, its data editor, and the end matter.</li>
+<li><a href="starter.html"><code>starter.html</code></a> loads the stylesheet and the script from this folder.</li>
+<li><a href="README.md"><code>README.md</code></a> lists every field and what it accepts.</li>
+<li><a href="DESIGN.md"><code>DESIGN.md</code></a> states the design system and the rules it holds to.</li>
+</ul>
+<p>Every number, name and quotation in the sample report is invented. Replace the content, the notice, the header links and the template link with your own verified work before you publish.</p>
+</div>
+</section>
+
+</main>
+<footer class="site-footer">
+<div class="colophon"><span class="colophon-org">{{organization}}</span><span>Report template kit</span><span>{{date}}</span></div>
+<div class="colophon-links"><a class="footer-url" href="{{guide_url}}">{{guide_url}}</a><a class="back-to-top" href="#top">Back to top ↑</a></div>
+</footer>
+<script defer src="report.js"></script>
+<script>
+/* The theme presets, and nothing else. A report carries its five colors in its
+   own JSON file, so no report ships this script: it is here to let a reader of
+   the guide try a theme on the page before they copy it. The button holds the
+   five colors and the color scheme the build read from the paper. */
+(function () {
+  var root = document.documentElement;
+  var keys = ['paper', 'ink', 'accent', 'secondary', 'wash'];
+  var buttons = Array.prototype.slice.call(
+    document.querySelectorAll('.theme-preset'));
+  buttons.forEach(function (button) {
+    button.addEventListener('click', function () {
+      keys.forEach(function (key) {
+        root.style.setProperty('--' + key, button.dataset[key]);
+      });
+      root.style.colorScheme = button.dataset.scheme;
+      buttons.forEach(function (other) {
+        other.setAttribute('aria-pressed', String(other === button));
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>

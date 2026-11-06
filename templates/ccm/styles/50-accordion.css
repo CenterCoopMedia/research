@@ -1,0 +1,102 @@
+/* accordion */
+
+.accordion-item {
+  border-top:1px solid var(--rule);
+}
+
+.accordion-item:last-child {
+  border-bottom:1px solid var(--rule);
+}
+
+.accordion-item > summary {
+  list-style:none;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:var(--s5);
+  min-height:var(--tap);
+  padding-block:var(--s2);
+  font-family:var(--font-label);
+  font-size:var(--t1);
+  line-height:var(--lh-label);
+  transition:color var(--dur-hover) var(--ease);
+}
+
+.accordion-item > summary::-webkit-details-marker {
+  display:none;
+}
+
+.accordion-item > summary:hover {
+  color:var(--accent);
+}
+
+/* The chevron points down when the item is closed and up when it is open, so
+   the state has a shape as well as a place on the page. */
+
+.accordion-chevron {
+  flex:none;
+  color:var(--rule-strong);
+  transition:transform var(--dur-hover) var(--ease),color var(--dur-hover) var(--ease);
+}
+
+.accordion-item[open] > summary .accordion-chevron {
+  transform:rotate(180deg);
+}
+
+.accordion-item > summary:hover .accordion-chevron {
+  color:var(--accent);
+}
+
+.accordion-panel {
+  padding-block:var(--s2) var(--s5);
+}
+
+.accordion-panel > :last-child {
+  margin-bottom:0;
+}
+
+/* Where the browser can measure an intrinsic size, the panel opens over
+   --dur-reveal instead of appearing whole. Where it cannot, the panel appears
+   whole, which is what a native <details> does today. */
+
+@supports (interpolate-size:allow-keywords) {
+
+  .accordion {
+    interpolate-size:allow-keywords;
+  }
+
+  .accordion-item::details-content {
+    block-size:0;
+    overflow:hidden;
+    transition:block-size var(--dur-reveal) var(--ease),content-visibility var(--dur-reveal) allow-discrete;
+  }
+
+  .accordion-item[open]::details-content {
+    block-size:auto;
+  }
+
+}
+
+@media print {
+
+  /* Paper cannot open an item, so every panel prints. A browser that has
+     ::details-content needs both of these; one that does not needs neither. */
+
+  .accordion-item::details-content {
+    content-visibility:visible!important;
+    block-size:auto!important;
+  }
+
+  .accordion-panel {
+    display:block!important;
+  }
+
+  .accordion-chevron {
+    display:none;
+  }
+
+  .accordion-item {
+    break-inside:avoid;
+  }
+
+}
